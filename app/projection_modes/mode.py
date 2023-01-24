@@ -5,4 +5,3 @@ class Mode(ABC):
     @abstractmethod
     def trigger(self):
         pass
-

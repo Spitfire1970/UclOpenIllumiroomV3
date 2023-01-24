@@ -6,6 +6,7 @@ from .weather_snow import Snow
 
 
 class ModesFactory:
+
     def __init__(self, img, selected_modes):
         self.img = img
         self.modes = selected_modes
@@ -16,3 +17,6 @@ class ModesFactory:
             "wobble": Wobble,
             "snow": Snow
         }
+
+    def get_available_modes(self):
+        return self.mode_names.keys()
