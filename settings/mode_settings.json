@@ -1,0 +1,21 @@
+{
+    "cartoon":{
+        "compatible_wth":["wobble","blur","weather_snow"]
+    },
+    "wobble":{
+        "compatible_wth":["cartoon","blur","weather_snow"]
+    },
+    "blur":{
+        "compatible_wth":["cartoon","wobble","weather_snow"],
+        "blur_amount":100
+    },
+    "low_health":{
+        "compatible_wth":[]
+    },
+    "racing_speed":{
+        "compatible_wth":[]
+    },
+    "weather_snow":{
+        "compatible_wth":["cartoon","wobble","blur"]
+    }
+}
