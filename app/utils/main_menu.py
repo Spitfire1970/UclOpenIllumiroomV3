@@ -44,7 +44,8 @@ class MainMenu:
       print("The modes currently available are:")
    
       #Create a mode factory and get the available modes, ModesFactory is definitive list
-      mode_factory = ModesFactory()
+      # No display or audio capture are passed in - None
+      mode_factory = ModesFactory(None, None)
       available_modes = mode_factory.get_available_modes()
       mode_selection_in_progress = True #Becomes false when valid modes have been entered
 

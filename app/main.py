@@ -8,8 +8,11 @@ import cv2
 
 from utils.main_menu import MainMenu
 from utils.settings_access import SettingsAccess
+
 from utils.display_output import DisplayOutput
 from utils.display_capture import DisplayCapture
+from utils.audio_capture import AudioCapture
+
 from utils.fps import FPS
 
 from projection_modes.modes_factory import ModesFactory
@@ -47,24 +50,30 @@ def main():
 
     # Create instance of display output, display capture
     primary_bounding_box = selected_displays["primary_display"]
-    display_capture = DisplayCapture(primary_bounding_box)
+    projector_bounding_box = selected_displays["projector_display"]
+
+    display_capture = DisplayCapture(primary_bounding_box, projector_bounding_box)
+    audio_capture = AudioCapture()
     display_output = DisplayOutput()
 
     #Create instance of FPS
     fps = FPS()
 
     #Create the mode objects from the mode factory
-    mode_factory = ModesFactory()
+    mode_factory = ModesFactory(display_capture,audio_capture)
     mode_objects = mode_factory.get_modes(selected_modes)
-    
     
 
     #Main loop of application
     stopped = False
     while not(stopped):
 
-        fps.print_fps()
-        frame = display_capture.capture_frame()
+        #fps.print_fps()
+
+        #Modes control whether they need screen or audio capture
+        #Calling trigger on the mode object causes it to activate itself and run as required,
+        #trigger always returns a frame or None
+        frame = mode_objects[0].trigger()
         stopped = display_output.display_frame(frame)
 
     # run display output unless exit command received eg: 'q' pressed when on 

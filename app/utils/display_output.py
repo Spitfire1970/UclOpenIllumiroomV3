@@ -15,7 +15,7 @@ class DisplayOutput:
         #Setup the display window
         cv2.namedWindow("UCL Open Illumiroom V2", cv2.WINDOW_NORMAL)
         cv2.setWindowProperty("UCL Open Illumiroom V2", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
-        cv2.imshow('UCL Open Illumiroom V2', np.array(frame))
+        cv2.imshow('UCL Open Illumiroom V2', frame)
         if (cv2.waitKey(1) & 0xFF) == ord('q'):
             cv2.destroyAllWindows()
             return True

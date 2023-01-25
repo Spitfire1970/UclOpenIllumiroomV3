@@ -8,11 +8,32 @@ import cv2
 
 class DisplayCapture:
 
-    def __init__(self, display_bounding_box):
+    def __init__(self, primary_bounding_box, projector_bounding_box):
         self.sct = mss()
-        self.display_bounding_box = display_bounding_box
+        self.primary_bounding_box = primary_bounding_box
+        self.projector_bounding_box = projector_bounding_box
 
+        self.monitor_resize_scale_factor = self.projector_bounding_box['width']/self.primary_bounding_box['width']
 
-    def capture_frame(self):
-        frame = self.sct.grab(self.display_bounding_box)
+    #Use no resize if the image captured will not be directly displayed
+    def capture_frame_no_resize(self):
+        frame = np.array(self.sct.grab(self.primary_bounding_box))
         return frame
+
+    def capture_frame_resize_projector(self):
+        frame = np.array(self.sct.grab(self.primary_bounding_box))
+        #Check if the resolution of the primary monitor and TV differ (ratio not 1)
+        if (self.monitor_resize_scale_factor) > 1.05 or (self.monitor_resize_scale_factor) < 0.95 :
+            frame = self.resize_image_fit_projector(frame)
+
+        return frame
+
+    def resize_image_fit_projector(self,frame):
+        #If the projector and the tv have different resolutions, quite possible if a 4k tv is being used 
+        # The image from the tv needs to be resized to fit onto the projector, otherwise full size image will be shown
+        height, width, channels = frame.shape
+        width = int(width * self.monitor_resize_scale_factor)
+        height = int(height * self.monitor_resize_scale_factor)
+        dim = (width, height)
+        # resize image
+        return cv2.resize(frame, dim, interpolation = cv2.INTER_AREA)
