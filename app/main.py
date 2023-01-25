@@ -8,10 +8,13 @@ import cv2
 
 from utils.main_menu import MainMenu
 from utils.settings_access import SettingsAccess
+from utils.display_output import DisplayOutput
+from utils.display_capture import DisplayCapture
 
 BACKGROUND_IMAGE = "assets/room_image/TV_box.jpeg"
 
-if __name__ == '__main__':
+
+def main():
 
     menu = MainMenu()
 
@@ -40,9 +43,23 @@ if __name__ == '__main__':
     # Create instance of projection modes factory
 
     # Create instance of display output
+    primary_bounding_box = selected_displays["primary_display"]
+    display_capture = DisplayCapture(primary_bounding_box)
+    display_output = DisplayOutput()
+
+    stopped = False
+    while not(stopped):
+
+        frame = display_capture.capture_frame()
+        stopped = display_output.display_frame(frame)
 
     # run display output unless exit command received eg: 'q' pressed when on 
     # projector window
 
+    print("Thank you for using UCL Open Illumiroom V2, Have a great day!")
     # Clean up and exit.
     exit()
+
+if __name__ == '__main__':
+    main()
+    
