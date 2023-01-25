@@ -15,5 +15,5 @@ class Blur(Mode):
         print("blurring")
 
     def trigger(self):
-        pass
+        print("trigger blur")
 

@@ -4,4 +4,4 @@ from .weather import WeatherMode
 class Snow(WeatherMode):
     
     def trigger(self):
-        pass
+        print("trigger snow")
