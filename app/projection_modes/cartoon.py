@@ -21,8 +21,15 @@ class Cartoon(Mode):
 
         # Merge original image with edge image
         self.img = cv2.addWeighted(self.img, 0.9, colour, 0.2, -40)
-        cv2.imwrite("./assets/generated/cartoon_view.jpeg", self.img)
 
     def trigger(self):
         # Save image
-        self.cartoonify()
+        cartoon_img_name = "./assets/generated/cartoon_view.jpeg"
+        cartoon_img = Path(cartoon_img_name)
+        if cartoon_img.is_file():
+            self.img = cv2.imread(cartoon_img_name)
+        else: 
+            self.cartoonify()
+            cv2.imwrite("./assets/generated/cartoon_view.jpeg", self.img)
+        
+        return self.img
