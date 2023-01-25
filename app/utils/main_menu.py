@@ -1,20 +1,44 @@
 from projection_modes.modes_factory import ModesFactory
+from .display_selection import DisplaySelection
 from .settings_access import SettingsAccess
 
+from time import sleep
 
 class MainMenu:
+   def __init__(self):
+      self.modes = None
+      self.displays = None
 
-   def print_available_modes(self):
-      print("Select Your Mode:")
-      print("1: Blur")
-      print("2: Wobble")
+   def main_select_options(self):
+      ready_to_run = False
+      print("Welcome to UCL Open-Illumiroom V2")
+      
+      while(not(ready_to_run)):
+         print("Please enter the number of the option you wish to select")
+         print("1) Select your projector and TV displays")
+         print("2) Chose your required mode(s)")
+         print("3) Run Illumiroom")
+         user_selection = input(">")
+         if user_selection == "3" or user_selection == "run":
+            return self.modes, self.displays
+         elif user_selection == "1":
+            display_selector = DisplaySelection()
+            self.displays = display_selector.select_tv_projector()
+         elif user_selection == "2":
+            self.modes = self.select_modes()
+         else:
+            print("Invalid input, please try again!")
 
+         #Include a sleep to give feeling of menu movement
+         sleep(0.75)
+
+   
    def check_modes_valid(self,available_modes, modes):
       for mode in modes:
          if mode not in available_modes:
             return False
       return True
-         
+   
 
    def select_modes(self):
       print("The modes currently available are:")
@@ -26,7 +50,7 @@ class MainMenu:
 
       while(mode_selection_in_progress):
          for index, mode in enumerate(available_modes):
-            print(f"{index}) {mode}")
+            print(f"{mode}")
 
          print("Please select a mode, or 2 modes that are compatible")
          print("Either enter the mode name eg: wobble, or for 2 modes seprate with a comma: blur,weather_snow")

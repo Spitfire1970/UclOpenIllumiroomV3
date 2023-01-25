@@ -1,1 +1,1 @@
-{"selected_displays": {"primary_display": "display 1", "projector_display": "projector 1"}, "selected_modes": ["blur", "snow"]}
+{"selected_displays": {"primary_display": {"left": 0, "top": 0, "width": 1920, "height": 1080}, "projector_display": {"left": 0, "top": -1080, "width": 1920, "height": 1080}}, "selected_modes": ["blur"]}

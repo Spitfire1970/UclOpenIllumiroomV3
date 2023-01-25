@@ -18,15 +18,24 @@ if __name__ == '__main__':
     #Get the current general settings
     settings_access = SettingsAccess()
     general_settings_json = settings_access.read_settings("general_settings.json")
-    #Display currently selected modes, if there are none then get user to select
 
-    selected_modes = general_settings_json["selected_modes"]
-    if selected_modes is None or selected_modes == []:
-        selected_modes = menu.select_modes()
+    # Display settings menu
+
+    modes, displays = menu.main_select_options()
+    if modes is not None: 
+        selected_modes = modes
+    else:
+        #Display currently selected modes, if there are none then get user to select
+        selected_modes = general_settings_json["selected_modes"]
+
+    if displays is not None:
+        selected_displays = displays
+    else:
+        selected_displays = general_settings_json["selected_displays"]
 
     print(f"Your selected mode(s): {selected_modes}")
-    # Display settings menu
-    
+
+    print(f"Your selected displays: {selected_displays}")
 
     # Create instance of projection modes factory
 
@@ -36,4 +45,4 @@ if __name__ == '__main__':
     # projector window
 
     # Clean up and exit.
-    pass
+    exit()
