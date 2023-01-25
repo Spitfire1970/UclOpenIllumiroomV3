@@ -5,6 +5,7 @@ from projection_modes.mode import Mode
 from utils.settings_access import SettingsAccess
 from utils.display_capture import DisplayCapture
 
+from cv2 import blur
 
 class Blur(Mode):
     
@@ -16,12 +17,14 @@ class Blur(Mode):
    
 
     def apply_mode_to_frame(self,frame):
-        return frame
+
+        return blur(frame, self.blur_tuple ,0)
 
     def trigger(self):
         #Once triggered, screen record a frame, apply the blurring, then return the frame
         #frame = self.display_capture.capture_frame_no_resize()
         frame = self.display_capture.capture_frame_resize_projector()
+        frame = self.apply_mode_to_frame(frame)
         return frame
 
     def get_blur_amount_from_settings(self):

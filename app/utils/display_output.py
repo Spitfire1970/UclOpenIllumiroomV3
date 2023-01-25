@@ -3,7 +3,7 @@ from mss import mss
 
 
 import numpy as np
-import cv2
+from cv2 import imshow, namedWindow, setWindowProperty, waitKey, destroyAllWindows, WINDOW_NORMAL, WND_PROP_FULLSCREEN, WINDOW_FULLSCREEN
 
 class DisplayOutput:
 
@@ -13,10 +13,10 @@ class DisplayOutput:
 
     def display_frame(self, frame):
         #Setup the display window
-        cv2.namedWindow("UCL Open Illumiroom V2", cv2.WINDOW_NORMAL)
-        cv2.setWindowProperty("UCL Open Illumiroom V2", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
-        cv2.imshow('UCL Open Illumiroom V2', frame)
-        if (cv2.waitKey(1) & 0xFF) == ord('q'):
-            cv2.destroyAllWindows()
+        namedWindow("UCL Open Illumiroom V2", WINDOW_NORMAL)
+        setWindowProperty("UCL Open Illumiroom V2", WND_PROP_FULLSCREEN, WINDOW_FULLSCREEN)
+        imshow('UCL Open Illumiroom V2', frame)
+        if (waitKey(1) & 0xFF) == ord('q'):
+            destroyAllWindows()
             return True
         return False

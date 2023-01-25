@@ -1,21 +1,21 @@
 {
     "cartoon":{
-        "compatible_wth":["wobble","weather_snow"]
+        ".compatible_with":["wobble","weather_snow"]
     },
     "wobble":{
-        "compatible_wth":["cartoon","weather_snow"]
+        ".compatible_with":["cartoon","weather_snow"]
     },
     "blur":{
-        "compatible_wth":[],
-        "blur_amount":200
+        "blur_amount":50,
+        ".compatible_with":[]  
     },
     "low_health":{
-        "compatible_wth":[]
+        ".compatible_with":[]
     },
-    "racing_speed":{
-        "compatible_wth":[]
+    "speed_lines":{
+        ".compatible_with":[]
     },
     "weather_snow":{
-        "compatible_wth":["cartoon","wobble"]
+        ".compatible_with":["cartoon","wobble"]
     }
 }

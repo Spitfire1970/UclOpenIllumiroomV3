@@ -3,7 +3,7 @@ from mss import mss
 
 
 import numpy as np
-import cv2
+from cv2 import resize ,INTER_AREA
 
 
 class DisplayCapture:
@@ -36,4 +36,4 @@ class DisplayCapture:
         height = int(height * self.monitor_resize_scale_factor)
         dim = (width, height)
         # resize image
-        return cv2.resize(frame, dim, interpolation = cv2.INTER_AREA)
+        return resize(frame, dim, interpolation = INTER_AREA)
