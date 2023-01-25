@@ -7,9 +7,7 @@ from .weather_snow import Snow
 
 class ModesFactory:
 
-    def __init__(self, img, selected_modes):
-        self.img = img
-        self.modes = selected_modes
+    def __init__(self):
         self.mode_names = {
             "blur": Blur,
             "cartoon": Cartoon,
@@ -20,3 +18,11 @@ class ModesFactory:
 
     def get_available_modes(self):
         return self.mode_names.keys()
+
+
+    def get_modes(self, selected_modes):
+        return_modes = []
+        for mode in selected_modes:
+            return_modes.append(self.mode_names[mode]())
+
+        return return_modes

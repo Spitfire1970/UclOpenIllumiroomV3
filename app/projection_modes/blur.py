@@ -1,5 +1,4 @@
-import sys
-sys.path.append("..")
+
 
 
 from projection_modes.mode import Mode
@@ -9,5 +8,12 @@ from projection_modes.mode import Mode
 
 class Blur(Mode):
     
-    pass
+    def __init__(self):
+        self.blur_amount = 1
+
+    def blur(self):
+        print("blurring")
+
+    def trigger(self):
+        pass
 

@@ -11,6 +11,8 @@ from utils.settings_access import SettingsAccess
 from utils.display_output import DisplayOutput
 from utils.display_capture import DisplayCapture
 
+from projection_modes.modes_factory import ModesFactory
+
 BACKGROUND_IMAGE = "assets/room_image/TV_box.jpeg"
 
 
@@ -47,6 +49,11 @@ def main():
     display_capture = DisplayCapture(primary_bounding_box)
     display_output = DisplayOutput()
 
+    #Create the mode objects from the mode factory
+    mode_factory = ModesFactory()
+    mode_objects = mode_factory.get_modes(selected_modes)
+    print(mode_objects)
+    #Main loop of application
     stopped = False
     while not(stopped):
 

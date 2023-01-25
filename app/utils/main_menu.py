@@ -30,7 +30,7 @@ class MainMenu:
             print("Invalid input, please try again!")
 
          #Include a sleep to give feeling of menu movement
-         sleep(0.75)
+         sleep(0.5)
 
    
    def check_modes_valid(self,available_modes, modes):
@@ -44,7 +44,7 @@ class MainMenu:
       print("The modes currently available are:")
    
       #Create a mode factory and get the available modes, ModesFactory is definitive list
-      mode_factory = ModesFactory(None, None)
+      mode_factory = ModesFactory()
       available_modes = mode_factory.get_available_modes()
       mode_selection_in_progress = True #Becomes false when valid modes have been entered
 
