@@ -47,11 +47,8 @@ class MainMenu:
          sleep(0.5)
 
    
-   def check_modes_valid(self,available_modes, modes):
-      for mode in modes:
-         if mode not in available_modes:
-            return False
-      return True
+   def check_mode_valid(self,available_modes, mode):
+      return mode in available_modes
    
 
    def select_modes(self):
@@ -66,29 +63,28 @@ class MainMenu:
          for index, mode in enumerate(self.available_modes):
             print(f"{mode}")
 
-         print("Please select a mode, or 2 modes that are compatible")
-         print("Either enter the mode name eg: wobble, or for 2 modes seprate with a comma: blur,weather_snow")
-         print("Any more than 2 modes are not supported and will be ignored!")
+         print("Please select a mode that you wish to use")
+         print("Please only enter one mode name, any more will not be accepted")
+         print("eg: wobble")
 
-         modes_selection = input()
-         modes = modes_selection.strip().replace(" ","").split(',')[:2]
+         mode_selection = input()
+         mode = mode_selection.strip()
 
-         print("Mode(s) selected: ")
-         for mode in modes:
-            print(f"{mode}")
+         print("Mode selected: ")
+         print(f"{mode}")
 
-         if self.check_modes_valid(self.available_modes,modes):
+         if self.check_mode_valid(self.available_modes,mode):
             mode_selection_in_progress = False #All modes valid, can continue
          else:
             print("Invalid mode entered, please try again!")
 
 
-      #Write the selected modes to the general settings json
+      #Write the selected mode to the general settings json
       general_settings_json = self.settings_access.read_settings("general_settings.json")
-      general_settings_json['selected_modes'] = modes
+      general_settings_json['selected_modes'] = mode
       self.settings_access.write_settings("general_settings.json", general_settings_json)
 
-      return modes
+      return mode
 
    def select_mode_settings(self):
       mode_selection_in_progress = True #Becomes false when valid modes have been entered
@@ -101,7 +97,7 @@ class MainMenu:
          print("Either enter the mode name eg: wobble. Only enter 1 mode")
 
          modes_selected=[input().strip()]
-         if self.check_modes_valid(self.available_modes,modes_selected):
+         if self.check_mode_valid(self.available_modes,modes_selected):
             mode_selection_in_progress = False #All modes valid, can continue
          else:
             print("Invalid mode entered, please try again!")

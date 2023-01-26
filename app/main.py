@@ -74,6 +74,9 @@ def main():
         #Calling trigger on the mode object causes it to activate itself and run as required,
         #trigger always returns a frame or None
         frame = mode_objects[0].trigger()
+        
+        #potentially add the depth mapping here
+
         stopped = display_output.display_frame(frame)
 
     # run display output unless exit command received eg: 'q' pressed when on 
