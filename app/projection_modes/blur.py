@@ -23,7 +23,7 @@ class Blur(Mode):
     def trigger(self):
         #Once triggered, screen record a frame, apply the blurring, then return the frame
         #frame = self.display_capture.capture_frame_no_resize()
-        frame = self.display_capture.capture_frame_resize_projector()
+        frame = self.display_capture.capture_frame_projector_resize()
         frame = self.apply_mode_to_frame(frame)
         return frame
 
