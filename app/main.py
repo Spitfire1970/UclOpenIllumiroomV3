@@ -30,19 +30,19 @@ def main():
 
     # Display settings menu
 
-    modes, displays = menu.main_select_options()
-    if modes is not None: 
-        selected_modes = modes
+    mode, displays = menu.main_select_options()
+    if mode is not None: 
+        selected_mode = mode
     else:
         #Display currently selected modes, if there are none then get user to select
-        selected_modes = general_settings_json["selected_modes"]
+        selected_mode = general_settings_json["selected_mode"]
 
     if displays is not None:
         selected_displays = displays
     else:
         selected_displays = general_settings_json["selected_displays"]
 
-    print(f"Your selected mode(s): {selected_modes}")
+    print(f"Your selected mode: {selected_mode}")
 
     print(f"Your selected displays: {selected_displays}")
 
@@ -61,7 +61,7 @@ def main():
 
     #Create the mode objects from the mode factory
     mode_factory = ModesFactory(display_capture,audio_capture)
-    mode_objects = mode_factory.get_modes(selected_modes)
+    mode_object = mode_factory.get_mode(selected_mode)
     
 
     #Main loop of application
@@ -73,11 +73,11 @@ def main():
         #Modes control whether they need screen or audio capture
         #Calling trigger on the mode object causes it to activate itself and run as required,
         #trigger always returns a frame or None
-        frame = mode_objects[0].trigger()
+        frames = mode_object.trigger()
         
         #potentially add the depth mapping here
 
-        stopped = display_output.display_frame(frame)
+        stopped = display_output.display_frame(frames)
 
     # run display output unless exit command received eg: 'q' pressed when on 
     # projector window

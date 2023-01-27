@@ -1,1 +1,1 @@
-{"selected_displays": {"primary_display": {"left": 0, "top": 0, "width": 1920, "height": 1080}, "projector_display": {"left": -2560, "top": -655, "width": 2560, "height": 1440}}, "selected_modes": ["blur"], "background_image": "assets/room_image/TV_box.jpeg"}
+{"selected_displays": {"primary_display": {"left": 0, "top": 0, "width": 1920, "height": 1080}, "projector_display": {"left": 0, "top": 0, "width": 1920, "height": 1080}}, "selected_mode": "blur", "background_image": "assets/room_image/TV_box.jpeg"}

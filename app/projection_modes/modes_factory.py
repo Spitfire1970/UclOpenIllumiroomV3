@@ -23,9 +23,6 @@ class ModesFactory:
         return self.mode_names.keys()
 
 
-    def get_modes(self, selected_modes):
-        return_modes = []
-        for mode in selected_modes:
-            return_modes.append(self.mode_names[mode](self.display_capture, self.audio_capture))
+    def get_mode(self, selected_mode):
+        return self.mode_names[selected_mode](self.display_capture, self.audio_capture)
 
-        return return_modes

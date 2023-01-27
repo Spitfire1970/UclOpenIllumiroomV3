@@ -11,11 +11,12 @@ class DisplayOutput:
         pass
 
 
-    def display_frame(self, frame):
+    def display_frame(self, frames):
         #Setup the display window
         namedWindow("UCL Open Illumiroom V2", WINDOW_NORMAL)
         setWindowProperty("UCL Open Illumiroom V2", WND_PROP_FULLSCREEN, WINDOW_FULLSCREEN)
-        imshow('UCL Open Illumiroom V2', frame)
+        for frame in frames:
+            imshow('UCL Open Illumiroom V2', frame)
         if (waitKey(1) & 0xFF) == ord('q'):
             destroyAllWindows()
             return True

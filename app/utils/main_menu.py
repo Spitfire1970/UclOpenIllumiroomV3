@@ -81,7 +81,7 @@ class MainMenu:
 
       #Write the selected mode to the general settings json
       general_settings_json = self.settings_access.read_settings("general_settings.json")
-      general_settings_json['selected_modes'] = mode
+      general_settings_json['selected_mode'] = mode
       self.settings_access.write_settings("general_settings.json", general_settings_json)
 
       return mode
