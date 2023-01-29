@@ -6,7 +6,7 @@ from time import sleep
 
 class MainMenu:
    def __init__(self):
-      mode_factory = ModesFactory(None, None)
+      mode_factory = ModesFactory(None, None, None, None)
       self.settings_access = SettingsAccess()
       self.available_modes = mode_factory.get_available_modes()
       self.modes = None
