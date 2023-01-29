@@ -19,3 +19,8 @@ class SettingsAccess:
         settings_path = self.path + settings_name
         with open(settings_path,'w') as write_file:
             json.dump(new_json_data, write_file)
+
+
+    def read_mode_settings(self, mode, setting):
+        mode_settings_json = self.read_settings("mode_settings.json")
+        return mode_settings_json[mode][setting]
