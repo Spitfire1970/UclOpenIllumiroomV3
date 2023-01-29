@@ -1,25 +1,38 @@
 from .mode import Mode
-from utils.sound_analysis import SoundDetector
+from utils.audio_capture import AudioCapture
+from utils.settings_access import SettingsAccess
+
+import numpy as np
+import cv2
 
 # TODO: refactor generate_frames method
 # - single responsibility principle!!
 
 class Wobble(Mode):
-    # TODO: remove center_x, center_y, start, 
-    # and end by getting these values from 
-    # .settings/mode_settings.json
     def __init__(
-            self, img, center_x, center_y, start, 
-            end, threshold, main_window
+            self,
+            setting_access,
+            display_capture,  
+            background_img,
+            audio_capture=None
         ):
-        self.img = img
-        self.num_frames = 15
-        self.center_x, self.center_y = center_x, center_y
-        self.start, self.end = start, end
-        self.sound_detector = SoundDetector(threshold)
-        self.threshold = threshold
-        self.frames = []
-        self.main_window = main_window
+        self.img = background_img
+        self.settings = setting_access
+        self.num_frames = self.settings.read_mode_settings("wobble", "num_frames")
+
+        self.output_img = np.zeros_like(self.img)
+        height, width = self.img.shape[:2]
+        self.x, self.y = np.meshgrid(np.arange(width), np.arange(height))
+        self.original_x, self.original_y = self.x.copy(), self.y.copy()
+        self.fractal_amplitude = self.settings.read_mode_settings("wobble", "fractal_amplitude")
+
+        self.threshold = self.settings.read_mode_settings("wobble", "sound_threshold")
+
+        self.audio_capture = AudioCapture(self.threshold)
+
+        self.frames = None
+        self.generate_frames()
+
 
     def generate_frames(self):
         self.frames = []
@@ -30,12 +43,17 @@ class Wobble(Mode):
             factor = 1 - i / self.num_frames
 
             # Create a mask to exclude pixels inside the TV rectangle
+            top_left_coords = self.settings.read_mode_settings("wobble", "tv_top_left")
+            bottom_right_coors = self.settings.read_mode_settings("wobble", "tv_bottom_right")
             mask = np.zeros(self.img.shape[:2], dtype=np.uint8)
-            cv2.rectangle(mask, self.start, self.end, (255, 255, 255), -1)
+            cv2.rectangle(mask, top_left_coords, bottom_right_coors, (255, 255, 255), -1)
 
             # Calculate distance from the center of the effect
-            distance = np.sqrt((self.x - self.center_x) ** 2 + (self.y - self.center_y) ** 2)
-            distance[self.mask == 255] = 0
+            center_x = self.settings.read_mode_settings("wobble", "tv_center_x")
+            center_y = self.settings.read_mode_settings("wobble", "tv_center_y")
+
+            distance = np.sqrt((self.x - center_x) ** 2 + (self.y - center_y) ** 2)
+            distance[mask == 255] = 0
             fractal_noise = np.random.normal(0, self.fractal_amplitude, distance.shape)
             distance = distance + fractal_noise
 
@@ -52,24 +70,17 @@ class Wobble(Mode):
             new_y = np.float32(self.original_y * (1 - factor) + new_y * factor)
 
             # Use remap with new coords and Lanczos Interpolation method
+            # For future: can re-map onto a cartoon image
             output_img = cv2.remap(self.img, new_x, new_y, cv2.INTER_LANCZOS4)
             self.frames.append(output_img)
 
 
     def trigger(self):
-        self.generate_frames()
         while True:
-            if self.sound_detector.detect_loud_sound() > self.threshold:
-                for frame in self.frames:
-                    height, width, channel = frame.shape
-                    bytesPerLine = 3 * width
-                    qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format.Format_RGB888).rgbSwapped()
-                    self.main_window.label.setPixmap(QtGui.QPixmap(qImg))
-                    self.main_window.update()
-                    time.sleep(0.05)
+            if self.audio_capture.detect_loud_sound() > self.threshold:
+                # print("Loud sound")
+                frames = self.frames
             else:
-                height, width, channel = self.img.shape
-                bytesPerLine = 3 * width
-                qImg = QtGui.QImage(self.img, width, height, bytesPerLine, QtGui.QImage.Format.Format_RGB888).rgbSwapped()
-                self.main_window.label.setPixmap(QtGui.QPixmap(self.img))
-                self.main_window.update()
+                # print("No loud sound")
+                frames = [self.img]
+            return frames

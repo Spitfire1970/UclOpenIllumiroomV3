@@ -6,6 +6,6 @@ class Mode(ABC):
     def trigger(self):
         pass
 
-    @abstractmethod
-    def apply_mode_to_frame(self,frame):
-        pass
+    # @abstractmethod
+    # def apply_mode_to_frame(self,frame):
+    #     pass
