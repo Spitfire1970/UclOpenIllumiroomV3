@@ -1,9 +1,19 @@
 from .mode import Mode
+import numpy as np
+import cv2
+from pathlib import Path
 
 
 class Cartoon(Mode):
-    def __init__(self, img) -> None:
-        self.img = img
+    def __init__(
+            self,
+            setting_access,
+            display_capture,  
+            background_img,
+            audio_capture=None
+        ):
+        self.img = background_img
+        self.settings = setting_access
 
     def cartoonify(self):
         gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
@@ -24,12 +34,14 @@ class Cartoon(Mode):
 
     def trigger(self):
         # Save image
-        cartoon_img_name = "./assets/generated/cartoon_view.jpeg"
+        cartoon_img_name = (__file__[:__file__.index("app") 
+            + len("app")]+"/assets/generated/cartoon_view.jpeg")
         cartoon_img = Path(cartoon_img_name)
         if cartoon_img.is_file():
             self.img = cv2.imread(cartoon_img_name)
         else: 
             self.cartoonify()
-            cv2.imwrite("./assets/generated/cartoon_view.jpeg", self.img)
-        
-        return self.img
+            cv2.imwrite(cartoon_img_name, self.img)
+
+        frames = [self.img]
+        return frames
