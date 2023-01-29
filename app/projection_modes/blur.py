@@ -1,15 +1,17 @@
-
-
-
 from projection_modes.mode import Mode
 from utils.settings_access import SettingsAccess
-from utils.display_capture import DisplayCapture
 
 from cv2 import blur
 
 class Blur(Mode):
-    
-    def __init__(self, display_capture, audio_capture=None):
+
+    def __init__(
+        self, 
+        settings_access, 
+        display_capture, 
+        background_img=None, 
+        audio_capture=None
+    ):
         self.blur_amount = self.get_blur_amount_from_settings()
         self.blur_tuple = (self.blur_amount, self.blur_amount)
 
