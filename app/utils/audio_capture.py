@@ -5,8 +5,8 @@ import pyaudio
 class AudioCapture():
     def __init__(self, threshold=None) -> None:
         self.threshold = threshold
-        self.buffer_size = 8192
-        self.sample_rate = 16000
+        self.buffer_size = 2500#8192
+        self.sample_rate = 20000
         self.channels = 1
 
         # For moving average

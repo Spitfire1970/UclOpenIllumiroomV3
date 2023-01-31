@@ -35,6 +35,7 @@ class Wobble(Mode):
 
 
     def generate_frames(self):
+        print("Generating wobble frames, awesomeness coming soon!")
         self.frames = []
         for i in range(self.num_frames):
             amplitude = 15 * (i/self.num_frames)

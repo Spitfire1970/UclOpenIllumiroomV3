@@ -7,27 +7,47 @@ from cv2 import imshow, namedWindow, setWindowProperty, waitKey, destroyAllWindo
 import sys
 from PyQt6 import QtWidgets, QtGui, QtCore
 from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel
-from PyQt6.QtGui import QPixmap, QImage
+from PyQt6.QtGui import QPixmap, QImage,QScreen, QScreen
 from PyQt6.QtCore import Qt
+
 import time
 
 
 class DisplayOutput(QtWidgets.QMainWindow):
-    def __init__(self):
+    def __init__(self, primary_bounding_box, projector_bounding_box):
         super().__init__()
         # self.ui = QMainWindow()
+        self.primary_bounding_box = primary_bounding_box
+        self.projector_bounding_box = projector_bounding_box
+
+        self.exit_key_binding = Qt.Key.Key_Escape.value
+        display_monitor = 1
+
+        monitors = QScreen.virtualSiblings(self.screen())
+        monitor = monitors[display_monitor].availableGeometry()
+              
         self.label = QtWidgets.QLabel(self)
         self.setCentralWidget(self.label)
+
+        #Move to the mss coordinates of the projector 
+        projector_left = projector_bounding_box['left']
+        projector_top = projector_bounding_box['top']
+
+        self.move(projector_left, projector_top)
+        self.showFullScreen()
+
+        print("Window Opened, press Escape in the illumiroom window to exit")
         
         self.stopped = False
+        return 
 
-    def closeEvent(self, event):
-        self.stopped = True
-        event.accept()
     
     def keyPressEvent(self, event):
-        if event.key() == QtCore.Qt.Key_Escape or event.text() == QtCore.Qt.Key_Q:
+        if event.key() == self.exit_key_binding:
+            print("Thank you for using UCL-Open Illumiroom V2")
+            print("Have a great day!")
             self.close()
+            exit()
 
 
 # class DisplayOutput:

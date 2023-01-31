@@ -21,8 +21,9 @@ class MainMenu:
          print("Please enter the number of the option you wish to select")
          print("1) Run Illumiroom")
          print("2) Select your projector and TV displays")
-         print("3) Chose your required mode(s)")
+         print("3) Chose your required mode")
          print("4) View Mode Settings")
+         print("5) Close system without running")
          
          user_selection = input(">")
          if user_selection == "1" or user_selection == "run":
@@ -39,6 +40,10 @@ class MainMenu:
             self.select_mode_settings()
             #print("Changing mode settings requires the Ilumiroom System to restart, please rerun Illumiroom")
             #exit()
+         elif user_selection == "5":
+            print("Thank you for using UCL-Open Illumiroom V2")
+            print("Have a great day!")    
+            exit()
 
          else:
             print("Invalid input, please try again!")

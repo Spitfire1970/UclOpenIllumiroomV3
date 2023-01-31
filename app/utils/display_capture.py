@@ -16,16 +16,14 @@ class DisplayCapture:
         self.monitor_resize_scale_factor = self.projector_bounding_box['width']/self.primary_bounding_box['width']
 
     #Use no resize if the image captured will not be directly displayed
-    def capture_frame_no_resize(self):
+    def capture_frame(self):
         frame = np.array(self.sct.grab(self.primary_bounding_box))
         return frame
 
-    def capture_frame_projector_resize(self):
-        frame = np.array(self.sct.grab(self.primary_bounding_box))
+    def frame_projector_resize(self, frame):
         #Check if the resolution of the primary monitor and TV differ (ratio not 1)
         if (self.monitor_resize_scale_factor) > 1.05 or (self.monitor_resize_scale_factor) < 0.95 :
             frame = self.resize_image_fit_projector(frame)
-
         return frame
 
     def resize_image_fit_projector(self,frame):

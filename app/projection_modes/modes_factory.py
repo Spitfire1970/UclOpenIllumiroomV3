@@ -2,7 +2,7 @@ from .cartoon import Cartoon
 from .wobble import Wobble
 from .blur import Blur
 from .low_health import LowHealth
-from .weather_snow import Snow
+from .weather import Weather
 from .speed_lines import SpeedLines
 
 class ModesFactory:
@@ -19,7 +19,7 @@ class ModesFactory:
             "cartoon": Cartoon,
             "low_health": LowHealth,
             "wobble": Wobble,
-            "snow": Snow,
+            "weather": Weather,
             "speed_lines": SpeedLines,
         }
         self.settings = setting_access

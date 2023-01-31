@@ -25,7 +25,7 @@ img_path = (__file__[:__file__.index("app")
             + len("app")]+"/assets/room_image/TV_box.jpeg")
 BACKGROUND_IMG = cv2.imread(img_path)
 
-print("image = ", BACKGROUND_IMG)
+#print("image = ", BACKGROUND_IMG)
 
 
 def main():
@@ -50,9 +50,9 @@ def main():
     else:
         selected_displays = general_settings_json["selected_displays"]
 
-    print(f"Your selected mode: {selected_mode}")
+    #print(f"Your selected mode: {selected_mode}")
 
-    print(f"Your selected displays: {selected_displays}")
+    #print(f"Your selected displays: {selected_displays}")
 
     # Create instance of projection modes factory
 
@@ -72,29 +72,42 @@ def main():
     mode_factory = ModesFactory(BACKGROUND_IMG, display_capture, audio_capture, settings_access)
     mode_object = mode_factory.get_mode(selected_mode)
 
+    format_string = settings_access.read_mode_settings(selected_mode, "qImg_format")
+    trigger_frequency = settings_access.read_mode_settings(selected_mode, "trigger_frequency")
+    qImg_format = eval(format_string)
+
 
     # Create PyQt app
     app = QtWidgets.QApplication(sys.argv)
-    main_window = DisplayOutput()
-    main_window.showFullScreen()
-    # main_window.show()
 
+    main_window = DisplayOutput(primary_bounding_box, projector_bounding_box)
+    #main_window.showFullScreen()
+    #main_window.showMaximized()
+
+    frame_counter = 0
     # Main loop for app
     while not main_window.stopped:
+  
         frames = mode_object.trigger()
 
+        
         if frames is not None or len(frames) != 0:
             for frame in frames:
+
+                #Resize frame to fit projector if requires resizing
+                frame = display_capture.frame_projector_resize(frame)
+
+                #Frame display
                 height, width = frame.shape[:2]
                 bytes_per_line = frame.strides[0]
-                format_string = settings_access.read_mode_settings(selected_mode, "qImg_format")
-                qImg_format = eval(format_string)
                 qImg = QtGui.QImage(frame.data, width, height, bytes_per_line, qImg_format).rgbSwapped()
                 main_window.label.setPixmap(QtGui.QPixmap(qImg))
                 # main_window.setFixedSize(width, height)
                 app.processEvents()
-                time.sleep(0.1)
-    sys.exit(app.exec())
+                #time.sleep(0) Does this have to be here?
+                #fps.print_fps()
+        frame_counter+=1
+    
 
 
     # #Main loop of application
@@ -108,11 +121,7 @@ def main():
     #     stopped = display_output.display_frame(frames)
     # # # run display output unless exit command received eg: 'q' pressed when on 
     # # # projector window
-
-    # # print("Thank you for using UCL Open Illumiroom V2, Have a great day!")
-    # # Clean up and exit.
-    
-    # exit()
+    exit(app.exec())
 
 if __name__ == '__main__':
     main()

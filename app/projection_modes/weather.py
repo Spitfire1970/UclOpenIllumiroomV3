@@ -1,8 +1,6 @@
-from abc import ABC, abstractmethod
 
 
-class WeatherMode(ABC):
-    @abstractmethod
+class Weather():
     def trigger(self):
         pass
 
