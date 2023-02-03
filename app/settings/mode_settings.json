@@ -6,7 +6,7 @@
         "trigger_frequency": "once"
     },
     "wobble":{
-        "num_frames":25,
+        "num_frames":100,
         "sound_threshold":0.01,
         "fractal_amplitude":3,
         "tv_top_left":[613, 495],

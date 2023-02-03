@@ -1,0 +1,6 @@
+Follow Nuitka instructions to setup
+
+hello world works with --standalone, distrubutable using folder, cannot just send exe file
+
+
+pyinstaller bundles code into 1 exe, but does not give a performance boost

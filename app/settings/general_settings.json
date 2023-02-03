@@ -1,1 +1,1 @@
-{"selected_displays": {"primary_display": {"left": 0, "top": 0, "width": 1920, "height": 1080}, "projector_display": {"left": 1920, "top": 0, "width": 2560, "height": 1080}}, "selected_mode": "wobble", "background_image": "assets/room_image/TV_box.jpeg", "exit_key_binding": "Key_Escape"}
+{"selected_displays": {"primary_display": {"left": 0, "top": 0, "width": 2560, "height": 1440}, "projector_display": {"left": -1366, "top": 661, "width": 1366, "height": 768}}, "selected_mode": "cartoon", "background_image": "assets/room_image/TV_box.jpeg", "exit_key_binding": "Key_Escape"}
