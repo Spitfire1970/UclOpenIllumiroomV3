@@ -21,6 +21,10 @@ class SettingsAccess:
             json.dump(new_json_data, write_file)
 
 
-    def read_mode_settings(self, mode, setting):
+    def read_mode_settings(self, mode, settings):
         mode_settings_json = self.read_settings("mode_settings.json")
-        return mode_settings_json[mode][setting]
+        if isinstance(settings, str):
+            return mode_settings_json[mode][settings]
+        else:
+            # Nested JSON object
+            return mode_settings_json[mode][settings[0]][settings[1]]

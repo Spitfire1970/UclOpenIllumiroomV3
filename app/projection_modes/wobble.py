@@ -11,13 +11,13 @@ import cv2
 class Wobble(Mode):
     def __init__(
             self,
-            setting_access,
+            settings_access,
             display_capture,  
             background_img,
             audio_capture=None
         ):
         self.img = background_img
-        self.settings = setting_access
+        self.settings = settings_access
         self.num_frames = self.settings.read_mode_settings("wobble", "num_frames")
 
         self.output_img = np.zeros_like(self.img)
@@ -77,11 +77,11 @@ class Wobble(Mode):
 
 
     def trigger(self):
-        while True:
-            if self.audio_capture.detect_loud_sound() > self.threshold:
-                # print("Loud sound")
-                frames = self.frames
-            else:
-                # print("No loud sound")
-                frames = [self.img]
-            return frames
+        # while True:
+        if self.audio_capture.detect_loud_sound() > self.threshold:
+            # print("Loud sound")
+            frames = self.frames
+        else:
+            # print("No loud sound")
+            frames = [self.img]
+        return frames

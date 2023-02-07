@@ -7,13 +7,13 @@ from pathlib import Path
 class Cartoon(Mode):
     def __init__(
             self,
-            setting_access,
+            settings_access,
             display_capture,  
             background_img,
             audio_capture=None
         ):
         self.img = background_img
-        self.settings = setting_access
+        self.settings = settings_access
 
     def cartoonify(self):
         gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
@@ -31,6 +31,7 @@ class Cartoon(Mode):
 
         # Merge original image with edge image
         self.img = cv2.addWeighted(self.img, 0.9, colour, 0.2, -40)
+
 
     def trigger(self):
         # Save image
