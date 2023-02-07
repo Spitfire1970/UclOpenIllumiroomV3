@@ -31,6 +31,32 @@
     "speed_lines":{
         ".compatible_with":[]
     },
+    "snow":{
+        "snow_amount": "harsh_snow",
+        "light_snow":{
+            "snow_point": 50,
+            "snow_point_increment": 0.0001,
+            "num_snowflakes": 300,
+            "falling_speed_interval": [2, 5],
+            "noise_wind_interval": [3, 7]
+        },
+        "med_snow":{
+            "snow_point": 60,
+            "snow_point_increment": 0.001,
+            "num_snowflakes": 400,
+            "falling_speed_interval": [3, 7],
+            "noise_wind_interval": [10, 17]
+        },
+        "harsh_snow":{
+            "snow_point": 70,
+            "snow_point_increment": 0.07,
+            "num_snowflakes": 600,
+            "falling_speed_interval": [7, 11],
+            "noise_wind_interval": [15, 20]
+        },
+        "qImg_format":"QtGui.QImage.Format.Format_RGB888",
+        "trigger_frequency": "every_frame"
+    },
     "weather":{
         ".compatible_with":["cartoon","wobble"],
         "trigger_frequency":"every_other_frame"
