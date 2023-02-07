@@ -5,9 +5,9 @@ from .settings_access import SettingsAccess
 from time import sleep
 
 class MainMenu:
-   def __init__(self):
+   def __init__(self, settings_access):
       mode_factory = ModesFactory(None, None, None, None)
-      self.settings_access = SettingsAccess()
+      self.settings_access = settings_access
       self.available_modes = mode_factory.get_available_modes()
       self.modes = None
       self.displays = None
@@ -30,16 +30,16 @@ class MainMenu:
             return self.modes, self.displays
 
          elif user_selection == "2":
-            display_selector = DisplaySelection()
+            display_selector = DisplaySelection(self.settings_access)
             self.displays = display_selector.select_tv_projector()
 
          elif user_selection == "3":
             self.modes = self.select_modes()
 
-         elif user_selection == "4":
-            self.select_mode_settings()
-            #print("Changing mode settings requires the Ilumiroom System to restart, please rerun Illumiroom")
-            #exit()
+         # elif user_selection == "4":
+         #    self.select_mode_settings()
+         #    #print("Changing mode settings requires the Ilumiroom System to restart, please rerun Illumiroom")
+         #    #exit()
          elif user_selection == "5":
             print("Thank you for using UCL-Open Illumiroom V2")
             print("Have a great day!")    

@@ -6,6 +6,9 @@ for standalone with tkinter - --standalone --enable-plugin=tk-inter
 
 pyinstaller bundles code into 1 exe, but does not give a performance boost
 
- use command:
-python -m nuitka --standalone --enable-plugin=tk-inter  --enable-plugin=pyqt6  main.py
+ use bash command in the illumiroom repo highest level
+python -m nuitka --standalone --enable-plugin=tk-inter  --enable-plugin=pyqt6  --output-dir=release --remove-output app/main.py
 
+python -m nuitka --standalone --enable-plugin=tk-inter  --enable-plugin=pyqt6  main.py; xcopy 
+
+python -m nuitka --standalone --enable-plugin=tk-inter  --enable-plugin=pyqt6  --output-dir=release --remove-output app/main.py; cp -r app/settings release/main.dist; cp -r app/assets release/main.dist

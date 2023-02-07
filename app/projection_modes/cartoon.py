@@ -12,8 +12,8 @@ class Cartoon(Mode):
             background_img,
             audio_capture=None
         ):
+        self.settings_access = settings_access
         self.img = background_img
-        self.settings = settings_access
 
     def cartoonify(self):
         gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
@@ -35,8 +35,10 @@ class Cartoon(Mode):
 
     def trigger(self):
         # Save image
-        cartoon_img_name = (__file__[:__file__.index("app") 
-            + len("app")]+"/assets/generated/cartoon_view.jpeg")
+        # cartoon_img_name = (__file__[:__file__.index("app") 
+        #     + len("app")]+"/assets/generated/cartoon_view.jpeg")
+        #All images are stored in the assets folder
+        cartoon_img_name = self.settings_access.get_image_path("/generated/cartoon_view.jpeg")
         cartoon_img = Path(cartoon_img_name)
         if cartoon_img.is_file():
             self.img = cv2.imread(cartoon_img_name)

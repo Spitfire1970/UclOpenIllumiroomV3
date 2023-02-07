@@ -21,19 +21,20 @@ from utils.fps import FPS
 from projection_modes.modes_factory import ModesFactory
 
 
-img_path = (__file__[:__file__.index("app") 
-            + len("app")]+"/assets/room_image/TV_box_old.jpeg")
-BACKGROUND_IMG = cv2.imread(img_path)
 
-#print("image = ", BACKGROUND_IMG)
+
+app_root_path = __file__[:__file__.index("main.py")]
+img_path = (app_root_path+"assets\\room_image\\TV_box_old.jpeg")
+BACKGROUND_IMG = cv2.imread(img_path)
 
 
 def main():
 
-    menu = MainMenu()
+    
 
-    #Get the current general settings
-    settings_access = SettingsAccess()
+    #Get the current general settings and display the menu
+    settings_access = SettingsAccess(app_root_path)
+    menu = MainMenu(settings_access)
     general_settings_json = settings_access.read_settings("general_settings.json")
 
     # Display settings menu
@@ -81,8 +82,6 @@ def main():
     app = QtWidgets.QApplication(sys.argv)
 
     main_window = DisplayOutput(primary_bounding_box, projector_bounding_box)
-    #main_window.showFullScreen()
-    #main_window.showMaximized()
 
     frame_counter = 0
     # Main loop for app

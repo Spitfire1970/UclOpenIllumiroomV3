@@ -49,5 +49,5 @@ class DisplayOutput(QtWidgets.QMainWindow):
             print("Thank you for using UCL-Open Illumiroom V2")
             print("Have a great day!")
             self.close()
-            exit()
+            sys.exit()
 

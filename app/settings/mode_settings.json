@@ -19,7 +19,7 @@
         "trigger_frequency":"every_frame"
     },
     "blur":{
-        "blur_amount":50,
+        "blur_amount":30,
         ".compatible_with":[],
         "bytes_per_line_factor":4,
         "qImg_format": "QtGui.QImage.Format.Format_RGBA8888",

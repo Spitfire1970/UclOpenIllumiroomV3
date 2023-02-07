@@ -12,6 +12,7 @@ class Blur(Mode):
         background_img=None, 
         audio_capture=None
     ):
+        self.settings_access = settings_access
         self.blur_amount = self.get_blur_amount_from_settings()
         self.blur_tuple = (self.blur_amount, self.blur_amount)
 
@@ -32,6 +33,5 @@ class Blur(Mode):
         return frames
 
     def get_blur_amount_from_settings(self):
-        settings_access = SettingsAccess()
-        mode_settings_json = settings_access.read_settings("mode_settings.json")
+        mode_settings_json = self.settings_access.read_settings("mode_settings.json")
         return mode_settings_json["blur"]["blur_amount"]
