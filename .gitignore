@@ -4,3 +4,6 @@
 
 /app/projection_modes/__pycache__
 /app/utils/__pycache__
+/MFC_RELEASE
+*.pyc
+MFC_RELEASE.zip
