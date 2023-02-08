@@ -28,6 +28,7 @@ class ModesFactory:
         self.img = background_image
         self.display_capture = display_capture
         self.audio_capture = audio_capture
+        #self.background_image = read_background_image()
 
     def get_available_modes(self):
         return self.mode_names.keys()

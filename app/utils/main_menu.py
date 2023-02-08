@@ -1,7 +1,7 @@
 from projection_modes.modes_factory import ModesFactory
 from .display_selection import DisplaySelection
 from .settings_access import SettingsAccess
-
+from sys import exit
 from time import sleep
 
 class MainMenu:

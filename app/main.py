@@ -24,6 +24,7 @@ from projection_modes.modes_factory import ModesFactory
 
 
 app_root_path = __file__[:__file__.index("main.py")]
+
 img_path = (app_root_path+"assets\\room_image\\TV_box_old.jpeg")
 BACKGROUND_IMG = cv2.imread(img_path)
 
