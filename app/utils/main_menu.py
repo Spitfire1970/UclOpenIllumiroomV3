@@ -15,6 +15,7 @@ class MainMenu:
 
    def main_select_options(self):
       ready_to_run = False
+      print("----------------------------------")
       print("Welcome to UCL Open-Illumiroom V2")
       
       while(not(ready_to_run)):
@@ -23,7 +24,7 @@ class MainMenu:
          print("2) Select your projector and TV displays")
          print("3) Chose your required mode")
          print("4) View Mode Settings")
-         print("5) Close system without running")
+         print("5) Exit the system")
          
          user_selection = input(">")
          if user_selection == "1" or user_selection == "run":
