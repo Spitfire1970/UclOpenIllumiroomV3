@@ -6,8 +6,8 @@ class SettingsAccess:
         #Get the path to the settings app up to the app folder
         #self.path = __file__[:__file__.index("app") + len("app")]+"/settings/"
         self.app_root_path = app_root_path
-        self.assets_path = app_root_path+"assets/"
-        self.settings_path = app_root_path+"settings/"
+        self.assets_path = app_root_path+"assets\\"
+        self.settings_path = app_root_path+"settings\\"
 
 
     def read_settings(self, settings_name):
@@ -33,5 +33,5 @@ class SettingsAccess:
             return mode_settings_json[mode][settings[0]][settings[1]]
 
     def get_image_path(self, image_path):
-        img_path = self.assets_path+"generated/cartoon_view.jpeg"
+        img_path = self.assets_path+image_path
         return img_path
