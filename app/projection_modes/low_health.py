@@ -88,7 +88,7 @@ class LowHealth(Mode):
             frame_num = self.num_low_health_frames - 1
         elif frame_num < 0:
             frame_num = 0
-        print("framenum:",frame_num)
+        #print("framenum:",frame_num)
         return frame_num
     
     def generate_low_health_frames(self):
