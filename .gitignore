@@ -8,3 +8,4 @@
 *.pyc
 MFC_RELEASE.zip
 **/__pycache__
+__pycache__/
