@@ -16,18 +16,24 @@ class LowHealth(Mode):
         self.background_img = background_img
         self.display_capture = display_capture
         self.num_low_health_frames = settings_access.read_mode_settings("low_health","num_low_health_frames")
-        print(self.num_low_health_frames)
+        #print(self.num_low_health_frames)
         self.low_health_frames = self.generate_low_health_frames()
 
         self.number_clusters = 1
         self.criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
         self.flags = cv2.KMEANS_RANDOM_CENTERS
+
+        self.previous_avgBG = None
+        self.start_low_health = 1.2
+        self.end_low_health = 2.5
+        self.range = self.end_low_health - self.start_low_health
+        self.scaling_factor = self.num_low_health_frames/self.range
     
         
     def kmeans_get_colour(self, data):
         #number of colors
-        compactness, labels, colour = cv2.kmeans(data, self.number_clusters, None, self.criteria, 10, self.flags)
-        return colour
+        _, _, colour_list = cv2.kmeans(data, self.number_clusters, None, self.criteria, 10, self.flags)
+        return colour_list[0]
 
     def crop_and_resize_image_to_data(self,frame):
         height, width, _ = np.shape(frame)
@@ -37,31 +43,53 @@ class LowHealth(Mode):
 
         y = int(height/8)
         h = int(height*6/8)
-        left_img = frame[y:y+h, x_left:x_left+w]
-        right_img = frame[y:y+h, x_right:x_right+w]
+        sct_left = frame[y:y+h, x_left:x_left+w]
+        sct_right = frame[y:y+h, x_right:x_right+w]
 
-        img = cv2.hconcat([left_img,right_img])
-        height, width, _ = np.shape(img)
-        data = np.reshape(img, (height * width, 4))
-        data = np.float32(img) 
+        #reshape and concatenate data from images
+        height, width, _ = np.shape(sct_left)
+        data_left = np.reshape(sct_left, (height * width, 4))
+        data_left = np.float32(data_left) 
+
+        height, width, _ = np.shape(sct_right)
+        data_right = np.reshape(sct_left, (height * width, 4))
+        data_right = np.float32(data_right) 
+
+        data = np.concatenate((data_left,data_right))
         return data
 
     def scale_low_health_to_frames(self, colour):
 
         b, g, r, a = colour
         avgBG = (b+g+1)/2
-        print("colour is: ",colour)
-        print("red/avg :",r/avgBG)
-        if (r+1) / avgBG > 3:
-            return 4
-        elif (r+1) / avgBG > 2.4:
-            return 3
-        elif (r+1) / avgBG > 1.8:
-            return 2
-        elif (r+1) / avgBG >= 1.45:
-            return 1
-        else:
-            return 0 # Black background
+        #print("colour is: ",colour)
+        #print("red/avg :",r/avgBG)
+        frame_num = 0
+        # if (r+1) / avgBG > 3:
+        #     frame_num = self.num_low_health_frames
+        # elif (r+1) / avgBG > 2.4:
+        #     frame_num = int(self.num_low_health_frames*3/4)
+        # elif (r+1) / avgBG > 1.8:
+        #     frame_num = int(self.num_low_health_frames*1/2)
+        # elif (r+1) / avgBG >= 1.45:
+        #     frame_num = int(self.num_low_health_frames*1/4)
+
+        #In Bo2, anything below 1.2 is no blood, maximum of 2.5
+        #Scale from 1.2, to 2.5 use linear scale for frame num
+        #THerefore subtract 1.2 from each colour reading, then scale from 
+        #0 to 1.3
+
+        avgRBG = (r+1) / avgBG
+
+        avgRBG_scaled = (avgRBG - self.start_low_health) * self.scaling_factor
+        frame_num = int(avgRBG_scaled)
+
+        if frame_num > self.num_low_health_frames:
+            frame_num = self.num_low_health_frames - 1
+        elif frame_num < 0:
+            frame_num = 0
+        print("framenum:",frame_num)
+        return frame_num
     
     def generate_low_health_frames(self):
         gray = cv2.cvtColor(self.background_img, cv2.COLOR_BGR2GRAY)
@@ -76,7 +104,7 @@ class LowHealth(Mode):
         
         colour_edges = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)       
         colour_edges[np.where((colour_edges == [0,0,0]).all(axis = 2))] = [0, 0, 255] #BGR
-        colour_edges[np.where((colour_edges == [255,255,255]).all(axis = 2))] = [30, 30, 200] #BGR
+        colour_edges[np.where((colour_edges == [255,255,255]).all(axis = 2))] = [0, 0, 200] #BGR
 
         #Generate specified number of frames, first with 0 change in colour, get red until almost fully red
         generated_frames = []
@@ -84,7 +112,7 @@ class LowHealth(Mode):
         for opacity in range(0,self.num_low_health_frames,1):
             opacity_background = round(1-opacity/self.num_low_health_frames,2)
             opacity_edges= round(opacity/self.num_low_health_frames,2)
-            generated_frames.append(cv2.addWeighted(self.background_img, opacity_background, colour_edges, opacity_edges, -10))
+            generated_frames.append(cv2.addWeighted(self.background_img, opacity_background, colour_edges, opacity_edges, -5))
         return generated_frames
 
 
@@ -92,12 +120,16 @@ class LowHealth(Mode):
         #Display capture 
         input_frame = self.display_capture.capture_frame()
         frames = [input_frame]
+
         data = self.crop_and_resize_image_to_data(input_frame)
-        kmeans_colour = self.kmeans_get_colour(data)
-        print(kmeans_colour[10])
-        #low_health_frame_num = self.scale_low_health_to_frames(kmeans_colour)
         
-        #frames = [self.low_health_frames[low_health_frame_num]]
+        kmeans_colour = self.kmeans_get_colour(data)
+
+        low_health_frame_num = self.scale_low_health_to_frames(kmeans_colour)
+        if self.num_low_health_frames-low_health_frame_num > 0.8 * self.num_low_health_frames:
+            frames = [self.low_health_frames[low_health_frame_num]] 
+        else:
+            frames = [self.low_health_frames[low_health_frame_num]] * (3)
         return frames
     """
     def trigger(self):

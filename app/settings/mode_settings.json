@@ -28,9 +28,9 @@
     "low_health":{
         ".compatible_with":[],
         "bytes_per_line_factor":3,
-        "qImg_format": "QtGui.QImage.Format.Format_RGBA8888",
+        "qImg_format": "QtGui.QImage.Format.Format_RGB888",
         "trigger_frequency": "once",
-        "num_low_health_frames":8
+        "num_low_health_frames":30
     },
     "speed_lines":{
         ".compatible_with":[]
