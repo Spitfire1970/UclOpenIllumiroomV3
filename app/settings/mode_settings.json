@@ -23,7 +23,8 @@
         ".compatible_with":[],
         "bytes_per_line_factor":4,
         "qImg_format": "QtGui.QImage.Format.Format_RGBA8888",
-        "trigger_frequency": "every_frame"
+        "trigger_frequency": "every_frame",
+        "edge_rect_colour":[0,0,0,255]
     },
     "low_health":{
         ".compatible_with":[],

@@ -103,8 +103,8 @@ class LowHealth(Mode):
                 )
         
         colour_edges = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)       
-        colour_edges[np.where((colour_edges == [0,0,0]).all(axis = 2))] = [0, 0, 255] #BGR
-        colour_edges[np.where((colour_edges == [255,255,255]).all(axis = 2))] = [0, 0, 200] #BGR
+        colour_edges[np.where((colour_edges == [0,0,0]).all(axis = 2))] = [0, 0, 0] #BGR - Colour of lines
+        colour_edges[np.where((colour_edges == [255,255,255]).all(axis = 2))] = [0, 0, 200] #BGR - colour of background
 
         #Generate specified number of frames, first with 0 change in colour, get red until almost fully red
         generated_frames = []
@@ -130,6 +130,8 @@ class LowHealth(Mode):
             frames = [self.low_health_frames[low_health_frame_num]] 
         else:
             frames = [self.low_health_frames[low_health_frame_num]] * (3)
+        print("colour: ",kmeans_colour)
+        print("frame num: ",low_health_frame_num)
         return frames
     """
     def trigger(self):

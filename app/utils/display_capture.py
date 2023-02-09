@@ -35,3 +35,6 @@ class DisplayCapture:
         dim = (width, height)
         # resize image
         return resize(frame, dim, interpolation = INTER_AREA)
+
+    def get_projector_bounding_box(self):
+        return self.projector_bounding_box

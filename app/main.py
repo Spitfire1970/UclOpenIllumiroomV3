@@ -99,6 +99,7 @@ def main():
                     main_window.label.setPixmap(QtGui.QPixmap(qImg))
                     app.processEvents()
                     #fps.print_fps()
+                    #time.sleep(5)
             frame_counter+=1
         
         print("done")
