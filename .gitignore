@@ -7,4 +7,4 @@
 /MFC_RELEASE
 *.pyc
 MFC_RELEASE.zip
-
+**/__pycache__
