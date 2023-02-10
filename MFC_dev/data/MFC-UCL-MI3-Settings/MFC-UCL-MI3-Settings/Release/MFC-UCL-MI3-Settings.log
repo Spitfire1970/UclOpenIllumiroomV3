@@ -1,9 +1,0 @@
-﻿  MFC-UCL-MI3-SettingsDlg.cpp
-  The contents of <filesystem> are available only with C++17 or later.
-C:\Users\aneli\source\repos\MI_Multitouch_Settings_MFC\data\MFC-UCL-MI3-Settings\MFC-UCL-MI3-Settings\MFC-UCL-MI3-SettingsDlg.cpp(173,22): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-  Generating code
-  1 of 1758 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    4 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  MFC-UCL-MI3-Settings.vcxproj -> C:\Users\aneli\source\repos\MI_Multitouch_Settings_MFC\data\MFC-UCL-MI3-Settings\Release\MFC-UCL-MI3-Settings.exe

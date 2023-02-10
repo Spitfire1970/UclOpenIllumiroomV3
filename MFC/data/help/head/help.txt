@@ -1,0 +1,229 @@
+UCL MotionInput v3.11 - Special Edition with Visual Studio Accessibility Shortcuts
+Facial Navigation with Speech Microbuild Technical Preview
+
+This application simulates control of the mouse and keyboard, primarily by moving your face around a central point, and enables both speech or facial movements (like raising an eyebrow, opening a mouth) to use mouse gestures. It has speech commands, and live transcription (live captions) available in English in this Technical Preview.
+
+This file contains the gesture bindings for the Facial Navigation.
+For additional help and further information, see the MotionInput3-FAQ-HelpGuide.txt file.
+
+
+There are five modes in this build. To change modes in this version, say these words out loud: "NEXT MODE". It will loop through the following modes. 
+
+1. Nose Navigation with Speech
+2. Nose Navigation with Facial Switches
+3. Multitouch in the air with Speech
+4. Eye Gaze with Speech (calibration will automatically start, remove your glasses if you wear glasses)
+5. Eye Gaze with Facial Switches 
+
+For more information on this special edition and the commands for Visual Studio, see this blog here:
+https://hrussellzfac023.github.io/VisualNav/
+
+
+Mode 1. Nose Navigation with Speech
+
+This mode creates a joystick around your nose to control the mouse, with the centering of your nose as the rest position. You can move the mouse up, down, left or right, by moving your head with your neck and body. The blue box that you will see is called the area of interest (AOI). Once your nose is inside that box, it will be evaluating the nose from the start up position of where you are.
+
+To reset where the mouse starts from, to anchor to your nose, say out loud clearly "BUTTERFLY".
+You can do this whenever you move in your seat and you want to reset the resting location of the mouse to your nose.
+
+To do a mouse click on an icon or click in a game/app, say "click". The same for "double click" and "right click". Also useful for games if they use arrow key presses, is to say next, previous, up and down, referring to the right, left, up and down arrow keys.
+
+To click say "click", "right click", "double click" and to click and drag (left mouse button and holding it down), say "hold left" and "release left". The same for right mouse click, "hold right" and "release right".
+
+
+
+
+Modes 1,3 and 4. A list of speech commands - say the word to action the command 
+---------------------------
+Butterfly - resets nose joystick to centre
+
+Next Mode - changes to the next mode
+
+Reset - Redo the calibration of Eye Grid/Magnet Mode 
+
+Left Range - Sets the upper left range limit in the In-Range Nose Grid Mode 
+
+Right Range - Sets the lower right range limit in the In-Range Nose Grid Mode 
+
+Reset Ranges - Resets the default settings in the Nose Grid Mode 
+
+
+(Eye gaze specific commands)
+Start - Start the Eye Grid Mode movement of the cursor 
+
+Go - Lock the direction of the movement for the Eye Magnet Mode 
+
+Stop - Stop the movement of the cursor in Eye Grid/Magnet Mode 
+
+
+(Clicking)
+Click  - Left mouse click 
+
+Right click  - Right mouse click  
+
+Double click - Double click (left mouse button) 
+
+
+(Dragging)
+Hold left - Left mouse click and hold 
+
+Release left - Left click release (Reset cursor after “Hold Left” command) 
+
+Hold Right - Right click press and hold 
+
+Release Right - Right click release (Reset cursor after “Hold Right” command) 
+
+
+
+(Transcribe / Live Captioning / Filling in forms with speech)
+Transcribe - Enable transcribe mode 
+
+Stop Transcribe - Disable transcribe mode 
+
+
+
+(Keyboard keys)
+Next - Right Arrow key press 
+
+Previous - Left Arrow key press 
+
+Up - Up Arrow key press 
+
+Down - Down Arrow key press 
+
+Enter - Enter Key press 
+
+Escape - Esc Key press 
+
+Page Down - Scrolls the page down 
+
+Page Up - Scrolls the page up 
+
+Full Screen - Show full screen view (for powerpoint – F5 key) 
+
+Save - Save (Ctrl+ S) 
+
+Space - Space bar
+
+Copy - Copy (Ctrl + C) 
+
+Cut - Cut (Ctrl + X) 
+
+Paste - Paste (Ctrl + V) 
+
+Print - Print (Ctrl + P) 
+
+Help - Help (F1) 
+
+Revert - Undo (Ctrl + Z) 
+
+Escape - Escape Key press 
+
+Switch - Switch Windows (Alt + Tab) 
+
+Volume up - Increase the volume 
+
+Volume down - Decrease the volume 
+
+Close - Close (Alt + F4) 
+
+
+
+(Windows Operations)
+Windows Run - Open Windows Run window  
+
+Windows Key - Windows key press 
+
+Maximize - Maximize active window 
+
+Minimize - Minimize active window 
+
+Files - Opens Windows file explorer
+
+
+
+
+
+Features 
+
+From v3.03+, a new In-Range model has been added to detect from the maximum ranges you can move your neck. 
+Saying "left range" upon starting will set up the leftmost position marker, followed by saying "right range" will set the rightmost position marker. The size of the nose joystick will then shrink to match, and it should be more comfortable in moving within those ranges. Say "reset ranges" to go back to the default.
+
+Head rotation has also been added which are mapped to left and right keyboard keys, by rotating your head left and right.
+
+In any editable text field, including in Word, Outlook, Teams etc; say "transcribe" and "stop transcribe" to start and stop transcription. Speak with short English sentences and pause, and it should appear.
+
+In any browser or office app, "page up" and "page down". "Cut", "Copy", "Paste", "left arrow", "right arrow" work as well.
+
+In powerpoint you can say "next", "previous", "show fullscreen" and "escape".
+
+
+Mode 4 and 5. Eye Gaze 
+
+This mode creates tracks your eyes to control the mouse and is intended for users who cannot move their neck or body. You will start with a calibration screen. You can move the mouse up, down, left or right. There is a mode with speech, or without speech and with facial switches.
+
+In Eye Gaze with Speech, while watching in a direction, say "go" and cursor will start moving in that direction. Say "stop" to stop.
+
+
+Modes 2 and 5. Facial Switches (both for Nose Navigation and Eye Gaze) 
+
+The facial switch gestures in the non-speech modes are:
+
+			Nose					Eyes
+Smile			Left click and drag (v3.01+)		On/Off navigation
+Fish Face		Left click				Left click
+Eyebrow Raised		Double click				Double click
+Mounth Open		Right click				Right click
+
+
+
+Mode 3. Multitouch Gestures
+---
+- Raising your right hand, you will be able to do the following:
+>Index Pinch (Index Finger and Thumb)- native Windows Touchpoints Press (should appear as a round translucent circle - this is known as a Windows Touchpoint and is native to Windows)
+>Middle Pinch (Middle Finger and Thumb) - Left Mouse Click (or just say "click")
+>Ring Pinch (Ring Finger and Thumb) - Double Left Mouse Click (or just say "double click")
+>Pinky Pinch (Pinky Little Finger and Thumb) - Right Mouse Click (or just say "right click")
+
+- With both the right and left hand raised, you will be able to do the following:
+>Both right and left hands doing Index Pinch, moving in and out, starting with right hand - Touchpoints Drag (zooming in a browser)
+You can also select and drag in-air by saying "hold left" (meaning, hold the left mouse button), and "release left" (to release the left mouse button).
+
+>Double Pinch - Pinch both the index and middle finger with the thumb (with all other fingers raised) on the LEFT (non-dominant) hand - Left Mouse Press (holds left mouse button until the gesture is released)
+Performing the gesture with the left hand activates left mouse press, with the right/dominant hand still being responsible for mouse movement.
+Move your right hand whilst holding this gesture with the left hand to drag across the screen.
+
+>Ring Pinch (Ring Finger and Thumb) on the LEFT (non-dominant) hand - Right Mouse Press - holds right mouse button until the gesture is released. Move the right/dominant hand whilst holding this gesture on
+the left to right click drag across the screen.
+
+>Rabbit Pinch - Pinch the middle and ring finger with the thumb (with all other fingers raised) on the LEFT (non-dominant) hand - Monitor Switch - perform this gesture once to switch to the next screen/monitor (if connected).
+
+Repeatedly perform this gesture to cycle through multiple monitors.
+
+>Pinky Pinch (Pinky Little Finger and Thumb) on the LEFT (non-dominant) hand - activates 3 finger swipe mode - performing this gesture simulates pressing 3 fingers side by side on the screen.
+Move your RIGHT hand up/down/sideways whilst holding this gesture on the LEFT (non-dominant) hand to perform 3-finger swipe gestures (supported on Windows 11).
+Here are some of the actions you can perform whilst holding this gesture with your left hand:
+ - Move your RIGHT hand upwards and then release the gesture on the LEFT (non-dominant) hand to show all open windows.
+ - Move your RIGHT hand downwards and then release the gesture on the LEFT (non-dominant) hand to show the desktop.
+ - Move your RIGHT hand left/right to switch to the last open app.
+
+You can find the full list of supported gestures on: https://support.microsoft.com/en-us/windows/touch-gestures-for-windows-a9d28305-4818-a5df-4e2b-e5590f850741#WindowsVersion=Windows_11
+
+
+Classic Mouse Gestures
+---
+- Raising your right hand, you will be able to do the following:
+>Index Pinch (Index Finger and Thumb)- Left Mouse Press (or just say "hold left" and then "release left" when desired)
+>Middle Pinch (Middle Finger and Thumb) - Right Mouse Press (or just say "hold right" and then "release right" when desired)
+>Make a fist with your hand - Double Mouse Click (or just say "double click")
+>Index pinch on both left and right hand and then move hands closer/further apart - Zoom in/out on a browser
+>Press the index and middle finger against each other (side by side) and then tilt hand upwards/downwards to scroll up/down accordingly
+>Pinky Pinch (Pinky Little Finger and Thumb) - Monitor Switch - perform this gesture once to switch to the next screen/monitor (if connected).
+Repeatedly perform this gesture to cycle through multiple monitors.
+
+
+On some computers we have found that the Microsoft Visual C++ Redistributable is not installed. If no window appears, try installing this for X64 - https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170
+
+
+For feedback and comments, please do reach out to us on our website www.touchlesscomputing.org
+
