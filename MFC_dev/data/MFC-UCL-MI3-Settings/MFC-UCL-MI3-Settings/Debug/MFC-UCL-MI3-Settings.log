@@ -1,0 +1,7 @@
+﻿  pch.cpp
+  MFC-UCL-MI3-Settings.cpp
+  MFC-UCL-MI3-SettingsDlg.cpp
+  The contents of <filesystem> are available only with C++17 or later.
+  Generating Code...
+  LINK : C:\Users\aneli\OneDrive\Desktop\FACE_MFC\Debug\MFC-UCL-MI3-Settings.exe not found or not built by the last incremental link; performing full link
+  MFC-UCL-MI3-Settings.vcxproj -> C:\Users\aneli\OneDrive\Desktop\FACE_MFC\Debug\MFC-UCL-MI3-Settings.exe

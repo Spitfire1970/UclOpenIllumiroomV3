@@ -1,0 +1,9 @@
+﻿  MFC-UCL-MI3-SettingsDlg.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\filesystem(13): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
+C:\Users\Alex\Desktop\Git Repos\MI_Multitouch_Settings_MFC\data\MFC-UCL-MI3-Settings\MFC-UCL-MI3-Settings\MFC-UCL-MI3-SettingsDlg.cpp(185,22): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  Generating code
+  3 of 1779 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    6 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  MFC-UCL-MI3-Settings.vcxproj -> C:\Users\Alex\Desktop\Git Repos\MI_Multitouch_Settings_MFC\MFC-UCL-MI3-Settings.exe

@@ -1,0 +1,9 @@
+﻿  pch.cpp
+  CMFCUCLMI3AboutDlg.cpp
+  MFC-UCL-MI3-Settings.cpp
+  MFC-UCL-MI3-SettingsDlg.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\filesystem(13): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
+C:\Users\fabia\Documents\GitHub\IllumiroomGroup33COMP0016\MFC_dev\data\MFC-UCL-MI3-Settings\MFC-UCL-MI3-Settings\MFC-UCL-MI3-SettingsDlg.cpp(186,22): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  Generating Code...
+  LINK : C:\Users\fabia\Documents\GitHub\IllumiroomGroup33COMP0016\MFC_dev\data\MFC-UCL-MI3-Settings\..\..\MFC-UCL-MI3-Settings.exe not found or not built by the last incremental link; performing full link
+  MFC-UCL-MI3-Settings.vcxproj -> C:\Users\fabia\Documents\GitHub\IllumiroomGroup33COMP0016\MFC_dev\MFC-UCL-MI3-Settings.exe

@@ -1,5 +1,5 @@
-/release/main.dist
-/release/main.build
+main.dist
+
 
 
 /app/projection_modes/__pycache__/
