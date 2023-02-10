@@ -1,6 +1,11 @@
-/app/main.dist
-/app/main.build
-/app/main.exe
+/release/main.dist
+/release/main.build
 
-/app/projection_modes/__pycache__
-/app/utils/__pycache__
+
+/app/projection_modes/__pycache__/
+/app/utils/__pycache__/
+/MFC_RELEASE
+*.pyc
+MFC_RELEASE.zip
+**/__pycache__
+__pycache__/

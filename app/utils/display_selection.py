@@ -10,7 +10,8 @@ import cv2
 
 class DisplaySelection:
 
-    def __init__(self):
+    def __init__(self, settings_access):
+        self.settings_access = settings_access
         self.monitor_num_prim = None
         self.monitor_num_proj = None
         self.win = Tk()
@@ -123,10 +124,10 @@ class DisplaySelection:
         displays = {"primary_display":sct.monitors[self.monitor_num_prim],"projector_display":sct.monitors[self.monitor_num_proj]}
         
         #Write the selected displays to the general settings json
-        settings_access = SettingsAccess()
-        general_settings_json = settings_access.read_settings("general_settings.json")
+     
+        general_settings_json = self.settings_access.read_settings("general_settings.json")
         general_settings_json['selected_displays'] = displays
-        settings_access.write_settings("general_settings.json", general_settings_json)
+        self.settings_access.write_settings("general_settings.json", general_settings_json)
 
         print("Selected Displays!")
         return displays

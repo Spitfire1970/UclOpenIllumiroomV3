@@ -15,114 +15,113 @@ from utils.display_output import DisplayOutput
 from utils.display_capture import DisplayCapture
 from utils.audio_capture import AudioCapture
 from utils.tv_detection import TVDetection
+from utils.room_image import RoomImage
 
 from utils.fps import FPS
 
 from projection_modes.modes_factory import ModesFactory
 
-
-img_path = (__file__[:__file__.index("app") 
-            + len("app")]+"/assets/room_image/TV_box_old.jpeg")
-BACKGROUND_IMG = cv2.imread(img_path)
-
-#print("image = ", BACKGROUND_IMG)
-
+app_root_path = __file__[:__file__.index("main.py")]
 
 def main():
 
-    menu = MainMenu()
+    while True:
 
-    #Get the current general settings
-    settings_access = SettingsAccess()
-    general_settings_json = settings_access.read_settings("general_settings.json")
+        #Get the current general settings and display the menu
+        settings_access = SettingsAccess(app_root_path)
+        menu = MainMenu(settings_access)
+        general_settings_json = settings_access.read_settings("general_settings.json")
 
-    # Display settings menu
+        # Display settings menu
 
-    mode, displays = menu.main_select_options()
-    if mode is not None: 
-        selected_mode = mode
-    else:
-        #Display currently selected modes, if there are none then get user to select
-        selected_mode = general_settings_json["selected_mode"]
+        mode, displays, exit_requested = menu.main_select_options()
 
-    if displays is not None:
-        selected_displays = displays
-    else:
-        selected_displays = general_settings_json["selected_displays"]
+        #if exit is requested, break out of the main while loop
+        if exit_requested:
+            break
 
-    #print(f"Your selected mode: {selected_mode}")
+        if mode is not None: 
+            selected_mode = mode
+        else:
+            #Display currently selected modes, if there are none then get user to select
+            selected_mode = general_settings_json["selected_mode"]
 
-    #print(f"Your selected displays: {selected_displays}")
+        if displays is not None:
+            selected_displays = displays
+        else:
+            selected_displays = general_settings_json["selected_displays"]
 
-    # Create instance of projection modes factory
+        #print(f"Your selected mode: {selected_mode}")
 
-    # Create instance of display output, display capture
-    primary_bounding_box = selected_displays["primary_display"]
-    projector_bounding_box = selected_displays["projector_display"]
+        #print(f"Your selected displays: {selected_displays}")
 
-    display_capture = DisplayCapture(primary_bounding_box, projector_bounding_box)
-    audio_capture = AudioCapture()
-    # display_output = DisplayOutput()
-    # # tv_detection = TVDetection()
+        # Create instance of projection modes factory
 
-    #Create instance of FPS
-    fps = FPS()
+        # Create instance of display output, display capture
+        primary_bounding_box = selected_displays["primary_display"]
+        projector_bounding_box = selected_displays["projector_display"]
 
-    #Create the mode objects from the mode factory
-    mode_factory = ModesFactory(BACKGROUND_IMG, display_capture, audio_capture, settings_access)
-    mode_object = mode_factory.get_mode(selected_mode)
+        display_capture = DisplayCapture(primary_bounding_box, projector_bounding_box)
+        audio_capture = AudioCapture()
+        room_image_obj = RoomImage(settings_access,display_capture)
+        room_image = room_image_obj.read_room_image(resize=False)
 
-    format_string = settings_access.read_mode_settings(selected_mode, "qImg_format")
-    trigger_frequency = settings_access.read_mode_settings(selected_mode, "trigger_frequency")
-    qImg_format = eval(format_string)
+        #Create instance of FPS
+        fps = FPS()
+
+        #Create the mode objects from the mode factory
+        mode_factory = ModesFactory(room_image, display_capture, audio_capture, settings_access)
+        mode_object = mode_factory.get_mode(selected_mode)
+
+        format_string = settings_access.read_mode_settings(selected_mode, "qImg_format")
+        trigger_frequency = settings_access.read_mode_settings(selected_mode, "trigger_frequency")
+        qImg_format = eval(format_string)
 
 
-    # Create PyQt app
-    app = QtWidgets.QApplication(sys.argv)
+        # Create PyQt app
+        app = QtWidgets.QApplication(sys.argv)
 
-    main_window = DisplayOutput(primary_bounding_box, projector_bounding_box)
-    #main_window.showFullScreen()
-    #main_window.showMaximized()
+        main_window = DisplayOutput(primary_bounding_box, projector_bounding_box)
 
-    frame_counter = 0
-    # Main loop for app
-    while not main_window.stopped:
-  
-        frames = mode_object.trigger()
-
-        
-        if frames is not None or len(frames) != 0:
-            for frame in frames:
-
-                #Resize frame to fit projector if requires resizing
-                frame = display_capture.frame_projector_resize(frame)
-
-                #Frame display
-                height, width = frame.shape[:2]
-                bytes_per_line = frame.strides[0]
-                qImg = QtGui.QImage(frame.data, width, height, bytes_per_line, qImg_format).rgbSwapped()
-                main_window.label.setPixmap(QtGui.QPixmap(qImg))
-                # main_window.setFixedSize(width, height)
-                app.processEvents()
-                #time.sleep(0) Does this have to be here?
-                #fps.print_fps()
-        frame_counter+=1
+        frame_counter = 0
+        # Main loop for app
+        while not main_window.stopped:
     
+            frames = mode_object.trigger()
 
+            
+            if frames is not None or len(frames) != 0:
+                for frame in frames:
 
-    # #Main loop of application
-    # display_output = DisplayOutput()
-    # stopped = False
-    # while not(stopped):
-    #     #fps.print_fps()
-    #     #Modes control whether they need screen or audio capture
-    #     frames = mode_object.trigger()
-    #     #potentially add the depth mapping here
-    #     stopped = display_output.display_frame(frames)
-    # # # run display output unless exit command received eg: 'q' pressed when on 
-    # # # projector window
-    exit(app.exec())
+                    #Resize frame to fit projector if requires resizing
+                    frame = display_capture.frame_projector_resize(frame)
+
+                    fps.add_fps_to_image(frame, fps.get_fps())
+                    #Frame display
+                    height, width = frame.shape[:2]
+                    bytes_per_line = frame.strides[0]
+                    qImg = QtGui.QImage(frame.data, width, height, bytes_per_line, qImg_format).rgbSwapped()
+                    main_window.label.setPixmap(QtGui.QPixmap(qImg))
+                    app.processEvents()
+                    #fps.print_fps()
+                    #time.sleep(5)
+            frame_counter+=1
+        
+
+        # #Main loop of application
+        # display_output = DisplayOutput()
+        # stopped = False
+        # while not(stopped):
+        #     #fps.print_fps()
+        #     #Modes control whether they need screen or audio capture
+        #     frames = mode_object.trigger()
+        #     #potentially add the depth mapping here
+        #     stopped = display_output.display_frame(frames)
+        # # # run display output unless exit command received eg: 'q' pressed when on 
+        # # # projector window
+        #exit(app.exec())
 
 if __name__ == '__main__':
     main()
+    
     
