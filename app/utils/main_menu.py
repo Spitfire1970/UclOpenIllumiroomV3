@@ -28,7 +28,7 @@ class MainMenu:
          
          user_selection = input(">")
          if user_selection == "1" or user_selection == "run":
-            return self.modes, self.displays
+            return self.modes, self.displays, False
 
          elif user_selection == "2":
             display_selector = DisplaySelection(self.settings_access)
@@ -44,7 +44,7 @@ class MainMenu:
          elif user_selection == "5":
             print("Thank you for using UCL-Open Illumiroom V2")
             print("Have a great day!")    
-            exit()
+            return self.modes, self.displays, True
 
          else:
             print("Invalid input, please try again!")

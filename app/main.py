@@ -34,7 +34,12 @@ def main():
 
         # Display settings menu
 
-        mode, displays = menu.main_select_options()
+        mode, displays, exit_requested = menu.main_select_options()
+
+        #if exit is requested, break out of the main while loop
+        if exit_requested:
+            break
+
         if mode is not None: 
             selected_mode = mode
         else:
@@ -102,7 +107,6 @@ def main():
                     #time.sleep(5)
             frame_counter+=1
         
-        print("done")
 
         # #Main loop of application
         # display_output = DisplayOutput()
