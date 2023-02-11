@@ -62,7 +62,7 @@ class Rain(Mode):
         
     
     def create_falling_rain(self, max_scale, scale_factor):
-        slant_extreme = 10
+        slant_extreme = 1
         slant = np.random.randint(-slant_extreme, slant_extreme)
         drop_length = 20
         drop_width = 2
@@ -71,8 +71,7 @@ class Rain(Mode):
         for i in range(len(self.raindrops)):
             raindrop = self.raindrops[i]
             # Add randomness to y and x pos
-            raindrop[1] += random.randint(-1, 1) + self.noise_wind + self.falling_speed
-            raindrop[0] += random.randint(-1, 1) + self.noise_wind
+            raindrop[1] += self.noise_wind + self.falling_speed
             # Add randomness to size of raindrop
             raindrop[2] += random.uniform(-abs(scale_factor), scale_factor)
 
@@ -93,7 +92,7 @@ class Rain(Mode):
 
 
     def add_rain_to_image(self):
-        return cv2.addWeighted(self.img, 0.8, self.rain, 0.3, 0)
+        return cv2.addWeighted(self.img, 0.8, self.rain, 0.6, 0)
 
 
     def trigger(self):
