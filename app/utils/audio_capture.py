@@ -30,7 +30,7 @@ class AudioCapture():
             'dog_bark', 'drilling', 'engine_idling', 'gun_shot', 
             'jackhammer','siren', 'street_music']
 
-        # self.load_classifier_model()
+        self.load_classifier_model()
 
     def set_threshold(self, value):
          self.threshold = value
@@ -109,8 +109,9 @@ class AudioCapture():
         predicted_proba_vector = self.model.predict(prediction_feature, verbose=0)
         predicted_proba = predicted_proba_vector[0]
 
-        # for i in range(len(predicted_proba)): 
-        #     print(self.classes[i], "\t\t : ", format(predicted_proba[i], '.32f') )
+        print("------------------")
+        for i in range(len(predicted_proba)): 
+            print(self.classes[i], "\t\t : ", format(predicted_proba[i], '.32f') )
         
         dog_bark = predicted_proba[3]
         drilling = predicted_proba[4]
@@ -118,9 +119,9 @@ class AudioCapture():
         gun_shot = predicted_proba[6]
         jackhammer = predicted_proba[7]
         siren = predicted_proba[8]
-        if (dog_bark > 0.98 or drilling > 0.7
-            or engine_idling > 0.8 or gun_shot > 0.8 
-            or jackhammer > 0.75 or siren > 0.9):
+        if (dog_bark > 0.4 or drilling > 0.5
+            or engine_idling > 0.5 or gun_shot > 0.5 
+            or jackhammer > 0.4 or siren > 0.7):
             return True
         else:
             return False

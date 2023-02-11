@@ -49,7 +49,7 @@ class MainMenu:
 
          elif user_selection == "4":
             print("Step 1: Upload the picture of the projected area.")
-            self.room_image_obj.save_picture()
+            # self.room_image_obj.save_picture()
 
             print("Step 2: Detect where the TV/ primary monitor is on the image "
                + "by dragging your cursor to create a rectangle around it. "

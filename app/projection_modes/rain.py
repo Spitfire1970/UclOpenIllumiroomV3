@@ -27,10 +27,10 @@ class Rain(Mode):
         self.num_raindrops = self.settings.read_mode_settings("rain", [self.rain_mode, "num_raindrops"])
         self.speed_interval = self.settings.read_mode_settings("rain", [self.rain_mode, "falling_speed_interval"])
         self.wind_interval = self.settings.read_mode_settings("rain", [self.rain_mode, "noise_wind_interval"])
-        
+
         self.falling_speed = random.randint(self.speed_interval[0], self.speed_interval[1])
         self.noise_wind = random.randint(self.wind_interval[0], self.wind_interval[1])
-
+        
 
     def add_settling_rain(self, image):
         # Conversion to HLS
@@ -94,7 +94,7 @@ class Rain(Mode):
 
 
     def add_rain_to_image(self):
-        return cv2.addWeighted(self.img, 0.8, self.rain, 0.6, 0)
+        return cv2.addWeighted(self.img, 0.8, self.rain, 0.8, 0)
 
     def get_random_drop_color(self):
         return tuple(random.choice(self.possible_drop_colours))
@@ -117,8 +117,8 @@ class Rain(Mode):
 
             self.create_falling_rain(max_scale, scale_factor)
             
-            overlay = self.add_rain_to_image()
-            img = self.add_settling_rain(overlay)
+            img = self.add_rain_to_image()
+            #img = self.add_settling_rain(img)
             self.rain_point += self.rain_increment
 
             return [img]

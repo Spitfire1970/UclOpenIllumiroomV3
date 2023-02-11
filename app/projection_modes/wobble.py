@@ -39,8 +39,8 @@ class Wobble(Mode):
         print("Generating wobble frames, awesomeness coming soon!")
         self.frames = []
         for i in range(self.num_frames):
-            amplitude = 15 * (i/self.num_frames)
-            frequency = 0.12 * (i/self.num_frames)
+            amplitude = 30 * (i/self.num_frames)
+            frequency = 0.10 * (i/self.num_frames)
             # Interpolation factor
             factor = 1 - i / self.num_frames
 
@@ -78,8 +78,8 @@ class Wobble(Mode):
 
 
     def trigger(self):
-        if self.audio_capture.detect_loud_sound():
-        # if self.audio_capture.detect_explosive_sound():
+        # if self.audio_capture.detect_loud_sound():
+        if self.audio_capture.detect_explosive_sound():
             # print("Loud sound")
             frames = self.frames
         else:

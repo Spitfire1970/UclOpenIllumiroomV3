@@ -102,9 +102,9 @@ class RoomImage:
         # self.settings_access.write_settings("general_settings.json", settings_JSON)
 
 
-    def process_image(self):
+    def process_image(self, image_path):
         # Add black boundary filled box to the detected monitor
-        image_without_TV = cv2.imread(self.image_path)
+        image_without_TV = cv2.imread(image_path)
         start = self.settings_access.read_mode_settings("wobble", "tv_top_left")
         end = self.settings_access.read_mode_settings("wobble", "tv_bottom_right")
         cv2.rectangle(image_without_TV, (start[0], start[1]), (end[0], end[1]), (0, 0, 0), -1)
@@ -113,24 +113,27 @@ class RoomImage:
         return image_without_TV
 
     def detect_primary_display(self):
-        image = cv2.imread(self.image_path)
+        image_name = 'room_img1.jpg'
+        image_path = self.settings_access.room_img_path + image_name
+        image = cv2.imread(image_path)
         # image = self.read_room_image(resize=False)
         tv_detection = TVDetection(image, self.settings_access)
         image_without_TV = tv_detection.detect_tv()
         
         # Save image
-        image_without_TV = self.process_image()
+        image_without_TV = self.process_image(image_path)
         # image_name = self.settings_access.read_settings("general_settings.json")["background_image_path"]
         # img_path = self.settings_access.get_image_path(image_name)
         # image_name = self.image_name
         # Resize image:
         # self.display_capture.frame_projector_resize(image_without_TV)
         # print(self.image_name, self.image_path)
-        cv2.imwrite(self.image_path, image_without_TV)
+        image_without_TV_path = self.settings_access.room_img_path + 'room_img1_noTV.jpg'
+        cv2.imwrite(image_without_TV_path, image_without_TV)
 
         # Write image name to general settings JSON file
         settings_JSON = self.settings_access.read_settings("general_settings.json")
-        settings_JSON["background_image_path"] = self.image_name
+        settings_JSON["background_image_path"] = 'room_img1_noTV.jpg'
         self.settings_access.write_settings("general_settings.json", settings_JSON)
 
 

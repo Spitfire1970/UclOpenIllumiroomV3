@@ -97,7 +97,7 @@ class Snow(Mode):
 
     def trigger(self):
         # Snow flake properties
-        max_radius = 3
+        max_radius = 5
         radius_factor = 3    # how much radius will change as snow falls
 
         # Add new snowflakes to the top of the image
