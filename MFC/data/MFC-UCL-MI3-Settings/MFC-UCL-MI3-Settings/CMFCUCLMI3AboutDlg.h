@@ -22,4 +22,5 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	CListBox m_about_content;
+	afx_msg void OnLbnSelchangeAdvancedOptions();
 };

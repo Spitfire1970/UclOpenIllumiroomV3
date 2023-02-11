@@ -118,6 +118,7 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
     ON_BN_CLICKED(IDC_BUTTON_INFO_ROTATE_HEAD_LEFT, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoRotateHeadLeft)
     ON_BN_CLICKED(IDC_BUTTON_INFO_ROTATE_HEAD_RIGHT, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoRotateHeadRight)
 	ON_CBN_SELCHANGE(IDC_DEFAULTCAMERA_COMBO, &CMFCUCLMI3SettingsDlg::OnCbnSelchangeDefaultcameraCombo)
+	ON_BN_CLICKED(IDCANCEL, &CMFCUCLMI3SettingsDlg::OnBnClickedCancel)
 END_MESSAGE_MAP()
 
 // drag window cursor
@@ -281,7 +282,8 @@ void CMFCUCLMI3SettingsDlg::Save(){
 
 	// --------------------- WRITE JSON ---------------------
 
-	// Save Modes
+	// Save Modes 
+	/*
 	wstring tempStrModes = L"data\\mode_controller.json";
 	LPCWSTR pathModes = tempStrModes.c_str();
 	ifstream ifs_modes(pathModes);
@@ -317,9 +319,11 @@ void CMFCUCLMI3SettingsDlg::Save(){
 
 	ofstream outputModesFile(pathModes);
 	outputModesFile << setw(4) << myjson_modes << endl;
-
+	*/
 	// Save Configs
+	
 	wstring tempStrConfig = L"data\\configMFC.json";
+	//wstring tempStrConfig = L"main.dist\\settings\\test_settings_MFC.json";
 	LPCWSTR pathConfig = tempStrConfig.c_str();
 	ifstream ifs_config(pathConfig);
 	string content_config((istreambuf_iterator<char>(ifs_config)), (istreambuf_iterator<char>()));
@@ -341,13 +345,13 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	outputConfigFile << setw(4) << myjson_config << endl;
 
 	//MessageBox(_T("UCL MotionInput will now restart and apply the new setting."), _T("Information"));
-    MessageBox(_T("Any changes made have now been saved.\n\nMotionInput will now be restarted to apply the new settings."), _T("Changes Saved"));
+    //MessageBox(_T("Any changes made have now been saved.\n\nMotionInput will now be restarted to apply the new settings."), _T("Changes Saved"));
 
 	// 1. Exit MI
-	system("TASKKILL /IM MI3-FacialNavigation-3.11.exe");
+	//system("TASKKILL /IM MI3-FacialNavigation-3.11.exe");
 
 	// 2. Copy amended configMFC.json file from MFC app to config.json
-	Sleep(1000);	// 1 seconds delay
+	Sleep(100);	// 1 seconds delay
 	ifstream src(L"data\\configMFC.json", ios::binary);
 	ofstream dst(L"data\\config.json", ios::binary);
 	dst << src.rdbuf();
@@ -355,8 +359,8 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	// 3. Run Illumiroom
 	ShellExecuteA(NULL, "open", "main.dist\\main.exe", NULL, NULL, SW_SHOWDEFAULT);
 
-
-	CDialogEx::OnOK();
+	//Add option on dialog to keep window open, or close automatically
+	//CDialogEx::OnOK();
 }
 
 // About
@@ -589,4 +593,11 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoRotateHeadRight()
 void CMFCUCLMI3SettingsDlg::OnCbnSelchangeDefaultcameraCombo()
 {
 	// TODO: Add your control notification handler code here
+}
+
+
+void CMFCUCLMI3SettingsDlg::OnBnClickedCancel()
+{
+	// TODO: Add your control notification handler code here
+	CDialogEx::OnCancel();
 }

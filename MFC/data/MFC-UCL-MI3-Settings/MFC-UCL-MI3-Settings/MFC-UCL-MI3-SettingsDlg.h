@@ -93,5 +93,6 @@ public:
 	afx_msg void OnBnClickedI();
 	afx_msg void OnCbnSelchangeOpenMouthCombo();
 	afx_msg void OnCbnSelchangeDefaultcameraCombo();
+	afx_msg void OnBnClickedCancel();
 };
 
