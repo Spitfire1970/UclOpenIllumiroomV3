@@ -3,6 +3,7 @@ from .wobble import Wobble
 from .blur import Blur
 from .low_health import LowHealth
 from .weather import Weather
+from .rain import Rain
 from .snow import Snow
 from .speed_lines import SpeedLines
 
@@ -21,6 +22,7 @@ class ModesFactory:
             "low_health": LowHealth,
             "wobble": Wobble,
             "weather": Weather,
+            "rain": Rain,
             "snow": Snow,
             "speed_lines": SpeedLines,
         }
