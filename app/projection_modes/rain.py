@@ -66,7 +66,7 @@ class Rain(Mode):
         slant = np.random.randint(-slant_extreme, slant_extreme)
         drop_length = 20
         drop_width = 2
-        drop_color = (200,200,200)
+        drop_color = (255,0,0)
         # Move raindrops down by falling speed and wind
         for i in range(len(self.raindrops)):
             raindrop = self.raindrops[i]
