@@ -36,6 +36,33 @@
     "speed_lines":{
         ".compatible_with":[]
     },
+    "rain":{
+        "rain_mode" : "torrential",
+        "drizzle":{
+            "rain_point":50,
+            "rain_point_increment": 0.0001,
+            "num_raindrops":300,
+            "falling_speed_interval": [2,5],
+            "noise_wind_interval":[3,7]
+        },
+        "heavy" : {
+            "rain_point":60,
+            "rain_point_increment": 0.001,
+            "num_raindrops":500,
+            "falling_speed_interval": [3,7],
+            "noise_wind_interval":[10,17]
+        },
+        "torrential":{
+            "rain_point":70,
+            "rain_point_increment": 0.07,
+            "num_raindrops":800,
+            "falling_speed_interval": [7,11],
+            "noise_wind_interval":[15,20]
+        },
+        "qImg_format":"QtGui.QImage.Format.Format_RGB888",
+        "trigger_frequency": "every_frame"
+    },
+    
     "snow":{
         "snow_amount": "harsh_snow",
         "light_snow":{
