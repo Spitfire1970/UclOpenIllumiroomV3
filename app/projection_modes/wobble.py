@@ -14,7 +14,7 @@ class Wobble(Mode):
             settings_access,
             display_capture,  
             background_img,
-            audio_capture=None
+            audio_capture
         ):
         self.img = background_img
         self.settings = settings_access
@@ -28,7 +28,8 @@ class Wobble(Mode):
 
         self.threshold = self.settings.read_mode_settings("wobble", "sound_threshold")
 
-        self.audio_capture = AudioCapture(self.threshold)
+        self.audio_capture = audio_capture
+        # self.audio_capture.set_threshold(self.threshold)
 
         self.frames = None
         self.generate_frames()
@@ -77,8 +78,8 @@ class Wobble(Mode):
 
 
     def trigger(self):
-        # while True:
-        if self.audio_capture.detect_loud_sound() > self.threshold:
+        if self.audio_capture.detect_loud_sound():
+        # if self.audio_capture.detect_explosive_sound():
             # print("Loud sound")
             frames = self.frames
         else:
