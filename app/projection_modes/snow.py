@@ -19,12 +19,13 @@ class Snow(Mode):
         self.snow = np.zeros_like(background_img)
         self.snowflakes = []
         self.snow_amount = self.settings.read_mode_settings("snow", "snow_amount")
-        self.snow_point = self.settings.read_mode_settings("snow", [self.snow_amount, "snow_point"])
 
-        self.snow_increment = self.settings.read_mode_settings("snow", [self.snow_amount, "snow_point_increment"])
-        self.num_snowflakes = self.settings.read_mode_settings("snow", [self.snow_amount, "num_snowflakes"])
-        self.speed_interval = self.settings.read_mode_settings("snow", [self.snow_amount, "falling_speed_interval"])
-        self.wind_interval = self.settings.read_mode_settings("snow", [self.snow_amount, "noise_wind_interval"])
+        self.snow_amount_settings = self.settings.read_mode_settings("snow", self.snow_amount)
+        self.snow_point = self.snow_amount_settings["snow_point"]
+        self.snow_increment = self.snow_amount_settings["snow_point_increment"]
+        self.num_snowflakes = self.snow_amount_settings["num_snowflakes"]
+        self.speed_interval = self.snow_amount_settings["falling_speed_interval"]
+        self.wind_interval = self.snow_amount_settings["noise_wind_interval"]
         
         self.falling_speed = random.randint(self.speed_interval[0], self.speed_interval[1])
         self.noise_wind = random.randint(self.wind_interval[0], self.wind_interval[1])
@@ -37,7 +38,9 @@ class Snow(Mode):
         brightness_coefficient = 2.5
 
         # Scale pixel values up for channel 1 (Lightness)
-        image_HLS[:,:,1][image_HLS[:,:,1]<self.snow_point] = (image_HLS[:,:,1][image_HLS[:,:,1]<self.snow_point]*brightness_coefficient)
+        image_HLS[:,:,1][image_HLS[:,:,1]<self.snow_point] = (
+            image_HLS[:,:,1][image_HLS[:,:,1]<self.snow_point]*brightness_coefficient
+        )
         # Set all values above 255 to 255
         image_HLS[:,:,1][image_HLS[:,:,1]>255]  = 255 
 

@@ -1,1 +1,1 @@
-{"selected_displays": {"primary_display": {"left": 0, "top": 0, "width": 1920, "height": 1080}, "projector_display": {"left": 0, "top": 0, "width": 1920, "height": 1080}}, "selected_mode": "blur", "background_image_path": "room_image\\room_img1.jpg", "exit_key_binding": "Key_Escape"}
+{"selected_displays": {"primary_display": {"left": 0, "top": 0, "width": 1440, "height": 900}, "projector_display": {"left": 1440, "top": 0, "width": 1920, "height": 1080}}, "selected_mode": "cartoon", "background_image_path": "room_img1.JPG", "exit_key_binding": "Key_Escape"}

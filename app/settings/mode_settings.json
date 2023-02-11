@@ -1,69 +1,107 @@
 {
-    "cartoon":{
-        ".compatible_with":["wobble","weather_snow"],
-        "bytes_per_line_factor":3,
+    "cartoon": {
+        ".compatible_with": [
+            "wobble",
+            "weather_snow"
+        ],
+        "bytes_per_line_factor": 3,
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
         "trigger_frequency": "once"
     },
-    "wobble":{
-        "num_frames":100,
-        "sound_threshold":0.01,
-        "fractal_amplitude":3,
-        "tv_top_left":[613, 495],
-        "tv_bottom_right":[971, 707],
-        "tv_center_x":792,
-        "tv_center_y":601,
-        ".compatible_with":["cartoon","weather_snow"],
-        "bytes_per_line_factor":3,
-        "qImg_format":"QtGui.QImage.Format.Format_RGB888",
-        "trigger_frequency":"every_frame"
+    "wobble": {
+        "num_frames": 100,
+        "sound_threshold": 0.01,
+        "fractal_amplitude": 3,
+        "tv_top_left": [
+            1117,
+            819
+        ],
+        "tv_bottom_right": [
+            1698,
+            1152
+        ],
+        "tv_center_x": 1407,
+        "tv_center_y": 985,
+        ".compatible_with": [
+            "cartoon",
+            "weather_snow"
+        ],
+        "bytes_per_line_factor": 3,
+        "qImg_format": "QtGui.QImage.Format.Format_RGB888",
+        "trigger_frequency": "every_frame"
     },
-    "blur":{
-        "blur_amount":30,
-        ".compatible_with":[],
-        "bytes_per_line_factor":4,
+    "blur": {
+        "blur_amount": 30,
+        ".compatible_with": [],
+        "bytes_per_line_factor": 4,
         "qImg_format": "QtGui.QImage.Format.Format_RGBA8888",
         "trigger_frequency": "every_frame",
-        "edge_rect_colour":[0,0,0,255]
+        "edge_rect_colour": [
+            0,
+            0,
+            0,
+            255
+        ]
     },
-    "low_health":{
-        ".compatible_with":[],
-        "bytes_per_line_factor":3,
+    "low_health": {
+        ".compatible_with": [],
+        "bytes_per_line_factor": 3,
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
         "trigger_frequency": "once",
-        "num_low_health_frames":30
+        "num_low_health_frames": 30
     },
-    "speed_lines":{
-        ".compatible_with":[]
+    "speed_lines": {
+        ".compatible_with": []
     },
-    "snow":{
+    "snow": {
         "snow_amount": "harsh_snow",
-        "light_snow":{
+        "light_snow": {
             "snow_point": 50,
             "snow_point_increment": 0.0001,
             "num_snowflakes": 300,
-            "falling_speed_interval": [2, 5],
-            "noise_wind_interval": [3, 7]
+            "falling_speed_interval": [
+                2,
+                5
+            ],
+            "noise_wind_interval": [
+                3,
+                7
+            ]
         },
-        "med_snow":{
+        "med_snow": {
             "snow_point": 60,
             "snow_point_increment": 0.001,
             "num_snowflakes": 400,
-            "falling_speed_interval": [3, 7],
-            "noise_wind_interval": [10, 17]
+            "falling_speed_interval": [
+                3,
+                7
+            ],
+            "noise_wind_interval": [
+                10,
+                17
+            ]
         },
-        "harsh_snow":{
+        "harsh_snow": {
             "snow_point": 70,
             "snow_point_increment": 0.07,
             "num_snowflakes": 600,
-            "falling_speed_interval": [7, 11],
-            "noise_wind_interval": [15, 20]
+            "falling_speed_interval": [
+                7,
+                11
+            ],
+            "noise_wind_interval": [
+                15,
+                20
+            ]
         },
-        "qImg_format":"QtGui.QImage.Format.Format_RGB888",
+        "qImg_format": "QtGui.QImage.Format.Format_RGB888",
         "trigger_frequency": "every_frame"
     },
-    "weather":{
-        ".compatible_with":["cartoon","wobble"],
-        "trigger_frequency":"every_other_frame"
+    "weather": {
+        ".compatible_with": [
+            "cartoon",
+            "wobble"
+        ],
+        "trigger_frequency": "every_other_frame"
     }
 }
