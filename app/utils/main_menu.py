@@ -1,6 +1,10 @@
 from projection_modes.modes_factory import ModesFactory
 from .display_selection import DisplaySelection
 from .settings_access import SettingsAccess
+from .room_image import RoomImage
+
+from .display_capture import DisplayCapture
+
 from sys import exit
 from time import sleep
 
@@ -11,6 +15,7 @@ class MainMenu:
       self.available_modes = mode_factory.get_available_modes()
       self.modes = None
       self.displays = None
+      self.room_image_obj = RoomImage(self.settings_access)
 
 
    def main_select_options(self):
@@ -22,10 +27,12 @@ class MainMenu:
          print("Please enter the number of the option you wish to select")
          print("1) Run Illumiroom")
          print("2) Select your projector and TV displays")
-         print("3) Chose your required mode")
-         print("4) View Mode Settings")
-         print("5) Exit the system")
-         
+         print("3) Take a picture of the projected area")
+         print("4) Upload picture of projected area")
+         print("5) Choose your required mode")
+         print("6) View mode Settings")
+         print("7) Exit the system")
+
          user_selection = input(">")
          if user_selection == "1" or user_selection == "run":
             return self.modes, self.displays, False
@@ -35,13 +42,28 @@ class MainMenu:
             self.displays = display_selector.select_tv_projector()
 
          elif user_selection == "3":
+            print("Use Microsoft Lens to take a picture of the projected area. "
+                  + "Select the 4 corners of the projected grey image on Lens "
+                  + "as accurately as you can. Save the image to your OneDrive.")
+            self.room_image_obj.take_picture()
+
+         elif user_selection == "4":
+            print("Step 1: Upload the picture of the projected area.")
+            self.room_image_obj.save_picture()
+
+            print("Step 2: Detect where the TV/ primary monitor is on the image "
+               + "by dragging your cursor to create a rectangle around it. "
+               + "Press 'q' when the green rectangle covers the whole TV.")
+            self.room_image_obj.detect_primary_display()
+
+         elif user_selection == "5":
             self.modes = self.select_modes()
 
-         # elif user_selection == "4":
+         # elif user_selection == "6":
          #    self.select_mode_settings()
          #    #print("Changing mode settings requires the Ilumiroom System to restart, please rerun Illumiroom")
          #    #exit()
-         elif user_selection == "5":
+         elif user_selection == "7":
             print("Thank you for using UCL-Open Illumiroom V2")
             print("Have a great day!")    
             return self.modes, self.displays, True

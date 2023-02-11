@@ -14,7 +14,7 @@ import time
 
 
 class DisplayOutput(QtWidgets.QMainWindow):
-    def __init__(self, primary_bounding_box, projector_bounding_box):
+    def __init__(self, primary_bounding_box, projector_bounding_box, full_screen=True):
         super().__init__()
         # self.ui = QMainWindow()
 
@@ -34,8 +34,10 @@ class DisplayOutput(QtWidgets.QMainWindow):
         # projector_top = projector_bounding_box['top']
 
         self.move(projector_bounding_box['left'], projector_bounding_box['top'])
-        self.showFullScreen()
-        #self.show()
+        if full_screen:
+            self.showFullScreen()
+        else:
+            self.show()
         print("-------------------------------------------------------------")
         print("Window Opened, press Escape in the illumiroom window to exit")
         print("If you have an issue with the image fitting, please ensure that your projector is at 100% scaling")

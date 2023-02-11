@@ -1,7 +1,6 @@
 # 1) User runs main
 # 2) Menu is opened for the user, can update settings eg: their primary and 
 # projector displays and other settings
-
 import sys
 import time
 import numpy as np
@@ -14,7 +13,6 @@ from utils.settings_access import SettingsAccess
 from utils.display_output import DisplayOutput
 from utils.display_capture import DisplayCapture
 from utils.audio_capture import AudioCapture
-from utils.tv_detection import TVDetection
 from utils.room_image import RoomImage
 
 from utils.fps import FPS
@@ -96,7 +94,7 @@ def main():
                     #Resize frame to fit projector if requires resizing
                     frame = display_capture.frame_projector_resize(frame)
 
-                    fps.add_fps_to_image(frame, fps.get_fps())
+                    # fps.add_fps_to_image(frame, fps.get_fps())
                     #Frame display
                     height, width = frame.shape[:2]
                     bytes_per_line = frame.strides[0]
