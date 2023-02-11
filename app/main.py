@@ -23,6 +23,9 @@ app_root_path = __file__[:__file__.index("main.py")]
 
 def main():
 
+    # Create PyQt app, only ever needs to be defined once
+    app = QtWidgets.QApplication(sys.argv)
+
     while True:
 
         #Get the current general settings and display the menu
@@ -60,7 +63,7 @@ def main():
         projector_bounding_box = selected_displays["projector_display"]
 
         display_capture = DisplayCapture(primary_bounding_box, projector_bounding_box)
-        audio_capture = AudioCapture()
+        audio_capture = AudioCapture(settings_access)
         room_image_obj = RoomImage(settings_access,display_capture)
         room_image = room_image_obj.read_room_image(resize=False)
 
@@ -76,8 +79,6 @@ def main():
         qImg_format = eval(format_string)
 
 
-        # Create PyQt app
-        app = QtWidgets.QApplication(sys.argv)
 
         main_window = DisplayOutput(primary_bounding_box, projector_bounding_box)
 

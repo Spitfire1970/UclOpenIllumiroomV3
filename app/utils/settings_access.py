@@ -8,7 +8,8 @@ class SettingsAccess:
         self.app_root_path = app_root_path
         self.assets_path = app_root_path+"assets\\"
         self.settings_path = app_root_path+"settings\\"
-        self.room_img_path = self.assets_path +"room_image\\"
+        self.room_img_path = self.assets_path+"room_image\\"
+        self.utils_path = app_root_path+"utils\\"
 
 
     def read_settings(self, settings_name):
