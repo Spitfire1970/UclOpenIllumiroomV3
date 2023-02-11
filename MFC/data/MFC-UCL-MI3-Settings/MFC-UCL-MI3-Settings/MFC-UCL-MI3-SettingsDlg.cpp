@@ -160,7 +160,7 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 
 
 	// CONFIG data
-	wstring pathConfigS = L"data\\config.json";
+	wstring pathConfigS = L"main.dist\\settings\\test_settings.json";
 	LPCWSTR pathConfig = pathConfigS.c_str();
 
 	ifstream ifs_config(pathConfig);
@@ -322,8 +322,8 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	*/
 	// Save Configs
 	
-	wstring tempStrConfig = L"data\\configMFC.json";
-	//wstring tempStrConfig = L"main.dist\\settings\\test_settings_MFC.json";
+	//wstring tempStrConfig = L"data\\configMFC.json";
+	wstring tempStrConfig = L"main.dist\\settings\\test_settings_MFC.json";
 	LPCWSTR pathConfig = tempStrConfig.c_str();
 	ifstream ifs_config(pathConfig);
 	string content_config((istreambuf_iterator<char>(ifs_config)), (istreambuf_iterator<char>()));
@@ -352,8 +352,9 @@ void CMFCUCLMI3SettingsDlg::Save(){
 
 	// 2. Copy amended configMFC.json file from MFC app to config.json
 	Sleep(100);	// 1 seconds delay
-	ifstream src(L"data\\configMFC.json", ios::binary);
-	ofstream dst(L"data\\config.json", ios::binary);
+	
+	ifstream src(L"main.dist\\settings\\test_settings_MFC.json", ios::binary);
+	ofstream dst(L"main.dist\\settings\\test_settings.json", ios::binary);
 	dst << src.rdbuf();
 
 	// 3. Run Illumiroom

@@ -547,7 +547,7 @@
     "general": {
         "camera": {
             "camera_h": 480,
-            "camera_nr": 6,
+            "camera_nr": 1,
             "camera_w": 640,
             "suggested_sources": [
                 1
