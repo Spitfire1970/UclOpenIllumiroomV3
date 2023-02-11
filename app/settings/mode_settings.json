@@ -37,27 +37,30 @@
         ".compatible_with":[]
     },
     "rain":{
-        "rain_mode" : "torrential",
+        "rain_mode" : "heavy",
+        "possible_drop_lengths":[15,17,20],
+        "possible_drop_colours":[[255,0,0],[255,50,0],[120,50,0]],
+
         "drizzle":{
             "rain_point":50,
             "rain_point_increment": 0.0001,
-            "num_raindrops":300,
-            "falling_speed_interval": [2,5],
+            "num_raindrops":60,
+            "falling_speed_interval": [15,20],
             "noise_wind_interval":[3,7]
         },
         "heavy" : {
             "rain_point":60,
             "rain_point_increment": 0.001,
-            "num_raindrops":500,
-            "falling_speed_interval": [3,7],
+            "num_raindrops":600,
+            "falling_speed_interval": [15,25],
             "noise_wind_interval":[10,17]
         },
         "torrential":{
             "rain_point":70,
-            "rain_point_increment": 0.07,
+            "rain_point_increment": 0.005,
             "num_raindrops":800,
-            "falling_speed_interval": [7,11],
-            "noise_wind_interval":[15,20]
+            "falling_speed_interval": [15,35],
+            "noise_wind_interval":[15,25]
         },
         "qImg_format":"QtGui.QImage.Format.Format_RGB888",
         "trigger_frequency": "every_frame"
