@@ -6,7 +6,3 @@
 /app/utils/__pycache__/
 /MFC_RELEASE
 /MFC_dev
-*.pyc
-MFC_RELEASE.zip
-**/__pycache__
-__pycache__/
