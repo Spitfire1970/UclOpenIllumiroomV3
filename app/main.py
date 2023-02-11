@@ -25,6 +25,9 @@ app_root_path = __file__[:__file__.index("main.py")]
 
 def main():
 
+    # Create PyQt app, only ever needs to be defined once
+    app = QtWidgets.QApplication(sys.argv)
+
     while True:
 
         #Get the current general settings and display the menu
@@ -78,8 +81,6 @@ def main():
         qImg_format = eval(format_string)
 
 
-        # Create PyQt app
-        app = QtWidgets.QApplication(sys.argv)
 
         main_window = DisplayOutput(primary_bounding_box, projector_bounding_box)
 
