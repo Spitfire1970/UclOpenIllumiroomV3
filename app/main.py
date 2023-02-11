@@ -62,7 +62,7 @@ def main():
         projector_bounding_box = selected_displays["projector_display"]
 
         display_capture = DisplayCapture(primary_bounding_box, projector_bounding_box)
-        audio_capture = AudioCapture()
+        audio_capture = AudioCapture(settings_access)
         room_image_obj = RoomImage(settings_access,display_capture)
         room_image = room_image_obj.read_room_image(resize=False)
 
