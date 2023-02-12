@@ -94,7 +94,7 @@ class MainMenu:
 
          print("Please select a mode that you wish to use")
          print("Please only enter one mode name, any more will not be accepted")
-         print("eg: wobble")
+         print("eg: blur")
 
          mode_selection = input()
          mode = mode_selection.strip()

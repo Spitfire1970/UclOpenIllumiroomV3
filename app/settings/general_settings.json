@@ -1,1 +1,1 @@
-{"selected_displays": {"primary_display": {"left": -2736, "top": 0, "width": 2736, "height": 1824}, "projector_display": {"left": 0, "top": 0, "width": 1920, "height": 1080}}, "selected_mode": "snow", "background_image_path": "room_img_noTV.jpg", "exit_key_binding": "Key_Escape"}
+{"selected_displays": {"primary_display": {"left": 0, "top": 0, "width": 2560, "height": 1440}, "projector_display": {"left": -1366, "top": 661, "width": 1366, "height": 768}}, "selected_mode": "blur", "background_image_path": "room_img_noTV.jpg", "exit_key_binding": "Key_Escape"}
