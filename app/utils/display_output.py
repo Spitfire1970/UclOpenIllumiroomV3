@@ -23,8 +23,9 @@ class DisplayOutput(QtWidgets.QMainWindow):
         self.projector_bounding_box = projector_bounding_box
 
         self.exit_key_binding = Qt.Key.Key_Escape.value
-              
+
         self.label = QtWidgets.QLabel(self)
+        self.label.setScaledContents(True)
         self.setCentralWidget(self.label)
         self.setWindowTitle("UCL Open-Illumiroom V2")
 

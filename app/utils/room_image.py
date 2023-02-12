@@ -17,7 +17,7 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QPushButton,
 from PyQt6.QtGui import QPalette, QColor
 from PyQt6.QtCore import Qt, pyqtSlot
 
-
+import glob
 import sys
 
 class RoomImage:
@@ -28,7 +28,6 @@ class RoomImage:
         display_capture=None,
         ):
         self.settings_access = settings_access
-        self.display_capture = display_capture
         
         self.image_path = None
         self.image_name = None
@@ -41,26 +40,40 @@ class RoomImage:
         selected_displays = settings_access.read_general_settings("selected_displays")
         self.primary_bounding_box = selected_displays["primary_display"]
         self.projector_bounding_box = selected_displays["projector_display"]
+        self.display_capture = DisplayCapture(self.primary_bounding_box, self.projector_bounding_box)
 
 
     def take_picture(self):
-        app = QApplication(sys.argv)
-        take_pic_window = DisplayOutput(self.primary_bounding_box, self.projector_bounding_box)
-        # timer = QtCore.QTimer()
-        # timer.timeout.connect(lambda: take_pic_window.label.setStyleSheet("background-color: rgb(74,78,84)"))
-        # timer.start(50)
-        take_pic_window.label.setStyleSheet("background-color: rgb(74,78,84)")
+        height = self.projector_bounding_box['height']
+        width = self.projector_bounding_box['width']
+        image = np.zeros((height, width, 3), np.uint8)
         
-        while not take_pic_window.stopped:
-            # take_pic_window.label.setStyleSheet("background-color: rgb(74,78,84)")
-            app.processEvents()
+        rgb_color = (74,78,84)
+        colour = tuple(reversed(rgb_color))
+        image[:] = colour
+        
+        window_name = "Capture projected area"
+        # cv2.namedWindow(window_name)
+        cv2.namedWindow(window_name,cv2.WND_PROP_FULLSCREEN)
+        cv2.setWindowProperty(window_name,cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
 
+        cv2.moveWindow(
+            window_name, 
+            self.projector_bounding_box['left'], 
+            self.projector_bounding_box['top']
+        )
+
+        while True:
+            cv2.imshow(window_name, image)
+            k = cv2.waitKey(1)
+            if k==27:    # Esc key to stop
+                break
+        cv2.destroyAllWindows()
 
 
     def upload_picture(self):
         app = QApplication(sys.argv)
         upload_pic_window = DisplayOutput(self.primary_bounding_box, self.projector_bounding_box, full_screen=False)
-
 
         @pyqtSlot()
         def open_dialog():
@@ -93,11 +106,9 @@ class RoomImage:
         # print(len(self.image_path))
         # self.image_name = self.image_path
         self.image_name = os.path.basename(self.image_path) #+ ".jpeg"
-
         img = cv2.imread(self.image_path)
         self.image_path = self.settings_access.room_img_path + self.image_name
         cv2.imwrite(self.image_path, img)
-
         # settings_JSON = self.settings_access.read_settings("general_settings.json")
         # self.settings_access.write_settings("general_settings.json", settings_JSON)
 
@@ -108,32 +119,34 @@ class RoomImage:
         start = self.settings_access.read_mode_settings("wobble", "tv_top_left")
         end = self.settings_access.read_mode_settings("wobble", "tv_bottom_right")
         cv2.rectangle(image_without_TV, (start[0], start[1]), (end[0], end[1]), (0, 0, 0), -1)
-        # Save image of black boundary box replacing TV
-        # cv2.imwrite("TV_box.jpeg", self.img)
         return image_without_TV
 
     def detect_primary_display(self):
-        image_name = 'room_img1.jpg'
+        image_name = 'room_img.jpg'
         image_path = self.settings_access.room_img_path + image_name
+        if not os.path.exists(image_path):
+            print("Invalid image name. Please save the picture of the projected area " 
+            + "with the name: room_img.jpg")
+            return
+
         image = cv2.imread(image_path)
-        # image = self.read_room_image(resize=False)
+        # Resize image to fit projector's size
+        dim = (self.projector_bounding_box['width'], self.projector_bounding_box['height'])
+        image = cv2.resize(image, dim, interpolation=cv2.INTER_AREA)
+        cv2.imwrite(image_path, image)
+
         tv_detection = TVDetection(image, self.settings_access)
         image_without_TV = tv_detection.detect_tv()
         
         # Save image
         image_without_TV = self.process_image(image_path)
-        # image_name = self.settings_access.read_settings("general_settings.json")["background_image_path"]
-        # img_path = self.settings_access.get_image_path(image_name)
-        # image_name = self.image_name
-        # Resize image:
-        # self.display_capture.frame_projector_resize(image_without_TV)
-        # print(self.image_name, self.image_path)
-        image_without_TV_path = self.settings_access.room_img_path + 'room_img1_noTV.jpg'
+
+        image_without_TV_path = self.settings_access.room_img_path + 'room_img_noTV.jpg'
         cv2.imwrite(image_without_TV_path, image_without_TV)
 
         # Write image name to general settings JSON file
         settings_JSON = self.settings_access.read_settings("general_settings.json")
-        settings_JSON["background_image_path"] = 'room_img1_noTV.jpg'
+        settings_JSON["background_image_path"] = 'room_img_noTV.jpg'
         self.settings_access.write_settings("general_settings.json", settings_JSON)
 
 

@@ -23,8 +23,8 @@ class ModesFactory:
             "wobble": Wobble,
             "weather": Weather,
             "rain": Rain,
-            "snow": Snow,
-            "speed_lines": SpeedLines,
+            "snow": Snow
+            # "speed_lines": SpeedLines,
         }
         self.settings = setting_access
         self.img = background_image

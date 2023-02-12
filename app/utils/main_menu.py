@@ -24,11 +24,11 @@ class MainMenu:
       print("Welcome to UCL Open-Illumiroom V2")
       
       while(not(ready_to_run)):
-         print("Please enter the number of the option you wish to select")
+         print("\nPlease enter the number of the option you wish to select:")
          print("1) Run Illumiroom")
          print("2) Select your projector and TV displays")
          print("3) Take a picture of the projected area")
-         print("4) Upload picture of projected area")
+         print("4) Detect your TV in the picture")
          print("5) Choose your required mode")
          print("6) View mode Settings")
          print("7) Exit the system")
@@ -42,16 +42,17 @@ class MainMenu:
             self.displays = display_selector.select_tv_projector()
 
          elif user_selection == "3":
-            print("Use Microsoft Lens to take a picture of the projected area. "
-                  + "Select the 4 corners of the projected grey image on Lens "
-                  + "as accurately as you can. Save the image to your OneDrive.")
+            print("Step 1: Use Microsoft Lens to take a picture of the projected area. Press ESC to exit"
+                  + "the projection. \nStep 2: Select the 4 corners of the projected grey image on Lens "
+                  + "as accurately as you can. \nStep 3: Save the image to 'app\\assets\\room_image'."
+                  + "with the name 'room_img.jpg'. \nIn our next build, we'll introduce "
+                  + "an upload feature!")
             self.room_image_obj.take_picture()
 
          elif user_selection == "4":
-            print("Step 1: Upload the picture of the projected area.")
+            # print("Step 1: Upload the picture of the projected area.")
             # self.room_image_obj.save_picture()
-
-            print("Step 2: Detect where the TV/ primary monitor is on the image "
+            print("Detect where the TV/ primary monitor is on the image "
                + "by dragging your cursor to create a rectangle around it. "
                + "Press 'q' when the green rectangle covers the whole TV.")
             self.room_image_obj.detect_primary_display()
@@ -59,8 +60,8 @@ class MainMenu:
          elif user_selection == "5":
             self.modes = self.select_modes()
 
-         # elif user_selection == "6":
-         #    self.select_mode_settings()
+         elif user_selection == "6":
+            self.select_mode_settings()
          #    #print("Changing mode settings requires the Ilumiroom System to restart, please rerun Illumiroom")
          #    #exit()
          elif user_selection == "7":
@@ -124,13 +125,14 @@ class MainMenu:
          print("Please select the mode whose settings you would like to view")
          print("Either enter the mode name eg: wobble. Only enter 1 mode")
 
-         modes_selected=[input().strip()]
+         modes_selected=input().strip()
+         # print("Mode selected IS: ", modes_selected)
          if self.check_mode_valid(self.available_modes,modes_selected):
             mode_selection_in_progress = False #All modes valid, can continue
          else:
             print("Invalid mode entered, please try again!")
 
-      self.get_settings_for_mode(modes_selected[0])
+      self.get_settings_for_mode(modes_selected)
 
    def get_settings_for_mode(self,mode):
       mode_settings_json = self.settings_access.read_settings("mode_settings.json")

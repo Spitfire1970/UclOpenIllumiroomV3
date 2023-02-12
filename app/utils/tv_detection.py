@@ -49,8 +49,11 @@ class TVDetection():
         while True:
             cv2.imshow("Detect TV", self.img)
             key = cv2.waitKey(1)
-            if key == ord("q"):
+            if key == ord("q") and self.top_left is not None:
                 break
+            elif key == ord("q") and self.top_left is None:
+                print("Please select your primary monitor before exiting!")
+                pass
         cv2.destroyAllWindows()
         for i in range (1,5):
             cv2.waitKey(1)

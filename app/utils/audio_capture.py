@@ -119,9 +119,9 @@ class AudioCapture():
         gun_shot = predicted_proba[6]
         jackhammer = predicted_proba[7]
         siren = predicted_proba[8]
-        if (dog_bark > 0.4 or drilling > 0.5
+        if (dog_bark > 0.65 or drilling > 0.5
             or engine_idling > 0.5 or gun_shot > 0.5 
-            or jackhammer > 0.4 or siren > 0.7):
+            or jackhammer > 0.45 or siren > 0.7):
             return True
         else:
             return False

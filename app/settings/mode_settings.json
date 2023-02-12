@@ -13,15 +13,15 @@
         "sound_threshold": 0.01,
         "fractal_amplitude": 3,
         "tv_top_left": [
-            234,
-            169
+            446,
+            315
         ],
         "tv_bottom_right": [
-            706,
-            445
+            1317,
+            831
         ],
-        "tv_center_x": 470,
-        "tv_center_y": 307,
+        "tv_center_x": 881,
+        "tv_center_y": 573,
         ".compatible_with": [
             "cartoon",
             "weather_snow"
@@ -53,34 +53,70 @@
     "speed_lines": {
         ".compatible_with": []
     },
-    
-    "rain":{
-        "rain_mode" : "heavy",
-        "possible_drop_lengths":[10,17,25],
-        "possible_drop_colours":[[255,0,0],[255,50,0],[120,50,0]],
-
-        "drizzle":{
-            "rain_point":50,
+    "rain": {
+        "rain_mode": "heavy",
+        "possible_drop_lengths": [
+            10,
+            17,
+            25
+        ],
+        "possible_drop_colours": [
+            [
+                255,
+                0,
+                0
+            ],
+            [
+                255,
+                50,
+                0
+            ],
+            [
+                120,
+                50,
+                0
+            ]
+        ],
+        "drizzle": {
+            "rain_point": 50,
             "rain_point_increment": 0.0001,
-            "num_raindrops":60,
-            "falling_speed_interval": [15,20],
-            "noise_wind_interval":[3,7]
+            "num_raindrops": 60,
+            "falling_speed_interval": [
+                15,
+                20
+            ],
+            "noise_wind_interval": [
+                3,
+                7
+            ]
         },
-        "heavy" : {
-            "rain_point":60,
+        "heavy": {
+            "rain_point": 60,
             "rain_point_increment": 0.002,
-            "num_raindrops":350,
-            "falling_speed_interval": [15,25],
-            "noise_wind_interval":[10,17]
+            "num_raindrops": 350,
+            "falling_speed_interval": [
+                15,
+                25
+            ],
+            "noise_wind_interval": [
+                10,
+                17
+            ]
         },
-        "torrential":{
-            "rain_point":70,
+        "torrential": {
+            "rain_point": 70,
             "rain_point_increment": 0.005,
-            "num_raindrops":500,
-            "falling_speed_interval": [15,35],
-            "noise_wind_interval":[15,25]
+            "num_raindrops": 500,
+            "falling_speed_interval": [
+                15,
+                35
+            ],
+            "noise_wind_interval": [
+                15,
+                25
+            ]
         },
-        "qImg_format":"QtGui.QImage.Format.Format_RGB888",
+        "qImg_format": "QtGui.QImage.Format.Format_RGB888",
         "trigger_frequency": "every_frame"
     },
     "snow": {
