@@ -29,9 +29,9 @@ bool globalSpeech;
 int globalCameraNr;
 bool globalShowFPS;
 bool globalLowLight;
-int globalMouseNose;
+//int globalMouseNose;
 int globalMouseEye;
-int globalBoundBoxNose;
+//int globalBoundBoxNose;
 double globalSmile;
 double globalFishFace;
 double globalRaisedEyebrows;
@@ -68,9 +68,9 @@ CMFCUCLMI3SettingsDlg::CMFCUCLMI3SettingsDlg(CWnd* pParent) : CDialogEx(IDD_MFCU
 void CMFCUCLMI3SettingsDlg::DoDataExchange(CDataExchange* pDX){
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_DEFAULTCAMERA_COMBO, m_camera);
-	DDX_Control(pDX, IDC_NOSESPEED_SLIDER, m_noseMouseSpeed);
+	//DDX_Control(pDX, IDC_NOSESPEED_SLIDER, m_noseMouseSpeed);
 	// DDX_Control(pDX, IDC_EDIT3, m_cameraValue);
-	DDX_Control(pDX, IDC_NOSESPEED_COUNTER, m_noseMouseSpeedValue);
+	//DDX_Control(pDX, IDC_NOSESPEED_COUNTER, m_noseMouseSpeedValue);
 	DDX_Control(pDX, IDC_EYEMOUSE_SPEED_SLIDER, m_eyesMouseSpeed);
 	DDX_Control(pDX, IDC_EYEMOUSE_SPEED_COUNTER, m_eyesMouseSpeedValue);
 	DDX_Control(pDX, IDC_FPS_BUTTON, m_showFPS);
@@ -85,8 +85,6 @@ void CMFCUCLMI3SettingsDlg::DoDataExchange(CDataExchange* pDX){
 	DDX_Control(pDX, IDC_SPEECH_BUTTON, m_methodSpeech);
 	DDX_Control(pDX, IDC_ROTATE_HEAD_RIGHT_COMBO, m_rotationRight);
 	DDX_Control(pDX, IDC_ROTATE_HEAD_LEFT_COMBO, m_rotationLeft);
-	DDX_Control(pDX, IDC_NOSEDISTANCE_SLIDER, m_noseBoxBond);
-	DDX_Control(pDX, IDC_NOSEDISTANCE_COUNTER, m_noseBoxBondValue);
 }
 
 BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
@@ -99,7 +97,7 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
 	ON_WM_HSCROLL()
 	ON_BN_CLICKED(IDC_FPS_BUTTON, &CMFCUCLMI3SettingsDlg::UpdateShowFPS)
 	ON_BN_CLICKED(IDC_LOW_LIGHT_BUTTON, &CMFCUCLMI3SettingsDlg::UpdateLowLight)
-	ON_BN_CLICKED(IDC_NOSE_BUTTON, &CMFCUCLMI3SettingsDlg::UpdateModeNose)
+	//ON_BN_CLICKED(IDC_NOSE_BUTTON, &CMFCUCLMI3SettingsDlg::UpdateModeNose)
 	ON_BN_CLICKED(IDC_EYES_BUTTON, &CMFCUCLMI3SettingsDlg::UpdateModeEyes)
 	ON_BN_CLICKED(IDC_FACIAL_BUTTON, &CMFCUCLMI3SettingsDlg::UpdateMethodFacial)
 	ON_BN_CLICKED(IDC_SPEECH_BUTTON, &CMFCUCLMI3SettingsDlg::UpdateMethodSpeech)
@@ -108,8 +106,7 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
     ON_BN_CLICKED(IDC_BUTTON_INFO_FPS, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoFps)
     ON_BN_CLICKED(IDC_BUTTON_INFO_LIGHT, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoLight)
     ON_BN_CLICKED(IDC_BUTTON_INFO_CAMERA, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoCamera)
-    ON_BN_CLICKED(IDC_BUTTON_INFO_NOSE_SPEED, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoNoseMouse)
-    ON_BN_CLICKED(IDC_BUTTON_INFO_NOSE_DISTANCE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoNoseboxBound)
+    //ON_BN_CLICKED(IDC_BUTTON_INFO_NOSE_SPEED, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoNoseMouse)
     ON_BN_CLICKED(IDC_BUTTON_INFO_EYES_MOUSE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoEyesMouse)
     ON_BN_CLICKED(IDC_BUTTON_INFO_SMILE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSmile)
     ON_BN_CLICKED(IDC_BUTTON_INFO_FISHFACE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoFishface)
@@ -224,9 +221,9 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 	globalLowLight = general["view"]["low_light_indicator_on"]; // LIGHT
 	globalSpeech = modules["speech"]["enabled"]; // SPEECH
 	globalCameraNr = general["camera"]["camera_nr"]; // CAMERA
-	globalMouseNose = events["nose_tracking"]["scaling_factor"] / 10;
+	//globalMouseNose = events["nose_tracking"]["scaling_factor"] / 10;
 	globalMouseEye = modules["eye"]["Eye_mouse_speed"];
-	globalBoundBoxNose = events["nose_tracking"]["bound_sensitivity"];
+	//globalBoundBoxNose = events["nose_tracking"]["bound_sensitivity"];
 
 	// FPS
 	m_showFPS.SetWindowTextW(globalShowFPS ? L"ON" : L"OFF");
@@ -245,20 +242,20 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 	// m_cameraValue.SetWindowText(strSliderValue);
 	CString strSliderValue;
 	// Nose Mouse Speed
-	m_noseMouseSpeed.SetRange(1, 100);
-	m_noseMouseSpeed.SetPos(globalMouseNose);
-	strSliderValue.Format(_T("%d"), globalMouseNose);
-	m_noseMouseSpeedValue.SetWindowText(strSliderValue);
+	//m_noseMouseSpeed.SetRange(1, 100);
+	//m_noseMouseSpeed.SetPos(globalMouseNose);
+	//strSliderValue.Format(_T("%d"), globalMouseNose);
+	//m_noseMouseSpeedValue.SetWindowText(strSliderValue);
 	// Eyes Mouse Speed
 	m_eyesMouseSpeed.SetRange(1, 20);
 	m_eyesMouseSpeed.SetPos(globalMouseEye);
 	strSliderValue.Format(_T("%d"), globalMouseEye);
 	m_eyesMouseSpeedValue.SetWindowText(strSliderValue);
 	// NoseBox
-	m_noseBoxBond.SetRange(1, 10);
-	m_noseBoxBond.SetPos(globalBoundBoxNose);
-	strSliderValue.Format(_T("%d"), globalBoundBoxNose);
-	m_noseBoxBondValue.SetWindowText(strSliderValue);
+	//m_noseBoxBond.SetRange(1, 10);
+	//m_noseBoxBond.SetPos(globalBoundBoxNose);
+	//strSliderValue.Format(_T("%d"), globalBoundBoxNose);
+	//m_noseBoxBondValue.SetWindowText(strSliderValue);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -274,11 +271,11 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	else if (m_modeEyes.GetCheck() && m_methodSpeech.GetCheck()) globalCurrentMode = GRID_EYES_SPEECH;
 
 	globalCameraNr = m_camera.GetCurSel();
-	globalMouseNose = m_noseMouseSpeed.GetPos() * 10;
+	//globalMouseNose = m_noseMouseSpeed.GetPos() * 10;
 	globalMouseEye = m_eyesMouseSpeed.GetPos();
 
-	globalMouseNose = m_noseMouseSpeed.GetPos() * 10;
-	globalBoundBoxNose = m_noseBoxBond.GetPos();
+	//globalMouseNose = m_noseMouseSpeed.GetPos() * 10;
+	//globalBoundBoxNose = m_noseBoxBond.GetPos();
 
 	// --------------------- WRITE JSON ---------------------
 
@@ -335,9 +332,9 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	general["view"]["show_fps"] = globalShowFPS;
 	general["view"]["low_light_indicator_on"] = globalLowLight;
 	general["camera"]["camera_nr"] = globalCameraNr; 
-	events["nose_tracking"]["scaling_factor"] = globalMouseNose;
+	//events["nose_tracking"]["scaling_factor"] = globalMouseNose;
 	modules["eye"]["Eye_mouse_speed"] = globalMouseEye;
-	events["nose_tracking"]["bound_sensitivity"] = globalBoundBoxNose;
+	//events["nose_tracking"]["bound_sensitivity"] = globalBoundBoxNose;
 	
 
 	// WRITE INTO CONFIG JSON ALL CHANGES
@@ -395,25 +392,15 @@ void CMFCUCLMI3SettingsDlg::ShowHelp()
 void CMFCUCLMI3SettingsDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar){
 	CSliderCtrl* pSlider = reinterpret_cast<CSliderCtrl*>(pScrollBar);
 
-	// Nose Mouse Speed
-	if (pSlider == &m_noseMouseSpeed) {
-		CString strSliderValue;
-		int iValue = m_noseMouseSpeed.GetPos(); // Get Slider value
-		strSliderValue.Format(_T("%d"), iValue);
-		m_noseMouseSpeedValue.SetWindowText(strSliderValue);
-	}// Eyes Mouse Speed
-	else if (pSlider == &m_eyesMouseSpeed) {
+	// eyes Mouse Speed
+
+	if (pSlider == &m_eyesMouseSpeed) {
 		CString strSliderValue;
 		int iValue = m_eyesMouseSpeed.GetPos(); // Get Slider value
 		strSliderValue.Format(_T("%d"), iValue);
 		m_eyesMouseSpeedValue.SetWindowText(strSliderValue);
 	}// NoseBox Bound
-	else if (pSlider == &m_noseBoxBond) {
-		CString strSliderValue;
-		int iValue = m_noseBoxBond.GetPos(); // Get Slider value
-		strSliderValue.Format(_T("%d"), iValue);
-		m_noseBoxBondValue.SetWindowText(strSliderValue);
-	}
+
 }
 
 // FPS 
@@ -542,10 +529,7 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoNoseMouse()
 }
 
 
-void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoNoseboxBound()
-{
-    MessageBox(_T("Distance is only used during Nose Mode with Speech Method. A lower number allows setting the box size (range)wit more ease. Distance ranges allow users to specify the trajectory of the movement to be made before triggering a bound setup."), _T("Nose Mode Distance Information"));
-}
+
 
 void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoEyesMouse()
 {
