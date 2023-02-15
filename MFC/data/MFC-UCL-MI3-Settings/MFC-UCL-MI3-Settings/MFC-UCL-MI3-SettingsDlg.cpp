@@ -22,40 +22,19 @@
 using json = nlohmann::json;
 using namespace std;
 
-// define global variables
-string globalMode;
-string globalCurrentMode;
-bool globalSpeech;
 int globalCameraNr;
 bool globalShowFPS;
 bool globalLowLight;
-//int globalMouseNose;
 int globalMouseEye;
-//int globalBoundBoxNose;
-double globalSmile;
-double globalFishFace;
-double globalRaisedEyebrows;
-double globalOpenMounth;
 
-const LPCTSTR facialValues[6] = { L"Left Click", L"Right Click", L"Double Click", L"Left Hold/Release", L"Right Hold/Release", L"On/Off Eye Gaze"};
-const string facialConstants[6] = {"_left_click", "_right_click", "_double_click", "_left_press_hold_release", "_right_press_hold_release", "_on_off_eye_gaze"};
 
-// Define grids
-#define GRID_NOSE_SPEECH "nose_grid_speech"
-#define GRID_EYES_SPEECH "eye_grid_speech"
-#define GRID_NOSE_FACIAL "nose_grid_facial"
-#define GRID_EYES_FACIAL "eye_grid_facial"
-
-// Define MODE Values
-#define MODE_NOSE "Nose"
-#define MODE_EYES "Eyes"
-#define METHOD_FACIAL "Facial"
-#define METHOD_SPEECH "Speech"
 
 // parameters
 #define MAX_CAMERA_INDEX 9
 
-json globalModesData;
+
+
+
 
 // CMFCUCLMI3SettingsDlg Dialog - MFC VARIABLES
 CMFCUCLMI3SettingsDlg::CMFCUCLMI3SettingsDlg(CWnd* pParent) : CDialogEx(IDD_MFCUCLMI3SETTINGS_DIALOG, pParent){
@@ -69,22 +48,12 @@ void CMFCUCLMI3SettingsDlg::DoDataExchange(CDataExchange* pDX){
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_DEFAULTCAMERA_COMBO, m_camera);
 	//DDX_Control(pDX, IDC_NOSESPEED_SLIDER, m_noseMouseSpeed);
-	// DDX_Control(pDX, IDC_EDIT3, m_cameraValue);
+	//DDX_Control(pDX, IDC_EDIT3, m_cameraValue);
 	//DDX_Control(pDX, IDC_NOSESPEED_COUNTER, m_noseMouseSpeedValue);
 	DDX_Control(pDX, IDC_EYEMOUSE_SPEED_SLIDER, m_eyesMouseSpeed);
 	DDX_Control(pDX, IDC_EYEMOUSE_SPEED_COUNTER, m_eyesMouseSpeedValue);
 	DDX_Control(pDX, IDC_FPS_BUTTON, m_showFPS);
 	DDX_Control(pDX, IDC_LOW_LIGHT_BUTTON, m_lowLightOn);
-	DDX_Control(pDX, IDC_SMILE_COMBO, m_smile);
-	DDX_Control(pDX, IDC_FISH_FACE_COMBO, m_fishFace);
-	DDX_Control(pDX, IDC_RAISED_EYEBROWS_COMBO, m_raisedEyebrows);
-	DDX_Control(pDX, IDC_OPEN_MOUTH_COMBO, m_openMouth);
-	DDX_Control(pDX, IDC_NOSE_BUTTON, m_modeNose);
-	DDX_Control(pDX, IDC_EYES_BUTTON, m_modeEyes);
-	DDX_Control(pDX, IDC_FACIAL_BUTTON, m_methodFacial);
-	DDX_Control(pDX, IDC_SPEECH_BUTTON, m_methodSpeech);
-	DDX_Control(pDX, IDC_ROTATE_HEAD_RIGHT_COMBO, m_rotationRight);
-	DDX_Control(pDX, IDC_ROTATE_HEAD_LEFT_COMBO, m_rotationLeft);
 }
 
 BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
@@ -97,23 +66,10 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
 	ON_WM_HSCROLL()
 	ON_BN_CLICKED(IDC_FPS_BUTTON, &CMFCUCLMI3SettingsDlg::UpdateShowFPS)
 	ON_BN_CLICKED(IDC_LOW_LIGHT_BUTTON, &CMFCUCLMI3SettingsDlg::UpdateLowLight)
-	//ON_BN_CLICKED(IDC_NOSE_BUTTON, &CMFCUCLMI3SettingsDlg::UpdateModeNose)
-	ON_BN_CLICKED(IDC_EYES_BUTTON, &CMFCUCLMI3SettingsDlg::UpdateModeEyes)
-	ON_BN_CLICKED(IDC_FACIAL_BUTTON, &CMFCUCLMI3SettingsDlg::UpdateMethodFacial)
-	ON_BN_CLICKED(IDC_SPEECH_BUTTON, &CMFCUCLMI3SettingsDlg::UpdateMethodSpeech)
-    ON_BN_CLICKED(IDC_BUTTON_INFO_MODE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoMode)
-    ON_BN_CLICKED(IDC_BUTTON_INFO_METHOD, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoMethod)
     ON_BN_CLICKED(IDC_BUTTON_INFO_FPS, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoFps)
     ON_BN_CLICKED(IDC_BUTTON_INFO_LIGHT, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoLight)
     ON_BN_CLICKED(IDC_BUTTON_INFO_CAMERA, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoCamera)
-    //ON_BN_CLICKED(IDC_BUTTON_INFO_NOSE_SPEED, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoNoseMouse)
-    ON_BN_CLICKED(IDC_BUTTON_INFO_EYES_MOUSE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoEyesMouse)
-    ON_BN_CLICKED(IDC_BUTTON_INFO_SMILE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSmile)
-    ON_BN_CLICKED(IDC_BUTTON_INFO_FISHFACE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoFishface)
-    ON_BN_CLICKED(IDC_BUTTON_INFO_EYEBROWS, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoEyebrows)
-    ON_BN_CLICKED(IDC_BUTTON_INFO_OPEN_MOUTH, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoOpenMouth)
-    ON_BN_CLICKED(IDC_BUTTON_INFO_ROTATE_HEAD_LEFT, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoRotateHeadLeft)
-    ON_BN_CLICKED(IDC_BUTTON_INFO_ROTATE_HEAD_RIGHT, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoRotateHeadRight)
+
 	ON_CBN_SELCHANGE(IDC_DEFAULTCAMERA_COMBO, &CMFCUCLMI3SettingsDlg::OnCbnSelchangeDefaultcameraCombo)
 	ON_BN_CLICKED(IDCANCEL, &CMFCUCLMI3SettingsDlg::OnBnClickedCancel)
 END_MESSAGE_MAP()
@@ -148,6 +104,7 @@ void CMFCUCLMI3SettingsDlg::OnPaint() {
 
 // Init
 BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
+
 	CDialogEx::OnInitDialog();
 
 	// Set the icon for this dialog.  The framework does this automatically
@@ -157,72 +114,25 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 
 
 	// CONFIG data
-	wstring pathConfigS = L"main.dist\\settings\\test_settings.json";
+	wstring pathConfigS = L"main.dist\\settings\\general_settings.json";
 	LPCWSTR pathConfig = pathConfigS.c_str();
 
 	ifstream ifs_config(pathConfig);
 	string content_config((istreambuf_iterator<char>(ifs_config)), (istreambuf_iterator<char>()));
 
-	json myjson_config = json::parse(content_config);
-	auto& general = myjson_config["general"];
-	auto& modules = myjson_config["modules"];
-	auto& events = myjson_config["events"];
+	json general_settings = json::parse(content_config);
+	//auto& general = myjson_config["general"];
+	//auto& modules = myjson_config["modules"];
 
-	// JSON MODES PATH
-	wstring pathModesS = L"data\\mode_controller.json";
-	LPCWSTR pathModes = pathModesS.c_str();
-
-	ifstream ifs_modes(pathModes);
-	string content_modes((istreambuf_iterator<char>(ifs_modes)), (istreambuf_iterator<char>()));
-
-	json myjson_modes = json::parse(content_modes);
-	auto& current_mode = myjson_modes["current_mode"];
 	
-	// Set mode data
-	globalCurrentMode = current_mode;
-	globalModesData = myjson_modes["modes"];
-	auto& modes =	globalModesData[globalCurrentMode];
-	// Mode
-	m_modeNose.SetCheck(globalCurrentMode == GRID_NOSE_FACIAL || globalCurrentMode == GRID_NOSE_SPEECH);
-	m_modeEyes.SetCheck(globalCurrentMode == GRID_EYES_FACIAL || globalCurrentMode == GRID_EYES_SPEECH);
-	// Method
-	m_methodFacial.SetCheck(globalCurrentMode == GRID_NOSE_FACIAL || globalCurrentMode == GRID_EYES_FACIAL);
-	m_methodSpeech.SetCheck(globalCurrentMode == GRID_NOSE_SPEECH || globalCurrentMode == GRID_EYES_SPEECH);
-	// Facial Switches
-	m_smile.SetCurSel(0);
-	m_fishFace.SetCurSel(0);
-	m_raisedEyebrows.SetCurSel(0);
-	m_openMouth.SetCurSel(0);
-	m_rotationLeft.SetCurSel(0);
-	m_rotationRight.SetCurSel(0);
 
-	if (globalCurrentMode == GRID_NOSE_FACIAL || globalCurrentMode == GRID_EYES_FACIAL) {
-		int n = (globalCurrentMode == GRID_NOSE_FACIAL) ? 5 : 6;
-
-		for (int i = 0; i < n; i++) m_smile.AddString(facialValues[i]);
-		for (int i = 0; i < n; i++) m_fishFace.AddString(facialValues[i]);
-		for (int i = 0; i < n; i++) m_raisedEyebrows.AddString(facialValues[i]);
-		for (int i = 0; i < n; i++) m_openMouth.AddString(facialValues[i]);
-		for (int i = 0; i < n; i++) m_rotationLeft.AddString(facialValues[i]);
-		for (int i = 0; i < n; i++) m_rotationRight.AddString(facialValues[i]);
-
-		for (auto& el : modes.items()) {
-			for (int i = 0; i < n; i++) if (el.value() == ("head_smile" + facialConstants[i])) m_smile.SetCurSel(i + 1);
-			for (int i = 0; i < n; i++) if (el.value() == ("head_fishface" + facialConstants[i])) m_fishFace.SetCurSel(i + 1);
-			for (int i = 0; i < n; i++) if (el.value() == ("head_raise_eyebrows" + facialConstants[i])) m_raisedEyebrows.SetCurSel(i + 1);
-			for (int i = 0; i < n; i++) if (el.value() == ("head_open_mouth" + facialConstants[i])) m_openMouth.SetCurSel(i + 1);
-			for (int i = 0; i < n; i++) if (el.value() == ("head_left_rotation" + facialConstants[i])) m_rotationLeft.SetCurSel(i + 1);
-			for (int i = 0; i < n; i++) if (el.value() == ("head_right_rotation" + facialConstants[i])) m_rotationRight.SetCurSel(i + 1);
-		}			
-	}
 
 	// Set config data
-	globalShowFPS = general["view"]["show_fps"]; // FPS
-	globalLowLight = general["view"]["low_light_indicator_on"]; // LIGHT
-	globalSpeech = modules["speech"]["enabled"]; // SPEECH
-	globalCameraNr = general["camera"]["camera_nr"]; // CAMERA
+	globalShowFPS = general_settings["show_fps"]; // FPS
+	globalLowLight = general_settings["view"]["low_light_indicator_on"]; // LIGHT
+	globalCameraNr = general_settings["camera"]["camera_nr"]; // CAMERA
 	//globalMouseNose = events["nose_tracking"]["scaling_factor"] / 10;
-	globalMouseEye = modules["eye"]["Eye_mouse_speed"];
+	globalMouseEye = general_settings["eye"]["Eye_mouse_speed"];
 	//globalBoundBoxNose = events["nose_tracking"]["bound_sensitivity"];
 
 	// FPS
@@ -265,11 +175,12 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 // Save 
 void CMFCUCLMI3SettingsDlg::Save(){
 	// Update values
+	/*
 	if (m_modeNose.GetCheck() && m_methodFacial.GetCheck()) globalCurrentMode = GRID_NOSE_FACIAL;
 	else if (m_modeEyes.GetCheck() && m_methodFacial.GetCheck()) globalCurrentMode = GRID_EYES_FACIAL;
 	else if (m_modeNose.GetCheck() && m_methodSpeech.GetCheck()) globalCurrentMode = GRID_NOSE_SPEECH;
 	else if (m_modeEyes.GetCheck() && m_methodSpeech.GetCheck()) globalCurrentMode = GRID_EYES_SPEECH;
-
+	*/
 	globalCameraNr = m_camera.GetCurSel();
 	//globalMouseNose = m_noseMouseSpeed.GetPos() * 10;
 	globalMouseEye = m_eyesMouseSpeed.GetPos();
@@ -320,26 +231,22 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	// Save Configs
 	
 	//wstring tempStrConfig = L"data\\configMFC.json";
-	wstring tempStrConfig = L"main.dist\\settings\\test_settings_MFC.json";
+	
+	wstring tempStrConfig = L"main.dist\\settings\\temp_settings.json";
 	LPCWSTR pathConfig = tempStrConfig.c_str();
 	ifstream ifs_config(pathConfig);
 	string content_config((istreambuf_iterator<char>(ifs_config)), (istreambuf_iterator<char>()));
-	json myjson_config = json::parse(content_config);
-	auto& general = myjson_config["general"];
-	auto& modules = myjson_config["modules"];
-	auto& events = myjson_config["events"];
-	modules["speech"]["enabled"] = globalSpeech;
-	general["view"]["show_fps"] = globalShowFPS;
-	general["view"]["low_light_indicator_on"] = globalLowLight;
-	general["camera"]["camera_nr"] = globalCameraNr; 
-	//events["nose_tracking"]["scaling_factor"] = globalMouseNose;
-	modules["eye"]["Eye_mouse_speed"] = globalMouseEye;
-	//events["nose_tracking"]["bound_sensitivity"] = globalBoundBoxNose;
+	json general_settings = json::parse(content_config);
+
+	general_settings["show_fps"] = globalShowFPS;
+	general_settings["view"]["low_light_indicator_on"] = globalLowLight;
+	general_settings["camera"]["camera_nr"] = globalCameraNr;
+	general_settings["eye"]["Eye_mouse_speed"] = globalMouseEye;
 	
 
 	// WRITE INTO CONFIG JSON ALL CHANGES
 	ofstream outputConfigFile(pathConfig);
-	outputConfigFile << setw(4) << myjson_config << endl;
+	outputConfigFile << setw(4) << general_settings << endl;
 
 	//MessageBox(_T("UCL MotionInput will now restart and apply the new setting."), _T("Information"));
     //MessageBox(_T("Any changes made have now been saved.\n\nMotionInput will now be restarted to apply the new settings."), _T("Changes Saved"));
@@ -350,8 +257,8 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	// 2. Copy amended configMFC.json file from MFC app to config.json
 	Sleep(100);	// 1 seconds delay
 	
-	ifstream src(L"main.dist\\settings\\test_settings_MFC.json", ios::binary);
-	ofstream dst(L"main.dist\\settings\\test_settings.json", ios::binary);
+	ifstream src(L"main.dist\\settings\\temp_settings.json", ios::binary);
+	ofstream dst(L"main.dist\\settings\\general_settings.json", ios::binary);
 	dst << src.rdbuf();
 
 	// 3. Run Illumiroom
@@ -399,7 +306,7 @@ void CMFCUCLMI3SettingsDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScro
 		int iValue = m_eyesMouseSpeed.GetPos(); // Get Slider value
 		strSliderValue.Format(_T("%d"), iValue);
 		m_eyesMouseSpeedValue.SetWindowText(strSliderValue);
-	}// NoseBox Bound
+	}
 
 }
 
@@ -430,80 +337,9 @@ void CMFCUCLMI3SettingsDlg::UpdateLowLight(){
 		globalLowLight = true;
 	}
 }
-// Do not show on/off eye gaze option if Nose Facial selected
-void CMFCUCLMI3SettingsDlg::UpdateModeNose(){
-	m_modeNose.SetCheck(1);
-	m_modeEyes.SetCheck(0);
-
-	reference_wrapper<CComboBox> boxes[] = { m_smile, m_fishFace, m_raisedEyebrows, m_openMouth, m_rotationLeft, m_rotationRight };
-	string titles[] = { "head_smile", "head_fishface", "head_raise_eyebrows", "head_open_mouth", "head_left_rotation", "head_right_rotation" };
-	for (CComboBox& box : boxes) for (int i = box.GetCount() - 1; i > 0; i--) box.DeleteString(i);
-
-	int n = m_methodFacial.GetCheck() ? 5 : 0;
-	for (CComboBox& box : boxes) for (int i = 0; i < n; i++) box.AddString(facialValues[i]);
-
-
-	auto& modes = globalModesData[GRID_NOSE_FACIAL];
-	for (auto& el : modes.items()) for (int t = 0; t < 6; t++) for (int i = 0; i < n; i++)
-		if (el.value() == (titles[t] + facialConstants[i])) boxes[t].get().SetCurSel(i + 1);
-}
-
-// Show all options on Eyes Facial
-void CMFCUCLMI3SettingsDlg::UpdateModeEyes(){
-	m_modeNose.SetCheck(0);
-	m_modeEyes.SetCheck(1);
-
-	reference_wrapper<CComboBox> boxes[] = { m_smile, m_fishFace, m_raisedEyebrows, m_openMouth, m_rotationLeft, m_rotationRight };
-	string titles[] = { "head_smile", "head_fishface", "head_raise_eyebrows", "head_open_mouth", "head_left_rotation", "head_right_rotation"};
-	for (CComboBox& box : boxes) for (int i = box.GetCount() - 1; i > 0; i--) box.DeleteString(i);
-
-	auto& modes = globalModesData[GRID_EYES_FACIAL];
-	int n = m_methodFacial.GetCheck() ? 6 : 0;
-	for (CComboBox& box : boxes) for (int i = 0; i < n; i++) box.AddString(facialValues[i]);
-	for (auto& el : modes.items()) for (int t = 0; t < 6; t++) for (int i = 0; i < n; i++) 
-		if (el.value() == (titles[t] + facialConstants[i])) boxes[t].get().SetCurSel(i + 1);
-}
-
-// Show options only when Facial selected
-void CMFCUCLMI3SettingsDlg::UpdateMethodFacial(){
-	m_methodFacial.SetCheck(1);
-	m_methodSpeech.SetCheck(0);
-
-	reference_wrapper<CComboBox> boxes[] = { m_smile, m_fishFace, m_raisedEyebrows, m_openMouth, m_rotationLeft, m_rotationRight };
-	string titles[] = { "head_smile", "head_fishface", "head_raise_eyebrows", "head_open_mouth", "head_left_rotation", "head_right_rotation" };
-	for (CComboBox& box : boxes) for (int i = box.GetCount() - 1; i > 0; i--) box.DeleteString(i);
-
-	auto& modes = globalModesData[m_modeEyes.GetCheck() ? GRID_EYES_FACIAL : GRID_NOSE_FACIAL];
-	int n = m_modeEyes.GetCheck() ? 6 : 5;
-	for (CComboBox& box : boxes) for (int i = 0; i < n; i++) box.AddString(facialValues[i]);
-	for (auto& el : modes.items()) for (int t = 0; t < 6; t++) for (int i = 0; i < n; i++)
-		if (el.value() == (titles[t] + facialConstants[i])) boxes[t].get().SetCurSel(i + 1);
-}
-void CMFCUCLMI3SettingsDlg::UpdateMethodSpeech(){
-	m_methodFacial.SetCheck(0);
-	m_methodSpeech.SetCheck(1);
-
-	reference_wrapper<CComboBox> boxes[] = { m_smile, m_fishFace, m_raisedEyebrows, m_openMouth, m_rotationLeft, m_rotationRight };
-	
-	for (CComboBox& box : boxes) {
-		for (int i = box.GetCount() - 1; i > 0; i--) box.DeleteString(i);
-		box.SetCurSel(0);
-	}
-}
 
 
 
-// Popups
-void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoMode()
-{
-    MessageBox(_T("The Tracking Mode selected is used to control the device through either Nose or Eyes tracking. \nWhile using Eyes Mode the cursor of the mouse follows a person's eye gaze and moves across the screen. \nNose Mode requires some neck mobility as it is needed when pointing nose up, down, left, and right."), _T("Tracking Mode Information"));
-}
-
-
-void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoMethod()
-{
-    MessageBox(_T("The choice of using Speech or Facial methods to carry out actionsis available no matter the Tracking Mode selected. For instance, consider a left mouse click and a right mouse click. These actions could be triggered via Speech Commands with saying 'click' and 'right click' or via Facial Switches. \n\nWith Speech Commands, a person controls computer actions by saying specific phrases linked to actions. Currently, Speech Commands are designed to be used by people who are able to pronounce common words clearly. \n\nThere are six Facial Switches/Movements recognised by MotionInput at the moment. When Facial Method is selected the Facial Mode section is activated and a computer action becomes available to select for each movement."), _T("Method Information"));
-}
 
 
 void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoFps()
@@ -523,11 +359,6 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoCamera()
 }
 
 
-void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoNoseMouse()
-{
-    MessageBox(_T("This option allows users to adjust the speed with which the mouse moves across the screen using Nose Mode. The lower the number the slower the mouse will move and vice versa."), _T("Nose Mode Speed Information"));
-}
-
 
 
 
@@ -537,40 +368,7 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoEyesMouse()
 }
 
 
-void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSmile()
-{
-    MessageBox(_T("To trigger the Smile Facial gesture try to make part of your teeth visible, try saying 'cheese'."), _T("Smile Information"));
-}
 
-
-void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoFishface()
-{
-    MessageBox(_T("Fish Face is a gesture where a person's lips come together in a small circle in the middle of their face. Similar facial movement to that gestures made during a peck kiss or  whistling."), _T("Fish Face Information"));
-}
-
-
-void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoEyebrows()
-{
-    MessageBox(_T("Eyebrows raise can be seen when making a surprised or scared facial expression. It can also happen if a person looks up in attempt to see their forehead without the use of a mirror. \nIf experiencing difficulty triggering this gesture, try lowering your eyebrows (making a grumpy face) and then raising them again."), _T("Raised Eyebrows Information"));
-}
-
-
-void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoOpenMouth()
-{
-    MessageBox(_T("An Open Mouth gesture should be a relaxed movement as, typically, a standard circleforms during this process."), _T("Open Mouth Information"));
-}
-
-
-void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoRotateHeadLeft()
-{
-    MessageBox(_T("This movement resembles the movement puppies (dogs) make when looking at an object/individual with great curiousity. The head tilts to the side while keeping the nose in its original position.\n\nTry moving your head towards your left sholder."), _T("Rotate Head Left Information"));
-}
-
-
-void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoRotateHeadRight()
-{
-    MessageBox(_T("This movement resembles the movement puppies (dogs) make when looking at an object/individual with great curiousity. The head tilts to the side while keeping the nose in its original position.\n\nTry moving your head towards your right sholder."), _T("Rotate Head Right Information"));
-}
 
 
 

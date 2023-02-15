@@ -2,6 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by MFCUCLMI3Settings.rc
 //
+#define IDOK2                           3
 #define IDD_MFCUCLMI3SETTINGS_DIALOG    102
 #define IDI_ICON1                       112
 #define IDR_MAINFRAME                   128
@@ -113,6 +114,7 @@
 #define IDC_STATIC_FACIAL_MODE_OPTIONS  1074
 #define IDC_STATIC_EYES_MODE_OPTIONS    1075
 #define IDC_STATIC_NOSE_MODE_OPTIONS    1076
+#define IDC_STATIC_FACIAL_MODE_OPTIONS2 1076
 #define IDC_STATIC_CAMERA_OPTIONS       1077
 #define IDC_ADVANCED_OPTIONS            1078
 #define IDC_STATIC_GENERAL              1079

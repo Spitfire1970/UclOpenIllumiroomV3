@@ -1,0 +1,29 @@
+{
+    "background_image_path": "room_img.jpg",
+    "camera": {
+        "camera_nr": 0
+    },
+    "exit_key_binding": "Key_Escape",
+    "eye": {
+        "Eye_mouse_speed": 7
+    },
+    "selected_displays": {
+        "primary_display": {
+            "height": 1080,
+            "left": 0,
+            "top": 0,
+            "width": 1920
+        },
+        "projector_display": {
+            "height": 1080,
+            "left": 0,
+            "top": 0,
+            "width": 1920
+        }
+    },
+    "selected_mode": "snow",
+    "show_fps": false,
+    "view": {
+        "low_light_indicator_on": true
+    }
+}
