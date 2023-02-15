@@ -66,8 +66,7 @@ def main():
         room_image_obj = RoomImage(settings_access,display_capture)
         room_image = room_image_obj.read_room_image(resize=False)
 
-        #Create instance of FPS
-        fps = FPS()
+ 
 
         #Create the mode objects from the mode factory
         mode_factory = ModesFactory(room_image, display_capture, audio_capture, settings_access)
@@ -77,6 +76,10 @@ def main():
         trigger_frequency = settings_access.read_mode_settings(selected_mode, "trigger_frequency")
         qImg_format = eval(format_string)
 
+        #Create instance of FPS
+        fps = FPS()
+        show_fps = settings_access.read_general_settings("show_fps")
+            
 
         # Create PyQt app
         app = QtWidgets.QApplication(sys.argv)
@@ -95,8 +98,8 @@ def main():
 
                     #Resize frame to fit projector if requires resizing
                     frame = display_capture.frame_projector_resize(frame)
-
-                    fps.add_fps_to_image(frame, fps.get_fps())
+                    if show_fps:
+                        fps.add_fps_to_image(frame, fps.get_fps())
                     #Frame display
                     height, width = frame.shape[:2]
                     bytes_per_line = frame.strides[0]

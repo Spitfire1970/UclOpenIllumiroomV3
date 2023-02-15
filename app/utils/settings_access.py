@@ -16,6 +16,12 @@ class SettingsAccess:
         with open(path,'r') as read_file:
             return json.load(read_file)
 
+    def read_general_settings(self, setting):
+
+        path = self.settings_path +"general_settings.json"
+        with open(path,'r') as read_file:
+            return json.load(read_file)[setting]
+
 
     def write_settings(self, settings_name, new_json_data):
     
