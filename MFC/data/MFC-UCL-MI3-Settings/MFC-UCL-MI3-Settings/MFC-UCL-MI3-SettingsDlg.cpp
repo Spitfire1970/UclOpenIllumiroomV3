@@ -66,12 +66,13 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
 	ON_WM_HSCROLL()
 	ON_BN_CLICKED(IDC_FPS_BUTTON, &CMFCUCLMI3SettingsDlg::UpdateShowFPS)
 	ON_BN_CLICKED(IDC_LOW_LIGHT_BUTTON, &CMFCUCLMI3SettingsDlg::UpdateLowLight)
-    ON_BN_CLICKED(IDC_BUTTON_INFO_FPS, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoFps)
-    ON_BN_CLICKED(IDC_BUTTON_INFO_LIGHT, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoLight)
-    ON_BN_CLICKED(IDC_BUTTON_INFO_CAMERA, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoCamera)
+	ON_BN_CLICKED(IDC_BUTTON_INFO_FPS, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoFps)
+	ON_BN_CLICKED(IDC_BUTTON_INFO_LIGHT, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoLight)
+	ON_BN_CLICKED(IDC_BUTTON_INFO_CAMERA, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoCamera)
 
 	ON_CBN_SELCHANGE(IDC_DEFAULTCAMERA_COMBO, &CMFCUCLMI3SettingsDlg::OnCbnSelchangeDefaultcameraCombo)
 	ON_BN_CLICKED(IDCANCEL, &CMFCUCLMI3SettingsDlg::OnBnClickedCancel)
+	ON_BN_CLICKED(IDSAVEONLY, &CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly)
 END_MESSAGE_MAP()
 
 // drag window cursor
@@ -116,6 +117,7 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 	// CONFIG data
 	wstring pathConfigS = L"main.dist\\settings\\general_settings.json";
 	LPCWSTR pathConfig = pathConfigS.c_str();
+
 
 	ifstream ifs_config(pathConfig);
 	string content_config((istreambuf_iterator<char>(ifs_config)), (istreambuf_iterator<char>()));
@@ -175,64 +177,13 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 // Save 
 void CMFCUCLMI3SettingsDlg::Save(){
 	// Update values
-	/*
-	if (m_modeNose.GetCheck() && m_methodFacial.GetCheck()) globalCurrentMode = GRID_NOSE_FACIAL;
-	else if (m_modeEyes.GetCheck() && m_methodFacial.GetCheck()) globalCurrentMode = GRID_EYES_FACIAL;
-	else if (m_modeNose.GetCheck() && m_methodSpeech.GetCheck()) globalCurrentMode = GRID_NOSE_SPEECH;
-	else if (m_modeEyes.GetCheck() && m_methodSpeech.GetCheck()) globalCurrentMode = GRID_EYES_SPEECH;
-	*/
+
 	globalCameraNr = m_camera.GetCurSel();
-	//globalMouseNose = m_noseMouseSpeed.GetPos() * 10;
+
 	globalMouseEye = m_eyesMouseSpeed.GetPos();
 
-	//globalMouseNose = m_noseMouseSpeed.GetPos() * 10;
-	//globalBoundBoxNose = m_noseBoxBond.GetPos();
-
-	// --------------------- WRITE JSON ---------------------
-
-	// Save Modes 
-	/*
-	wstring tempStrModes = L"data\\mode_controller.json";
-	LPCWSTR pathModes = tempStrModes.c_str();
-	ifstream ifs_modes(pathModes);
-	string content_modes((istreambuf_iterator<char>(ifs_modes)), (istreambuf_iterator<char>()));
-	json myjson_modes = json::parse(content_modes);
-	myjson_modes["current_mode"] = globalCurrentMode;
 	
-	// Get data from current mode
-	auto& modes = myjson_modes["modes"][globalCurrentMode];
-
-	// Facial switches 
-	json facialData = json::array();
-	if (m_smile.GetCurSel() > 0) facialData.push_back("head_smile" + facialConstants[m_smile.GetCurSel() - 1]);
-	if (m_fishFace.GetCurSel() > 0) facialData.push_back("head_fishface" + facialConstants[m_fishFace.GetCurSel() - 1]);
-	if (m_raisedEyebrows.GetCurSel() > 0) facialData.push_back("head_raise_eyebrows" + facialConstants[m_raisedEyebrows.GetCurSel() - 1]);
-	if (m_openMouth.GetCurSel() > 0) facialData.push_back("head_open_mouth" + facialConstants[m_openMouth.GetCurSel() - 1]);
-	if (m_rotationLeft.GetCurSel() > 0) facialData.push_back("head_left_rotation" + facialConstants[m_rotationLeft.GetCurSel() - 1]);
-	if (m_rotationRight.GetCurSel() > 0) facialData.push_back("head_right_rotation" + facialConstants[m_rotationRight.GetCurSel() - 1]);
-
-	for (auto& el : modes.items()) {
-		string cur = el.value();
-		if(
-			cur.find("head_smile") == string::npos &&
-			cur.find("head_fishface") == string::npos &&
-			cur.find("head_raise_eyebrows") == string::npos &&
-			cur.find("head_open_mouth") == string::npos &&
-			cur.find("head_left_rotation") == string::npos &&
-			cur.find("head_right_rotation") == string::npos 
-		) facialData.push_back(cur.c_str());
-	}
-
-	modes = facialData;
-
-	ofstream outputModesFile(pathModes);
-	outputModesFile << setw(4) << myjson_modes << endl;
-	*/
-	// Save Configs
-	
-	//wstring tempStrConfig = L"data\\configMFC.json";
-	
-	wstring tempStrConfig = L"main.dist\\settings\\temp_settings.json";
+	wstring tempStrConfig = L"main.dist\\settings\\general_settings.json";
 	LPCWSTR pathConfig = tempStrConfig.c_str();
 	ifstream ifs_config(pathConfig);
 	string content_config((istreambuf_iterator<char>(ifs_config)), (istreambuf_iterator<char>()));
@@ -257,9 +208,10 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	// 2. Copy amended configMFC.json file from MFC app to config.json
 	Sleep(100);	// 1 seconds delay
 	
+	/*
 	ifstream src(L"main.dist\\settings\\temp_settings.json", ios::binary);
 	ofstream dst(L"main.dist\\settings\\general_settings.json", ios::binary);
-	dst << src.rdbuf();
+	dst << src.rdbuf();*/
 
 	// 3. Run Illumiroom
 	ShellExecuteA(NULL, "open", "main.dist\\main.exe", NULL, NULL, SW_SHOWDEFAULT);
@@ -342,6 +294,8 @@ void CMFCUCLMI3SettingsDlg::UpdateLowLight(){
 
 
 
+
+
 void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoFps()
 {
 	MessageBox(_T("FPS, or Frames per second, is the rate of frames (pictures) produced every second. The higher the number is, the smoother and better the interaction with the device will be. \n\nBy default, this setting is set to 'ON' meaning the FPS number shows at the bottom right corner of MotionInput's camera screen. Changing this option to 'OFF' will hide the FPS number."), _T("FPS Information"));
@@ -383,4 +337,46 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedCancel()
 {
 	// TODO: Add your control notification handler code here
 	CDialogEx::OnCancel();
+}
+
+
+
+
+void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
+{
+	// Update values
+
+	globalCameraNr = m_camera.GetCurSel();
+
+	globalMouseEye = m_eyesMouseSpeed.GetPos();
+
+
+	wstring tempStrConfig = L"main.dist\\settings\\temp_settings.json";
+	LPCWSTR pathConfig = tempStrConfig.c_str();
+	ifstream ifs_config(pathConfig);
+	string content_config((istreambuf_iterator<char>(ifs_config)), (istreambuf_iterator<char>()));
+	json general_settings = json::parse(content_config);
+
+	general_settings["show_fps"] = globalShowFPS;
+	general_settings["view"]["low_light_indicator_on"] = globalLowLight;
+	general_settings["camera"]["camera_nr"] = globalCameraNr;
+	general_settings["eye"]["Eye_mouse_speed"] = globalMouseEye;
+
+
+	// WRITE INTO CONFIG JSON ALL CHANGES
+	ofstream outputConfigFile(pathConfig);
+	outputConfigFile << setw(4) << general_settings << endl;
+
+	//MessageBox(_T("UCL MotionInput will now restart and apply the new setting."), _T("Information"));
+	//MessageBox(_T("Any changes made have now been saved.\n\nMotionInput will now be restarted to apply the new settings."), _T("Changes Saved"));
+
+	// 1. Exit MI
+	//system("TASKKILL /IM MI3-FacialNavigation-3.11.exe");
+
+	// 2. Copy amended configMFC.json file from MFC app to config.json
+	Sleep(100);	// 1 seconds delay
+
+	ifstream src(L"main.dist\\settings\\temp_settings.json", ios::binary);
+	ofstream dst(L"main.dist\\settings\\general_settings.json", ios::binary);
+	dst << src.rdbuf();
 }
