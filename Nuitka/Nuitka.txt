@@ -17,3 +17,6 @@ python -m nuitka --standalone --enable-plugin=tk-inter  --enable-plugin=pyqt6  -
 
 To MFC Release
 python -m nuitka --standalone --enable-plugin=tk-inter  --enable-plugin=pyqt6  --output-dir=MFC_RELEASE --remove-output app/main.py; cp -r app/settings MFC_RELEASE/main.dist; cp -r app/assets MFC_RELEASE/main.dist
+
+Proper Name:
+python -m nuitka --standalone --enable-plugin=tk-inter  --enable-plugin=pyqt6  --output-dir=release --remove-output --disable-console  app/UCL_Open-Illumiroom_V2.py; cp -r app/settings release/UCL_Open-Illumiroom_V2.dist; cp -r app/assets release/UCL_Open-Illumiroom_V2.dist

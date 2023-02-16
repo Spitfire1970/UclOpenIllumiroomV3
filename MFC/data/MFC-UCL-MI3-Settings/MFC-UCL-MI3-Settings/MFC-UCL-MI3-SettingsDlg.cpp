@@ -150,7 +150,7 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 
 
 	// general settings config data
-	wstring pathConfigSGeneral = L"main.dist\\settings\\general_settings.json";
+	wstring pathConfigSGeneral = L"UCL_Open-Illumiroom_V2.dist\\settings\\general_settings.json";
 	LPCWSTR pathConfigGeneral = pathConfigSGeneral.c_str();
 
 
@@ -180,7 +180,7 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// mode settings config data
-	wstring pathConfigSModes = L"main.dist\\settings\\mode_settings.json";
+	wstring pathConfigSModes = L"UCL_Open-Illumiroom_V2.dist\\settings\\mode_settings.json";
 	LPCWSTR pathConfigModes = pathConfigSModes.c_str();
 
 
@@ -252,7 +252,7 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	globalSelectedMode = modesAvailableStr[globalSelectedModeNum];
 
 	
-	wstring StrConfigGeneral = L"main.dist\\settings\\general_settings.json";
+	wstring StrConfigGeneral = L"UCL_Open-Illumiroom_V2.dist\\settings\\general_settings.json";
 	LPCWSTR pathConfigGeneral = StrConfigGeneral.c_str();
 	ifstream ifs_config_general(pathConfigGeneral);
 	string content_config_general((istreambuf_iterator<char>(ifs_config_general)), (istreambuf_iterator<char>()));
@@ -272,7 +272,7 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	// Update values mode settings
 	globalBlurAmount = m_blurAmount.GetPos();
 
-	wstring StrConfigMode = L"main.dist\\settings\\mode_settings.json";
+	wstring StrConfigMode = L"UCL_Open-Illumiroom_V2.dist\\settings\\mode_settings.json";
 	LPCWSTR pathConfigMode = StrConfigMode.c_str();
 	ifstream ifs_config_mode(pathConfigMode);
 	string content_config_mode((istreambuf_iterator<char>(ifs_config_mode)), (istreambuf_iterator<char>()));
@@ -288,10 +288,10 @@ void CMFCUCLMI3SettingsDlg::Save(){
 
 
 	//Kill any existing versions of the app
-	system("TASKKILL /IM main.exe");
+	system("TASKKILL /IM UCL_Open-Illumiroom_V2.exe");
 
 	// Run Illumiroom, with run argument
-	ShellExecuteA(NULL, "open", "main.dist\\main.exe", "run", NULL, SW_SHOWDEFAULT);
+	ShellExecuteA(NULL, "open", "UCL_Open-Illumiroom_V2.dist\\UCL_Open-Illumiroom_V2.exe", "run", NULL, SW_SHOWDEFAULT);
 
 	//Add option on dialog to keep window open, or close automatically
 	if (!globalSettingsDialogOpen)CDialogEx::OnOK();
@@ -429,7 +429,7 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
 	globalSelectedMode = modesAvailableStr[globalSelectedModeNum];
 
 	
-	wstring tempStrConfig = L"main.dist\\settings\\general_settings.json";
+	wstring tempStrConfig = L"UCL_Open-Illumiroom_V2.dist\\settings\\general_settings.json";
 	LPCWSTR pathConfig = tempStrConfig.c_str();
 	ifstream ifs_config(pathConfig);
 	string content_config((istreambuf_iterator<char>(ifs_config)), (istreambuf_iterator<char>()));
@@ -451,7 +451,7 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
 	// Update values mode settings
 	globalBlurAmount = m_blurAmount.GetPos();
 
-	wstring StrConfigMode = L"main.dist\\settings\\mode_settings.json";
+	wstring StrConfigMode = L"UCL_Open-Illumiroom_V2.dist\\settings\\mode_settings.json";
 	LPCWSTR pathConfigMode = StrConfigMode.c_str();
 	ifstream ifs_config_mode(pathConfigMode);
 	string content_config_mode((istreambuf_iterator<char>(ifs_config_mode)), (istreambuf_iterator<char>()));
@@ -476,7 +476,7 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedCloseprojector()
 {
 	// TODO: repplace main.exe with different name for illumiroom
 
-	system("TASKKILL /IM main.exe");
+	system("TASKKILL /IM UCL_Open-Illumiroom_V2.exe");
 }
 
 
