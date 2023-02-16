@@ -27,9 +27,11 @@ int globalCameraNr;
 bool globalShowFPS;
 bool globalLowLight;
 int globalMouseEye;
+bool globalSettingsDialogOpen;
 
 //mode settings
 int globalBlurAmount;
+string globalSelectedSnowAmount;
 
 string globalSelectedMode;
 int globalSelectedModeNum = 0;
@@ -61,13 +63,18 @@ void CMFCUCLMI3SettingsDlg::DoDataExchange(CDataExchange* pDX){
 	//DDX_Control(pDX, IDC_NOSESPEED_SLIDER, m_noseMouseSpeed);
 	//DDX_Control(pDX, IDC_EDIT3, m_cameraValue);
 	//DDX_Control(pDX, IDC_NOSESPEED_COUNTER, m_noseMouseSpeedValue);
-	DDX_Control(pDX, IDC_EYEMOUSE_SPEED_SLIDER, m_eyesMouseSpeed);
-	DDX_Control(pDX, IDC_EYEMOUSE_SPEED_COUNTER, m_eyesMouseSpeedValue);
+
 	DDX_Control(pDX, IDC_BLUR_AMOUNT_SLIDER, m_blurAmount);
 	DDX_Control(pDX, IDC_BLUR_AMOUNT_COUNTER, m_blurAmountValue);
 	DDX_Control(pDX, IDC_FPS_BUTTON, m_showFPS);
 	DDX_Control(pDX, IDC_LOW_LIGHT_BUTTON, m_lowLightOn);
 	DDX_Control(pDX, IDC_SELECT_MODE_COMBO, m_selectMode);
+	DDX_Control(pDX, IDC_KEEP_SETTINGS_OPEN, m_keepSettingsOpen);
+
+	DDX_Control(pDX, IDC_SNOW1, m_lightSnow);
+	DDX_Control(pDX, IDC_SNOW2, m_mediumSnow);
+	DDX_Control(pDX, IDC_SNOW3, m_harshSnow);
+
 }
 
 BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
@@ -87,12 +94,19 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
 	ON_CBN_SELCHANGE(IDC_DEFAULTCAMERA_COMBO, &CMFCUCLMI3SettingsDlg::OnCbnSelchangeDefaultcameraCombo)
 	ON_BN_CLICKED(IDCANCEL, &CMFCUCLMI3SettingsDlg::OnBnClickedCancel)
 	ON_BN_CLICKED(IDSAVEONLY, &CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly)
+	ON_BN_CLICKED(IDC_BUTTON_INFO_SNOW_MODE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSnowMode)
+	ON_BN_CLICKED(IDC_BUTTON_INFO_BLUR_AMOUNT, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoBlurAmount)
 	ON_BN_CLICKED(IDC_SELECT_DISPLAYS_BUTTON, &CMFCUCLMI3SettingsDlg::OnBnClickedSelectDisplaysButton)
 	ON_BN_CLICKED(IDCLOSEPROJECTOR, &CMFCUCLMI3SettingsDlg::OnBnClickedCloseprojector)
 	ON_BN_CLICKED(IDC_STATIC_CAMERA_OPTIONS, &CMFCUCLMI3SettingsDlg::OnBnClickedStaticCameraOptions)
 	ON_CBN_SELCHANGE(IDC_SELECT_MODE_COMBO, &CMFCUCLMI3SettingsDlg::OnCbnSelchangeSelectModeCombo)
 	ON_BN_CLICKED(IDC_BUTTON_INFO_SELECT_MODE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectMode)
 	ON_STN_CLICKED(IDC_STATIC_SELECT_MODE, &CMFCUCLMI3SettingsDlg::OnStnClickedStaticSelectMode)
+
+	ON_BN_CLICKED(IDC_SNOW1, &CMFCUCLMI3SettingsDlg::OnBnClickedSnow1)
+	ON_BN_CLICKED(IDC_SNOW2, &CMFCUCLMI3SettingsDlg::OnBnClickedSnow2)
+	ON_BN_CLICKED(IDC_SNOW3, &CMFCUCLMI3SettingsDlg::OnBnClickedSnow3)
+	ON_BN_CLICKED(IDC_KEEP_SETTINGS_OPEN, &CMFCUCLMI3SettingsDlg::OnBnClickedKeepSettingsOpen)
 
 END_MESSAGE_MAP()
 
@@ -148,11 +162,12 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 	//auto& modules = myjson_config["modules"];
 
 	// Set general settings data
+	//globalSettingsDialogOpen = general_settings["view"]["open"]; //  keep window open
 	globalShowFPS = general_settings["show_fps"]; // FPS
 	globalLowLight = general_settings["view"]["low_light_indicator_on"]; // LIGHT
 	globalCameraNr = general_settings["camera"]["camera_nr"]; // CAMERA
-	globalMouseEye = general_settings["eye"]["Eye_mouse_speed"];
 	globalSelectedMode = general_settings["selected_mode"]; // selected mode
+	
 
 	// Initializing an object of wstring
 	wstring temp = wstring(globalSelectedMode.begin(), globalSelectedMode.end());
@@ -176,9 +191,13 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 
 	// Set mode settings data
 	globalBlurAmount = mode_settings["blur"]["blur_amount"]; // blur amount
+	globalSelectedSnowAmount = mode_settings["snow"]["snow_amount"]; // snow amount 
+	globalSettingsDialogOpen = mode_settings["keep_window_open"]; //  keep window open
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	//WINDOW OPEN
+	m_keepSettingsOpen.SetCheck(globalSettingsDialogOpen);
 	// FPS
 	m_showFPS.SetWindowTextW(globalShowFPS ? L"ON" : L"OFF");
 	// Low Light
@@ -205,22 +224,20 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 	m_selectMode.SetCurSel(globalSelectedModeNum);
 	
 
-	//Eyes mouse speed
 
-	CString strSliderValue;
-	m_eyesMouseSpeed.SetRange(1, 20);
-	m_eyesMouseSpeed.SetPos(globalMouseEye);
-	strSliderValue.Format(_T("%d"), globalMouseEye);
-	m_eyesMouseSpeedValue.SetWindowText(strSliderValue);
 
 	
 	//blur amount
-	//CString strSliderValue;
+	CString strSliderValue;
 	m_blurAmount.SetRange(1, 250);
 	m_blurAmount.SetPos(globalBlurAmount);
 	strSliderValue.Format(_T("%d"), globalBlurAmount);
 	m_blurAmountValue.SetWindowText(strSliderValue);
-	
+
+	//Snow mode - sets to the correct radio check based on the snow mode in the settings
+	m_lightSnow.SetCheck(globalSelectedSnowAmount == "light_snow");
+	m_mediumSnow.SetCheck(globalSelectedSnowAmount == "med_snow");
+	m_harshSnow.SetCheck(globalSelectedSnowAmount == "harsh_snow");
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -231,7 +248,6 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 void CMFCUCLMI3SettingsDlg::Save(){
 	// Update values general settings
 	globalCameraNr = m_camera.GetCurSel();
-	globalMouseEye = m_eyesMouseSpeed.GetPos();
 	globalSelectedModeNum = m_selectMode.GetCurSel();
 	globalSelectedMode = modesAvailableStr[globalSelectedModeNum];
 
@@ -245,9 +261,7 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	general_settings["show_fps"] = globalShowFPS;
 	general_settings["view"]["low_light_indicator_on"] = globalLowLight;
 	general_settings["camera"]["camera_nr"] = globalCameraNr;
-	general_settings["eye"]["Eye_mouse_speed"] = globalMouseEye;
 	general_settings["selected_mode"] = globalSelectedMode;
-
 	// WRITE INTO CONFIG JSON ALL CHANGES
 	ofstream outputConfigFileGeneral(pathConfigGeneral);
 	outputConfigFileGeneral << setw(4) << general_settings << endl;
@@ -265,28 +279,22 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	json mode_settings = json::parse(content_config_mode);
 
 	mode_settings["blur"]["blur_amount"] = globalBlurAmount;
-
+	mode_settings["snow"]["snow_amount"] = globalSelectedSnowAmount;
+	//for some reason i cannot have this setting in general settings. I do not know why. I fear this may be a problem with later settings. 
+	mode_settings["keep_window_open"] = globalSettingsDialogOpen;
 	// WRITE INTO CONFIG JSON ALL CHANGES
 	ofstream outputConfigFileMode(pathConfigMode);
 	outputConfigFileMode << setw(4) << mode_settings << endl;
 
 
-	// 1. Exit MI
-	//system("TASKKILL /IM MI3-FacialNavigation-3.11.exe");
+	//Kill any existing versions of the app
+	system("TASKKILL /IM main.exe");
 
-	// 2. Copy amended configMFC.json file from MFC app to config.json
-	Sleep(100);	// 1 seconds delay
-	
-	/*
-	ifstream src(L"main.dist\\settings\\temp_settings.json", ios::binary);
-	ofstream dst(L"main.dist\\settings\\general_settings.json", ios::binary);
-	dst << src.rdbuf();*/
-
-	// 3. Run Illumiroom, with run argument
+	// Run Illumiroom, with run argument
 	ShellExecuteA(NULL, "open", "main.dist\\main.exe", "run", NULL, SW_SHOWDEFAULT);
 
 	//Add option on dialog to keep window open, or close automatically
-	//CDialogEx::OnOK();
+	if (!globalSettingsDialogOpen)CDialogEx::OnOK();
 }
 
 // About
@@ -319,17 +327,10 @@ void CMFCUCLMI3SettingsDlg::ShowHelp()
 
 void CMFCUCLMI3SettingsDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar){
 	CSliderCtrl* pSlider = reinterpret_cast<CSliderCtrl*>(pScrollBar);
-
+	
 	// eyes Mouse Speed
 
-	if (pSlider == &m_eyesMouseSpeed) {
-		CString strSliderValue;
-		int iValue = m_eyesMouseSpeed.GetPos(); // Get Slider value
-		strSliderValue.Format(_T("%d"), iValue);
-		m_eyesMouseSpeedValue.SetWindowText(strSliderValue);
-	}
-
-	else if (pSlider == &m_blurAmount) {
+	if (pSlider == &m_blurAmount) {
 		CString strSliderValue;
 		int iValue = m_blurAmount.GetPos(); // Get Slider value
 		strSliderValue.Format(_T("%d"), iValue);
@@ -399,12 +400,6 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoCamera()
 
 
 
-void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoEyesMouse()
-{
-    MessageBox(_T("This option allows specification of the speed with which the mouse moves across the screen using Eyes Mode. The lower the number the slower the mouse will move and vice versa."), _T("Eyes Mouse Speed Information"));
-}
-
-
 
 
 
@@ -430,7 +425,6 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
 	// Update values
 
 	globalCameraNr = m_camera.GetCurSel();
-	globalMouseEye = m_eyesMouseSpeed.GetPos();
 	globalSelectedModeNum = m_selectMode.GetCurSel();
 	globalSelectedMode = modesAvailableStr[globalSelectedModeNum];
 
@@ -446,12 +440,29 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
 	general_settings["camera"]["camera_nr"] = globalCameraNr;
 	general_settings["eye"]["Eye_mouse_speed"] = globalMouseEye;
 	general_settings["selected_mode"] = globalSelectedMode;
-
+	general_settings["keep_window_open"] = globalSettingsDialogOpen;
 
 
 	// WRITE INTO CONFIG JSON ALL CHANGES
 	ofstream outputConfigFile(pathConfig);
 	outputConfigFile << setw(4) << general_settings << endl;
+
+
+	// Update values mode settings
+	globalBlurAmount = m_blurAmount.GetPos();
+
+	wstring StrConfigMode = L"main.dist\\settings\\mode_settings.json";
+	LPCWSTR pathConfigMode = StrConfigMode.c_str();
+	ifstream ifs_config_mode(pathConfigMode);
+	string content_config_mode((istreambuf_iterator<char>(ifs_config_mode)), (istreambuf_iterator<char>()));
+	json mode_settings = json::parse(content_config_mode);
+
+	mode_settings["blur"]["blur_amount"] = globalBlurAmount;
+	mode_settings["snow"]["snow_amount"] = globalSelectedSnowAmount;
+	mode_settings["keep_window_open"] = globalSettingsDialogOpen;
+	// WRITE INTO CONFIG JSON ALL CHANGES
+	ofstream outputConfigFileMode(pathConfigMode);
+	outputConfigFileMode << setw(4) << mode_settings << endl;
 
 
 }
@@ -517,4 +528,56 @@ void CMFCUCLMI3SettingsDlg::OnEnChangeBlurAmountCounter()
 	// with the ENM_CHANGE flag ORed into the mask.
 
 	// TODO:  Add your control notification handler code here
+}
+
+
+void CMFCUCLMI3SettingsDlg::OnBnClickedSnow1()
+{
+	// TODO: Add your control notification handler code here
+	m_lightSnow.SetCheck(1);
+	m_mediumSnow.SetCheck(0);
+	m_harshSnow.SetCheck(0);
+	globalSelectedSnowAmount = "light_snow";
+}
+
+void CMFCUCLMI3SettingsDlg::OnBnClickedSnow2()
+{
+	// TODO: Add your control notification handler code here
+	m_lightSnow.SetCheck(0);
+	m_mediumSnow.SetCheck(1);
+	m_harshSnow.SetCheck(0);
+	globalSelectedSnowAmount = "med_snow";
+}
+
+void CMFCUCLMI3SettingsDlg::OnBnClickedSnow3()
+{
+	// TODO: Add your control notification handler code here
+	m_lightSnow.SetCheck(0);
+	m_mediumSnow.SetCheck(0);
+	m_harshSnow.SetCheck(1);
+	globalSelectedSnowAmount = "harsh_snow";
+}
+
+
+
+
+void CMFCUCLMI3SettingsDlg::OnBnClickedKeepSettingsOpen()
+{
+	// TODO: Add your control notification handler code here
+	globalSettingsDialogOpen = m_keepSettingsOpen.GetCheck();
+}
+
+
+
+
+
+void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoBlurAmount()
+{
+	MessageBox(_T("This option allows you to chose the amount of blurring in the blur mode."), _T("Blur amount information"));
+}
+
+
+void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSnowMode()
+{
+	MessageBox(_T("This option allows you to chose which snow mode you would like to use. For finer control over modes, please check out the snow section of the mode_settings.json"), _T("Snow Mode information"));
 }

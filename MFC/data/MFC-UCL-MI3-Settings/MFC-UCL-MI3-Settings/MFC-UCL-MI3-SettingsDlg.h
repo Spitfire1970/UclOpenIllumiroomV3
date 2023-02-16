@@ -44,6 +44,7 @@ public:
 
 	CButton m_showFPS;
 	CButton m_lowLightOn;
+	CButton m_keepSettingsOpen;
 	afx_msg void UpdateShowFPS();
 	afx_msg void UpdateLowLight();
 
@@ -55,8 +56,10 @@ public:
 	CSliderCtrl m_blurAmount;
 	CEdit m_blurAmountValue;
 
-	CSliderCtrl m_eyesMouseSpeed;
-	CEdit m_eyesMouseSpeedValue;
+	CButton m_lightSnow;
+	CButton m_mediumSnow;
+	CButton m_harshSnow;
+
 
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	
@@ -112,5 +115,13 @@ public:
 	afx_msg void OnStnClickedStaticBlurAmount();
 	afx_msg void OnNMCustomdrawBlurAmountSlider(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnEnChangeBlurAmountCounter();
+	afx_msg void OnBnClickedCheck1();
+	afx_msg void OnBnClickedAdvancedOptions2();
+	afx_msg void OnBnClickedSnow3();
+	afx_msg void OnBnClickedSnow2();
+	afx_msg void OnBnClickedKeepSettingsOpen();
+	afx_msg void OnBnClickedSnow1();
+	afx_msg void OnBnClickedButtonInfoBlurAmount();
+	afx_msg void OnBnClickedButtonInfoSnowMode();
 };
 

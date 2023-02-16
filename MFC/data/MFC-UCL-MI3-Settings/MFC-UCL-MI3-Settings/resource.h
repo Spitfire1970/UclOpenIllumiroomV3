@@ -47,6 +47,8 @@
 #define IDC_STATIC_HAND2                1020
 #define IDC_STATIC_NOSE_SPEED           1020
 #define IDC_STATIC_SPEED                1020
+#define IDC_BUTTON_INFO_BLUR_AMOUNT2    1020
+#define IDC_BUTTON_INFO_SNOW_MODE       1020
 #define IDC_BUTTON_INFO_FISHFACE        1021
 #define IDC_BUTTON_INFO_EYEBROWS        1022
 #define IDC_BUTTON_INFO_OPEN_MOUTH      1023
@@ -82,6 +84,7 @@
 #define IDC_NOSESPEED_SLIDER            1050
 #define IDC_COMBO13                     1051
 #define IDC_SMILE_COMBO                 1051
+#define IDC_KEEP_SETTINGS_OPEN          1051
 #define IDC_SLIDER4                     1052
 #define IDC_EYEMOUSE_SPEED_SLIDER       1052
 #define IDC_COMBO14                     1053
@@ -97,7 +100,6 @@
 #define IDC_EDIT6                       1059
 #define IDC_EYEMOUSE_SPEED_COUNTER      1059
 #define IDC_EDIT7                       1060
-#define IDC_EYEMOUSE_SPEED_COUNTER2     1060
 #define IDC_BLUR_AMOUNT_COUNTER         1060
 #define IDC_EDIT8                       1061
 #define IDC_COMBO16                     1062
@@ -108,6 +110,7 @@
 #define IDC_LOW_LIGHT_BUTTON            1064
 #define IDC_RADIO1                      1065
 #define IDC_NOSE_BUTTON                 1065
+#define IDC_SNOW1                       1065
 #define IDC_BUTTON2                     1066
 #define IDC_FPS_BUTTON                  1066
 #define IDC_COMBO18                     1067
@@ -117,8 +120,10 @@
 #define IDC_SELECT_DISPLAYS_BUTTON      1068
 #define IDC_RADIO2                      1069
 #define IDC_EYES_BUTTON                 1069
+#define IDC_SNOW2                       1069
 #define IDC_RADIO3                      1070
 #define IDC_FACIAL_BUTTON               1070
+#define IDC_SNOW3                       1070
 #define IDC_RADIO4                      1071
 #define IDC_SPEECH_BUTTON               1071
 #define IDC_LIST1                       1073
@@ -130,6 +135,7 @@
 #define IDC_ADVANCED_OPTIONS            1078
 #define IDC_STATIC_GENERAL              1079
 #define IDLAUNCH                        1080
+#define IDC_SNOW_BOX                    1080
 #define ID_CANCEL                       1081
 
 // Next default values for new objects
@@ -138,7 +144,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        140
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1082
+#define _APS_NEXT_CONTROL_VALUE         1084
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif
