@@ -74,6 +74,7 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
 	ON_BN_CLICKED(IDCANCEL, &CMFCUCLMI3SettingsDlg::OnBnClickedCancel)
 	ON_BN_CLICKED(IDSAVEONLY, &CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly)
 	ON_BN_CLICKED(IDC_SELECT_DISPLAYS_BUTTON, &CMFCUCLMI3SettingsDlg::OnBnClickedSelectDisplaysButton)
+	ON_BN_CLICKED(IDCLOSEPROJECTOR, &CMFCUCLMI3SettingsDlg::OnBnClickedCloseprojector)
 END_MESSAGE_MAP()
 
 // drag window cursor
@@ -366,5 +367,15 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
 }
 
 
+
+
+
+
+void CMFCUCLMI3SettingsDlg::OnBnClickedCloseprojector()
+{
+	// TODO: repplace main.exe with different name for illumiroom
+
+	system("TASKKILL /IM main.exe");
+}
 
 

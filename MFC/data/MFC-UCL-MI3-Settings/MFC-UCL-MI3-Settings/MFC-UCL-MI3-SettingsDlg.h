@@ -99,5 +99,7 @@ public:
 	afx_msg void OnBnClickedSaveonly();
 	afx_msg void OnBnClickedFpsButton2();
 	afx_msg void OnBnClickedSelectDisplaysButton();
+	afx_msg void OnBnClickedCloseprojector();
+	afx_msg void OnBnClickedSaveonly2();
 };
 

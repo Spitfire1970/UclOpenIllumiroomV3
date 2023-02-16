@@ -2,9 +2,9 @@
 // Microsoft Visual C++ generated include file.
 // Used by MFCUCLMI3Settings.rc
 //
-#define CloseProjecto                   3
 #define IDCLOSEPROJECTOR                3
 #define IDSAVEONLY2                     4
+#define IDSAVEONLY                      4
 #define IDD_MFCUCLMI3SETTINGS_DIALOG    102
 #define IDI_ICON1                       112
 #define IDR_MAINFRAME                   128
