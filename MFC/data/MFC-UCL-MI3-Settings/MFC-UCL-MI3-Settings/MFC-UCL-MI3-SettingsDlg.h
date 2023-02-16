@@ -97,5 +97,7 @@ public:
 	afx_msg void OnBnClickedOk2();
 	afx_msg void OnBnClickedYes();
 	afx_msg void OnBnClickedSaveonly();
+	afx_msg void OnBnClickedFpsButton2();
+	afx_msg void OnBnClickedSelectDisplaysButton();
 };
 

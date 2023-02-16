@@ -19,6 +19,7 @@
 #define IDC_STATIC_MODE                 1009
 #define IDC_BUTTON_INFO_NOSEBOX_BOUND   1009
 #define IDC_BUTTON_INFO_NOSE_DISTANCE   1009
+#define IDC_BUTTON_INFO_SELECT_DISPLAYS 1009
 #define IDC_STATIC_HAND                 1010
 #define IDC_STATIC_LOW_LIGHT            1010
 #define IDC_STATIC_HAND3                1011
@@ -27,6 +28,7 @@
 #define IDC_STATIC_HAND4                1012
 #define IDC_STATIC_CAMERA               1013
 #define IDC_BUTTON_INFO_HEAD_ROTATION_LEFT 1013
+#define IDC_STATIC_SELECT_DISPLAYS      1013
 #define IDC_STATIC_MODE2                1014
 #define IDC_STATIC_TRACKING_MODE        1014
 #define IDC_COMBO_CAMERA                1015
@@ -103,6 +105,8 @@
 #define IDC_ROTATE_HEAD_RIGHT_COMBO     1067
 #define IDC_EDIT4                       1068
 #define IDC_NOSEDISTANCE_COUNTER        1068
+#define IDC_FPS_BUTTON2                 1068
+#define IDC_SELECT_DISPLAYS_BUTTON      1068
 #define IDC_RADIO2                      1069
 #define IDC_EYES_BUTTON                 1069
 #define IDC_RADIO3                      1070

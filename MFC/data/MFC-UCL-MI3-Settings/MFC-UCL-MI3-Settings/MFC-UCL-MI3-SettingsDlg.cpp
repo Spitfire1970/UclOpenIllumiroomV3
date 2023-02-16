@@ -73,6 +73,7 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
 	ON_CBN_SELCHANGE(IDC_DEFAULTCAMERA_COMBO, &CMFCUCLMI3SettingsDlg::OnCbnSelchangeDefaultcameraCombo)
 	ON_BN_CLICKED(IDCANCEL, &CMFCUCLMI3SettingsDlg::OnBnClickedCancel)
 	ON_BN_CLICKED(IDSAVEONLY, &CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly)
+	ON_BN_CLICKED(IDC_SELECT_DISPLAYS_BUTTON, &CMFCUCLMI3SettingsDlg::OnBnClickedSelectDisplaysButton)
 END_MESSAGE_MAP()
 
 // drag window cursor
@@ -149,25 +150,13 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 		m_camera.AddString(curIndex);
 	}
 	m_camera.SetCurSel(globalCameraNr);
-	// Just keep this here in case we want to use it?
-	// strSliderValue.Format(_T("%d"), globalCameraNr);
-	// m_cameraValue.SetWindowText(strSliderValue);
+
 	CString strSliderValue;
-	// Nose Mouse Speed
-	//m_noseMouseSpeed.SetRange(1, 100);
-	//m_noseMouseSpeed.SetPos(globalMouseNose);
-	//strSliderValue.Format(_T("%d"), globalMouseNose);
-	//m_noseMouseSpeedValue.SetWindowText(strSliderValue);
-	// Eyes Mouse Speed
 	m_eyesMouseSpeed.SetRange(1, 20);
 	m_eyesMouseSpeed.SetPos(globalMouseEye);
 	strSliderValue.Format(_T("%d"), globalMouseEye);
 	m_eyesMouseSpeedValue.SetWindowText(strSliderValue);
-	// NoseBox
-	//m_noseBoxBond.SetRange(1, 10);
-	//m_noseBoxBond.SetPos(globalBoundBoxNose);
-	//strSliderValue.Format(_T("%d"), globalBoundBoxNose);
-	//m_noseBoxBondValue.SetWindowText(strSliderValue);
+
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -199,8 +188,7 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	ofstream outputConfigFile(pathConfig);
 	outputConfigFile << setw(4) << general_settings << endl;
 
-	//MessageBox(_T("UCL MotionInput will now restart and apply the new setting."), _T("Information"));
-    //MessageBox(_T("Any changes made have now been saved.\n\nMotionInput will now be restarted to apply the new settings."), _T("Changes Saved"));
+
 
 	// 1. Exit MI
 	//system("TASKKILL /IM MI3-FacialNavigation-3.11.exe");
@@ -290,6 +278,11 @@ void CMFCUCLMI3SettingsDlg::UpdateLowLight(){
 	}
 }
 
+void CMFCUCLMI3SettingsDlg::OnBnClickedSelectDisplaysButton()
+{
+	// TODO: Add your control notification handler code here
+}
+
 
 
 
@@ -298,7 +291,7 @@ void CMFCUCLMI3SettingsDlg::UpdateLowLight(){
 
 void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoFps()
 {
-	MessageBox(_T("FPS, or Frames per second, is the rate of frames (pictures) produced every second. The higher the number is, the smoother and better the interaction with the device will be. \n\nBy default, this setting is set to 'ON' meaning the FPS number shows at the bottom right corner of MotionInput's camera screen. Changing this option to 'OFF' will hide the FPS number."), _T("FPS Information"));
+	MessageBox(_T("FPS, or Frames per second, is the rate of frames (pictures) produced every second. The higher the number is, the smoother and better the interaction with the system will be. \n\nBy default, this setting is set to 'ON' meaning the FPS number shows at the top left corner of the projected screen. Changing this option to 'OFF' will hide the FPS number."), _T("FPS Information"));
 }
 
 void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoLight()
@@ -351,7 +344,7 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
 	globalMouseEye = m_eyesMouseSpeed.GetPos();
 
 
-	wstring tempStrConfig = L"main.dist\\settings\\temp_settings.json";
+	wstring tempStrConfig = L"main.dist\\settings\\general_settings.json";
 	LPCWSTR pathConfig = tempStrConfig.c_str();
 	ifstream ifs_config(pathConfig);
 	string content_config((istreambuf_iterator<char>(ifs_config)), (istreambuf_iterator<char>()));
@@ -367,16 +360,9 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
 	ofstream outputConfigFile(pathConfig);
 	outputConfigFile << setw(4) << general_settings << endl;
 
-	//MessageBox(_T("UCL MotionInput will now restart and apply the new setting."), _T("Information"));
-	//MessageBox(_T("Any changes made have now been saved.\n\nMotionInput will now be restarted to apply the new settings."), _T("Changes Saved"));
 
-	// 1. Exit MI
-	//system("TASKKILL /IM MI3-FacialNavigation-3.11.exe");
-
-	// 2. Copy amended configMFC.json file from MFC app to config.json
-	Sleep(100);	// 1 seconds delay
-
-	ifstream src(L"main.dist\\settings\\temp_settings.json", ios::binary);
-	ofstream dst(L"main.dist\\settings\\general_settings.json", ios::binary);
-	dst << src.rdbuf();
 }
+
+
+
+
