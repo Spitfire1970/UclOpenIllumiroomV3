@@ -3,7 +3,6 @@
 // Used by MFCUCLMI3Settings.rc
 //
 #define IDCLOSEPROJECTOR                3
-#define IDSAVEONLY2                     4
 #define IDSAVEONLY                      4
 #define IDD_MFCUCLMI3SETTINGS_DIALOG    102
 #define IDI_ICON1                       112
@@ -18,6 +17,7 @@
 #define IDC_BUTTON_INFO_CAMERA          1007
 #define IDC_BUTTON_INFO_NOSE_MOUSE      1008
 #define IDC_BUTTON_INFO_NOSE_SPEED      1008
+#define IDC_BUTTON_INFO_SELECT_MODE     1008
 #define IDC_STATIC_MODE                 1009
 #define IDC_BUTTON_INFO_NOSEBOX_BOUND   1009
 #define IDC_BUTTON_INFO_NOSE_DISTANCE   1009
@@ -39,9 +39,11 @@
 #define IDC_STATIC_DEFAULT_CAMERA       1016
 #define IDC_STATIC_CAMERA3              1017
 #define IDC_STATIC_DISTANCE             1017
+#define IDC_STATIC_SELECT_MODE          1017
 #define IDC_BUTTON_INFO_EYES_MOUSE      1018
 #define IDC_STATIC_LIGHT                1019
 #define IDC_BUTTON_INFO_SMILE           1019
+#define IDC_BUTTON_INFO_BLUR_AMOUNT     1019
 #define IDC_STATIC_HAND2                1020
 #define IDC_STATIC_NOSE_SPEED           1020
 #define IDC_STATIC_SPEED                1020
@@ -51,6 +53,7 @@
 #define IDC_BUTTON_INFO_ROTATE_HEAD_LEFT 1024
 #define IDC_STATIC_EYES_SPEED           1025
 #define IDC_BUTTON_INFO_ROTATE_HEAD_RIGHT 1026
+#define IDC_STATIC_BLUR_AMOUNT          1026
 #define IDC_STATIC_HEAD_ROTATE_LEFT     1027
 #define IDC_STATIC_SMILE                1030
 #define IDC_STATIC_EYEBROWS             1031
@@ -74,6 +77,7 @@
 #define IDC_DEFAULTCAMERA_COMBO         1046
 #define IDC_SLIDER2                     1047
 #define IDC_NOSEDISTANCE_SLIDER         1047
+#define IDC_SELECT_MODE_COMBO           1047
 #define IDC_SLIDER3                     1050
 #define IDC_NOSESPEED_SLIDER            1050
 #define IDC_COMBO13                     1051
@@ -82,6 +86,7 @@
 #define IDC_EYEMOUSE_SPEED_SLIDER       1052
 #define IDC_COMBO14                     1053
 #define IDC_FISH_FACE_COMBO             1053
+#define IDC_BLUR_AMOUNT_SLIDER          1053
 #define IDC_SLIDER5                     1054
 #define IDC_SLIDER6                     1055
 #define IDC_EDIT3                       1056
@@ -92,6 +97,8 @@
 #define IDC_EDIT6                       1059
 #define IDC_EYEMOUSE_SPEED_COUNTER      1059
 #define IDC_EDIT7                       1060
+#define IDC_EYEMOUSE_SPEED_COUNTER2     1060
+#define IDC_BLUR_AMOUNT_COUNTER         1060
 #define IDC_EDIT8                       1061
 #define IDC_COMBO16                     1062
 #define IDC_OPEN_MOUTH_COMBO            1062

@@ -21,6 +21,7 @@
             "height": 1080
         }
     },
+    "modes_available":["blur", "wobble","cartoon","snow","rain","low_health","speed_lines"],
     "selected_mode": "blur",
     "show_fps": false,
     "view": {

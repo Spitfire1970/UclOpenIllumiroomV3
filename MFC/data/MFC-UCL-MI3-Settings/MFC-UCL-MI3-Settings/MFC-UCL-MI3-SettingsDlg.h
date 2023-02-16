@@ -40,6 +40,7 @@ public:
 
 	CComboBox m_mode;
 	CComboBox m_method;
+	CComboBox m_selectMode;
 
 	CButton m_showFPS;
 	CButton m_lowLightOn;
@@ -47,11 +48,13 @@ public:
 	afx_msg void UpdateLowLight();
 
 	CComboBox m_camera;
+
 	// Just keep this here in case we want to use it?
 	// CEdit m_cameraValue;
 
-	CSliderCtrl m_noseMouseSpeed;
-	CEdit m_noseMouseSpeedValue;
+	CSliderCtrl m_blurAmount;
+	CEdit m_blurAmountValue;
+
 	CSliderCtrl m_eyesMouseSpeed;
 	CEdit m_eyesMouseSpeedValue;
 
@@ -101,5 +104,13 @@ public:
 	afx_msg void OnBnClickedSelectDisplaysButton();
 	afx_msg void OnBnClickedCloseprojector();
 	afx_msg void OnBnClickedSaveonly2();
+	afx_msg void OnBnClickedStaticCameraOptions();
+	afx_msg void OnBnClickedButtonInfoCamera2();
+	afx_msg void OnCbnSelchangeSelectModeCombo();
+	afx_msg void OnBnClickedButtonInfoSelectMode();
+	afx_msg void OnStnClickedStaticSelectMode();
+	afx_msg void OnStnClickedStaticBlurAmount();
+	afx_msg void OnNMCustomdrawBlurAmountSlider(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnEnChangeBlurAmountCounter();
 };
 

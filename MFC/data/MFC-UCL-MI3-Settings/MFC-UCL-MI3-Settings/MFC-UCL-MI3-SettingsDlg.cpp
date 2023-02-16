@@ -22,10 +22,21 @@
 using json = nlohmann::json;
 using namespace std;
 
+//general settings
 int globalCameraNr;
 bool globalShowFPS;
 bool globalLowLight;
 int globalMouseEye;
+
+//mode settings
+int globalBlurAmount;
+
+string globalSelectedMode;
+int globalSelectedModeNum = 0;
+
+string modesAvailableStr[] = { "blur","wobble","cartoon","snow","rain","low_health","speed_lines" };
+LPCWSTR  modesAvailable[] = { L"blur",L"wobble",L"cartoon",L"snow",L"rain",L"low_health",L"speed_lines" };
+
 
 
 
@@ -52,8 +63,11 @@ void CMFCUCLMI3SettingsDlg::DoDataExchange(CDataExchange* pDX){
 	//DDX_Control(pDX, IDC_NOSESPEED_COUNTER, m_noseMouseSpeedValue);
 	DDX_Control(pDX, IDC_EYEMOUSE_SPEED_SLIDER, m_eyesMouseSpeed);
 	DDX_Control(pDX, IDC_EYEMOUSE_SPEED_COUNTER, m_eyesMouseSpeedValue);
+	DDX_Control(pDX, IDC_BLUR_AMOUNT_SLIDER, m_blurAmount);
+	DDX_Control(pDX, IDC_BLUR_AMOUNT_COUNTER, m_blurAmountValue);
 	DDX_Control(pDX, IDC_FPS_BUTTON, m_showFPS);
 	DDX_Control(pDX, IDC_LOW_LIGHT_BUTTON, m_lowLightOn);
+	DDX_Control(pDX, IDC_SELECT_MODE_COMBO, m_selectMode);
 }
 
 BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
@@ -75,6 +89,11 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
 	ON_BN_CLICKED(IDSAVEONLY, &CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly)
 	ON_BN_CLICKED(IDC_SELECT_DISPLAYS_BUTTON, &CMFCUCLMI3SettingsDlg::OnBnClickedSelectDisplaysButton)
 	ON_BN_CLICKED(IDCLOSEPROJECTOR, &CMFCUCLMI3SettingsDlg::OnBnClickedCloseprojector)
+	ON_BN_CLICKED(IDC_STATIC_CAMERA_OPTIONS, &CMFCUCLMI3SettingsDlg::OnBnClickedStaticCameraOptions)
+	ON_CBN_SELCHANGE(IDC_SELECT_MODE_COMBO, &CMFCUCLMI3SettingsDlg::OnCbnSelchangeSelectModeCombo)
+	ON_BN_CLICKED(IDC_BUTTON_INFO_SELECT_MODE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectMode)
+	ON_STN_CLICKED(IDC_STATIC_SELECT_MODE, &CMFCUCLMI3SettingsDlg::OnStnClickedStaticSelectMode)
+
 END_MESSAGE_MAP()
 
 // drag window cursor
@@ -116,29 +135,50 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 	//SetIcon(m_hIcon, FALSE);		// Set small icon
 
 
-	// CONFIG data
-	wstring pathConfigS = L"main.dist\\settings\\general_settings.json";
-	LPCWSTR pathConfig = pathConfigS.c_str();
+	// general settings config data
+	wstring pathConfigSGeneral = L"main.dist\\settings\\general_settings.json";
+	LPCWSTR pathConfigGeneral = pathConfigSGeneral.c_str();
 
 
-	ifstream ifs_config(pathConfig);
-	string content_config((istreambuf_iterator<char>(ifs_config)), (istreambuf_iterator<char>()));
+	ifstream ifs_configGeneral(pathConfigGeneral);
+	string content_configGeneral((istreambuf_iterator<char>(ifs_configGeneral)), (istreambuf_iterator<char>()));
 
-	json general_settings = json::parse(content_config);
+	json general_settings = json::parse(content_configGeneral);
 	//auto& general = myjson_config["general"];
 	//auto& modules = myjson_config["modules"];
 
-	
-
-
-	// Set config data
+	// Set general settings data
 	globalShowFPS = general_settings["show_fps"]; // FPS
 	globalLowLight = general_settings["view"]["low_light_indicator_on"]; // LIGHT
 	globalCameraNr = general_settings["camera"]["camera_nr"]; // CAMERA
-	//globalMouseNose = events["nose_tracking"]["scaling_factor"] / 10;
 	globalMouseEye = general_settings["eye"]["Eye_mouse_speed"];
-	//globalBoundBoxNose = events["nose_tracking"]["bound_sensitivity"];
+	globalSelectedMode = general_settings["selected_mode"]; // selected mode
 
+	// Initializing an object of wstring
+	wstring temp = wstring(globalSelectedMode.begin(), globalSelectedMode.end());
+
+	// Applying c_str() method on temp
+	LPCWSTR wideStringGlobalSelectedMode = temp.c_str();
+
+	//string modesAvailable = general_settings["modes_available"]; // available modes
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// mode settings config data
+	wstring pathConfigSModes = L"main.dist\\settings\\mode_settings.json";
+	LPCWSTR pathConfigModes = pathConfigSModes.c_str();
+
+
+	ifstream ifs_configModes(pathConfigModes);
+	string content_configModes((istreambuf_iterator<char>(ifs_configModes)), (istreambuf_iterator<char>()));
+
+	json mode_settings = json::parse(content_configModes);
+
+	// Set mode settings data
+	globalBlurAmount = mode_settings["blur"]["blur_amount"]; // blur amount
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	// FPS
 	m_showFPS.SetWindowTextW(globalShowFPS ? L"ON" : L"OFF");
 	// Low Light
@@ -152,12 +192,35 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 	}
 	m_camera.SetCurSel(globalCameraNr);
 
+	
+	//Modes
+	for (int i = 0; i < sizeof(modesAvailable) / sizeof(modesAvailable[0]); i++)
+	{
+		m_selectMode.AddString(modesAvailable[i]);
+		if (modesAvailableStr[i] == globalSelectedMode)
+		{
+			globalSelectedModeNum = i;
+		}
+	}
+	m_selectMode.SetCurSel(globalSelectedModeNum);
+	
+
+	//Eyes mouse speed
+
 	CString strSliderValue;
 	m_eyesMouseSpeed.SetRange(1, 20);
 	m_eyesMouseSpeed.SetPos(globalMouseEye);
 	strSliderValue.Format(_T("%d"), globalMouseEye);
 	m_eyesMouseSpeedValue.SetWindowText(strSliderValue);
 
+	
+	//blur amount
+	//CString strSliderValue;
+	m_blurAmount.SetRange(1, 250);
+	m_blurAmount.SetPos(globalBlurAmount);
+	strSliderValue.Format(_T("%d"), globalBlurAmount);
+	m_blurAmountValue.SetWindowText(strSliderValue);
+	
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -169,8 +232,9 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	// Update values
 
 	globalCameraNr = m_camera.GetCurSel();
-
 	globalMouseEye = m_eyesMouseSpeed.GetPos();
+	globalSelectedModeNum = m_selectMode.GetCurSel();
+	globalSelectedMode = modesAvailableStr[globalSelectedModeNum];
 
 	
 	wstring tempStrConfig = L"main.dist\\settings\\general_settings.json";
@@ -183,7 +247,7 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	general_settings["view"]["low_light_indicator_on"] = globalLowLight;
 	general_settings["camera"]["camera_nr"] = globalCameraNr;
 	general_settings["eye"]["Eye_mouse_speed"] = globalMouseEye;
-	
+	general_settings["selected_mode"] = globalSelectedMode;
 
 	// WRITE INTO CONFIG JSON ALL CHANGES
 	ofstream outputConfigFile(pathConfig);
@@ -247,6 +311,13 @@ void CMFCUCLMI3SettingsDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScro
 		int iValue = m_eyesMouseSpeed.GetPos(); // Get Slider value
 		strSliderValue.Format(_T("%d"), iValue);
 		m_eyesMouseSpeedValue.SetWindowText(strSliderValue);
+	}
+
+	else if (pSlider == &m_blurAmount) {
+		CString strSliderValue;
+		int iValue = m_blurAmount.GetPos(); // Get Slider value
+		strSliderValue.Format(_T("%d"), iValue);
+		m_blurAmountValue.SetWindowText(strSliderValue);
 	}
 
 }
@@ -343,10 +414,11 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
 	// Update values
 
 	globalCameraNr = m_camera.GetCurSel();
-
 	globalMouseEye = m_eyesMouseSpeed.GetPos();
+	globalSelectedModeNum = m_selectMode.GetCurSel();
+	globalSelectedMode = modesAvailableStr[globalSelectedModeNum];
 
-
+	
 	wstring tempStrConfig = L"main.dist\\settings\\general_settings.json";
 	LPCWSTR pathConfig = tempStrConfig.c_str();
 	ifstream ifs_config(pathConfig);
@@ -357,6 +429,8 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
 	general_settings["view"]["low_light_indicator_on"] = globalLowLight;
 	general_settings["camera"]["camera_nr"] = globalCameraNr;
 	general_settings["eye"]["Eye_mouse_speed"] = globalMouseEye;
+	general_settings["selected_mode"] = globalSelectedMode;
+
 
 
 	// WRITE INTO CONFIG JSON ALL CHANGES
@@ -379,3 +453,52 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedCloseprojector()
 }
 
 
+
+
+void CMFCUCLMI3SettingsDlg::OnBnClickedStaticCameraOptions()
+{
+	// TODO: Add your control notification handler code here
+}
+
+
+
+
+
+void CMFCUCLMI3SettingsDlg::OnCbnSelchangeSelectModeCombo()
+{
+	// TODO: Add your control notification handler code here
+}
+
+void CMFCUCLMI3SettingsDlg::OnStnClickedStaticSelectMode()
+{
+	// TODO: Add your control notification handler code here
+}
+
+
+void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectMode()
+{
+	MessageBox(_T("This option allows you to chose the mode which you would like to use."), _T("Select Mode Information"));
+}
+
+
+
+
+
+void CMFCUCLMI3SettingsDlg::OnStnClickedStaticBlurAmount()
+{
+	// TODO: Add your control notification handler code here
+}
+
+
+
+
+
+void CMFCUCLMI3SettingsDlg::OnEnChangeBlurAmountCounter()
+{
+	// TODO:  If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CDialogEx::OnInitDialog()
+	// function and call CRichEditCtrl().SetEventMask()
+	// with the ENM_CHANGE flag ORed into the mask.
+
+	// TODO:  Add your control notification handler code here
+}
