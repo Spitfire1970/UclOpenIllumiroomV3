@@ -11,6 +11,5 @@ pyinstaller bundles code into 1 exe, but does not give a performance boost
 https://github.com/Nuitka/Nuitka
 Just to release
 python -m nuitka --standalone --enable-plugin=tk-inter  --enable-plugin=pyqt6  --output-dir=release --remove-output app/main.py; cp -r app/settings release/main.dist; cp -r app/assets release/main.dist
-
 To MFC Release
 python -m nuitka --standalone --enable-plugin=tk-inter  --enable-plugin=pyqt6  --output-dir=MFC_RELEASE --remove-output app/main.py; cp -r app/settings MFC_RELEASE/main.dist; cp -r app/assets MFC_RELEASE/main.dist

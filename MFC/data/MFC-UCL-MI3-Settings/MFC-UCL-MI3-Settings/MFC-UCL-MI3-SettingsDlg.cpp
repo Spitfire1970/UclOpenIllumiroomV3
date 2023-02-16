@@ -201,8 +201,8 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	ofstream dst(L"main.dist\\settings\\general_settings.json", ios::binary);
 	dst << src.rdbuf();*/
 
-	// 3. Run Illumiroom
-	ShellExecuteA(NULL, "open", "main.dist\\main.exe", NULL, NULL, SW_SHOWDEFAULT);
+	// 3. Run Illumiroom, with run argument
+	ShellExecuteA(NULL, "open", "main.dist\\main.exe", "run", NULL, SW_SHOWDEFAULT);
 
 	//Add option on dialog to keep window open, or close automatically
 	//CDialogEx::OnOK();
@@ -281,6 +281,8 @@ void CMFCUCLMI3SettingsDlg::UpdateLowLight(){
 void CMFCUCLMI3SettingsDlg::OnBnClickedSelectDisplaysButton()
 {
 	// TODO: Add your control notification handler code here
+	// 3. Run Illumiroom, with run argument
+	ShellExecuteA(NULL, "open", "main.dist\\main.exe", "display", NULL, SW_SHOWDEFAULT);
 }
 
 

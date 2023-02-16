@@ -1,0 +1,173 @@
+{
+    "cartoon": {
+        ".compatible_with": [
+            "wobble",
+            "weather_snow"
+        ],
+        "bytes_per_line_factor": 3,
+        "qImg_format": "QtGui.QImage.Format.Format_RGB888",
+        "trigger_frequency": "once"
+    },
+    "wobble": {
+        "num_frames": 100,
+        "sound_threshold": 0.001,
+        "fractal_amplitude": 3,
+        "tv_top_left": [
+            446,
+            315
+        ],
+        "tv_bottom_right": [
+            1317,
+            831
+        ],
+        "tv_center_x": 881,
+        "tv_center_y": 573,
+        ".compatible_with": [
+            "cartoon",
+            "weather_snow"
+        ],
+        "bytes_per_line_factor": 3,
+        "qImg_format": "QtGui.QImage.Format.Format_RGB888",
+        "trigger_frequency": "every_frame"
+    },
+    "blur": {
+        "blur_amount": 30,
+        ".compatible_with": [],
+        "bytes_per_line_factor": 4,
+        "qImg_format": "QtGui.QImage.Format.Format_RGBA8888",
+        "trigger_frequency": "every_frame",
+        "edge_rect_colour": [
+            0,
+            0,
+            0,
+            255
+        ]
+    },
+    "low_health": {
+        ".compatible_with": [],
+        "bytes_per_line_factor": 3,
+        "qImg_format": "QtGui.QImage.Format.Format_RGB888",
+        "trigger_frequency": "once",
+        "num_low_health_frames": 30
+    },
+    "speed_lines": {
+        ".compatible_with": []
+    },
+    "rain": {
+        "rain_mode": "heavy",
+        "possible_drop_lengths": [
+            10,
+            17,
+            25
+        ],
+        "possible_drop_colours": [
+            [
+                255,
+                0,
+                0
+            ],
+            [
+                255,
+                50,
+                0
+            ],
+            [
+                120,
+                50,
+                0
+            ]
+        ],
+        "drizzle": {
+            "rain_point": 50,
+            "rain_point_increment": 0.0001,
+            "num_raindrops": 60,
+            "falling_speed_interval": [
+                15,
+                20
+            ],
+            "noise_wind_interval": [
+                3,
+                7
+            ]
+        },
+        "heavy": {
+            "rain_point": 60,
+            "rain_point_increment": 0.002,
+            "num_raindrops": 350,
+            "falling_speed_interval": [
+                15,
+                25
+            ],
+            "noise_wind_interval": [
+                10,
+                17
+            ]
+        },
+        "torrential": {
+            "rain_point": 70,
+            "rain_point_increment": 0.005,
+            "num_raindrops": 500,
+            "falling_speed_interval": [
+                15,
+                35
+            ],
+            "noise_wind_interval": [
+                15,
+                25
+            ]
+        },
+        "qImg_format": "QtGui.QImage.Format.Format_RGB888",
+        "trigger_frequency": "every_frame"
+    },
+    "snow": {
+        "snow_amount": "harsh_snow",
+        "light_snow": {
+            "snow_point": 30,
+            "snow_point_increment": 0.0001,
+            "num_snowflakes": 300,
+            "falling_speed_interval": [
+                2,
+                5
+            ],
+            "noise_wind_interval": [
+                3,
+                7
+            ]
+        },
+        "med_snow": {
+            "snow_point": 40,
+            "snow_point_increment": 0.001,
+            "num_snowflakes": 700,
+            "falling_speed_interval": [
+                7,
+                12
+            ],
+            "noise_wind_interval": [
+                10,
+                17
+            ]
+        },
+        "harsh_snow": {
+            "snow_point": 50,
+            "snow_point_increment": 0.05,
+            "num_snowflakes": 1100,
+            "falling_speed_interval": [
+                12,
+                16
+            ],
+            "noise_wind_interval": [
+                15,
+                20
+            ]
+        },
+        "qImg_format": "QtGui.QImage.Format.Format_RGB888",
+        "trigger_frequency": "every_frame"
+    },
+    "weather": {
+        ".compatible_with": [
+            "cartoon",
+            "wobble"
+        ],
+        "trigger_frequency": "every_other_frame"
+    }
+}

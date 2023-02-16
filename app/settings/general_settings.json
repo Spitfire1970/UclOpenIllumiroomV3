@@ -1,0 +1,29 @@
+{
+    "background_image_path": "room_img.jpg",
+    "camera": {
+        "camera_nr": 5
+    },
+    "exit_key_binding": "Key_Escape",
+    "eye": {
+        "Eye_mouse_speed": 14
+    },
+    "selected_displays": {
+        "primary_display": {
+            "left": 0,
+            "top": 0,
+            "width": 2560,
+            "height": 1440
+        },
+        "projector_display": {
+            "left": -1920,
+            "top": 669,
+            "width": 1920,
+            "height": 1080
+        }
+    },
+    "selected_mode": "blur",
+    "show_fps": false,
+    "view": {
+        "low_light_indicator_on": true
+    }
+}
