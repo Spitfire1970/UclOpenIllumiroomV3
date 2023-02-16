@@ -229,19 +229,18 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 
 // Save 
 void CMFCUCLMI3SettingsDlg::Save(){
-	// Update values
-
+	// Update values general settings
 	globalCameraNr = m_camera.GetCurSel();
 	globalMouseEye = m_eyesMouseSpeed.GetPos();
 	globalSelectedModeNum = m_selectMode.GetCurSel();
 	globalSelectedMode = modesAvailableStr[globalSelectedModeNum];
 
 	
-	wstring tempStrConfig = L"main.dist\\settings\\general_settings.json";
-	LPCWSTR pathConfig = tempStrConfig.c_str();
-	ifstream ifs_config(pathConfig);
-	string content_config((istreambuf_iterator<char>(ifs_config)), (istreambuf_iterator<char>()));
-	json general_settings = json::parse(content_config);
+	wstring StrConfigGeneral = L"main.dist\\settings\\general_settings.json";
+	LPCWSTR pathConfigGeneral = StrConfigGeneral.c_str();
+	ifstream ifs_config_general(pathConfigGeneral);
+	string content_config_general((istreambuf_iterator<char>(ifs_config_general)), (istreambuf_iterator<char>()));
+	json general_settings = json::parse(content_config_general);
 
 	general_settings["show_fps"] = globalShowFPS;
 	general_settings["view"]["low_light_indicator_on"] = globalLowLight;
@@ -250,9 +249,26 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	general_settings["selected_mode"] = globalSelectedMode;
 
 	// WRITE INTO CONFIG JSON ALL CHANGES
-	ofstream outputConfigFile(pathConfig);
-	outputConfigFile << setw(4) << general_settings << endl;
+	ofstream outputConfigFileGeneral(pathConfigGeneral);
+	outputConfigFileGeneral << setw(4) << general_settings << endl;
 
+
+
+
+	// Update values mode settings
+	globalBlurAmount = m_blurAmount.GetPos();
+
+	wstring StrConfigMode = L"main.dist\\settings\\mode_settings.json";
+	LPCWSTR pathConfigMode = StrConfigMode.c_str();
+	ifstream ifs_config_mode(pathConfigMode);
+	string content_config_mode((istreambuf_iterator<char>(ifs_config_mode)), (istreambuf_iterator<char>()));
+	json mode_settings = json::parse(content_config_mode);
+
+	mode_settings["blur"]["blur_amount"] = globalBlurAmount;
+
+	// WRITE INTO CONFIG JSON ALL CHANGES
+	ofstream outputConfigFileMode(pathConfigMode);
+	outputConfigFileMode << setw(4) << mode_settings << endl;
 
 
 	// 1. Exit MI
