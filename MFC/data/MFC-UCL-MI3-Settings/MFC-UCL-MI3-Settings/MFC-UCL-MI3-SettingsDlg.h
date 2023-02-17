@@ -123,5 +123,12 @@ public:
 	afx_msg void OnBnClickedSnow1();
 	afx_msg void OnBnClickedButtonInfoBlurAmount();
 	afx_msg void OnBnClickedButtonInfoSnowMode();
+	afx_msg void OnBnClickedButtonInfoBackgroundCapture();
+	afx_msg void OnBnClickedBackgroundCaptureButton();
+	afx_msg void OnBnClickedButtonInfoSelectDisplays3();
+	afx_msg void OnBnClickedSelectDisplaysButton3();
+	afx_msg void OnBnClickedSelectTvEdgesButton();
+	afx_msg void OnBnClickedButtonInfoSelectTvEdges();
+	afx_msg void OnBnClickedButtonInfoSelectDisplays();
 };
 

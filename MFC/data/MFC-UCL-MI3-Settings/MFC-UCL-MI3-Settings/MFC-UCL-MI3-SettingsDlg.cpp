@@ -25,8 +25,6 @@ using namespace std;
 //general settings
 int globalCameraNr;
 bool globalShowFPS;
-bool globalLowLight;
-int globalMouseEye;
 bool globalSettingsDialogOpen;
 
 //mode settings
@@ -67,7 +65,6 @@ void CMFCUCLMI3SettingsDlg::DoDataExchange(CDataExchange* pDX){
 	DDX_Control(pDX, IDC_BLUR_AMOUNT_SLIDER, m_blurAmount);
 	DDX_Control(pDX, IDC_BLUR_AMOUNT_COUNTER, m_blurAmountValue);
 	DDX_Control(pDX, IDC_FPS_BUTTON, m_showFPS);
-	DDX_Control(pDX, IDC_LOW_LIGHT_BUTTON, m_lowLightOn);
 	DDX_Control(pDX, IDC_SELECT_MODE_COMBO, m_selectMode);
 	DDX_Control(pDX, IDC_KEEP_SETTINGS_OPEN, m_keepSettingsOpen);
 
@@ -86,9 +83,7 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
 	ON_WM_HSCROLL()
 	ON_WM_HSCROLL()
 	ON_BN_CLICKED(IDC_FPS_BUTTON, &CMFCUCLMI3SettingsDlg::UpdateShowFPS)
-	ON_BN_CLICKED(IDC_LOW_LIGHT_BUTTON, &CMFCUCLMI3SettingsDlg::UpdateLowLight)
 	ON_BN_CLICKED(IDC_BUTTON_INFO_FPS, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoFps)
-	ON_BN_CLICKED(IDC_BUTTON_INFO_LIGHT, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoLight)
 	ON_BN_CLICKED(IDC_BUTTON_INFO_CAMERA, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoCamera)
 
 	ON_CBN_SELCHANGE(IDC_DEFAULTCAMERA_COMBO, &CMFCUCLMI3SettingsDlg::OnCbnSelchangeDefaultcameraCombo)
@@ -97,6 +92,10 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_INFO_SNOW_MODE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSnowMode)
 	ON_BN_CLICKED(IDC_BUTTON_INFO_BLUR_AMOUNT, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoBlurAmount)
 	ON_BN_CLICKED(IDC_SELECT_DISPLAYS_BUTTON, &CMFCUCLMI3SettingsDlg::OnBnClickedSelectDisplaysButton)
+	ON_BN_CLICKED(IDC_BUTTON_INFO_BACKGROUND_CAPTURE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoBackgroundCapture)
+	ON_BN_CLICKED(IDC_BACKGROUND_CAPTURE_BUTTON, &CMFCUCLMI3SettingsDlg::OnBnClickedBackgroundCaptureButton)
+
+
 	ON_BN_CLICKED(IDCLOSEPROJECTOR, &CMFCUCLMI3SettingsDlg::OnBnClickedCloseprojector)
 	ON_BN_CLICKED(IDC_STATIC_CAMERA_OPTIONS, &CMFCUCLMI3SettingsDlg::OnBnClickedStaticCameraOptions)
 	ON_CBN_SELCHANGE(IDC_SELECT_MODE_COMBO, &CMFCUCLMI3SettingsDlg::OnCbnSelchangeSelectModeCombo)
@@ -108,6 +107,11 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_SNOW3, &CMFCUCLMI3SettingsDlg::OnBnClickedSnow3)
 	ON_BN_CLICKED(IDC_KEEP_SETTINGS_OPEN, &CMFCUCLMI3SettingsDlg::OnBnClickedKeepSettingsOpen)
 
+
+
+	ON_BN_CLICKED(IDC_SELECT_TV_EDGES_BUTTON, &CMFCUCLMI3SettingsDlg::OnBnClickedSelectTvEdgesButton)
+	ON_BN_CLICKED(IDC_BUTTON_INFO_SELECT_TV_EDGES, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectTvEdges)
+	ON_BN_CLICKED(IDC_BUTTON_INFO_SELECT_DISPLAYS, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectDisplays)
 END_MESSAGE_MAP()
 
 // drag window cursor
@@ -164,7 +168,6 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 	// Set general settings data
 	//globalSettingsDialogOpen = general_settings["view"]["open"]; //  keep window open
 	globalShowFPS = general_settings["show_fps"]; // FPS
-	globalLowLight = general_settings["view"]["low_light_indicator_on"]; // LIGHT
 	globalCameraNr = general_settings["camera"]["camera_nr"]; // CAMERA
 	globalSelectedMode = general_settings["selected_mode"]; // selected mode
 	
@@ -200,8 +203,6 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 	m_keepSettingsOpen.SetCheck(globalSettingsDialogOpen);
 	// FPS
 	m_showFPS.SetWindowTextW(globalShowFPS ? L"ON" : L"OFF");
-	// Low Light
-	m_lowLightOn.SetWindowTextW(globalLowLight ? L"ON" : L"OFF");
 	// Camera
 	for (int i = 0; i < MAX_CAMERA_INDEX; i++)
 	{
@@ -259,7 +260,6 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	json general_settings = json::parse(content_config_general);
 
 	general_settings["show_fps"] = globalShowFPS;
-	general_settings["view"]["low_light_indicator_on"] = globalLowLight;
 	general_settings["camera"]["camera_nr"] = globalCameraNr;
 	general_settings["selected_mode"] = globalSelectedMode;
 	// WRITE INTO CONFIG JSON ALL CHANGES
@@ -328,7 +328,7 @@ void CMFCUCLMI3SettingsDlg::ShowHelp()
 void CMFCUCLMI3SettingsDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar){
 	CSliderCtrl* pSlider = reinterpret_cast<CSliderCtrl*>(pScrollBar);
 	
-	// eyes Mouse Speed
+	// Blur amount slider
 
 	if (pSlider == &m_blurAmount) {
 		CString strSliderValue;
@@ -353,29 +353,27 @@ void CMFCUCLMI3SettingsDlg::UpdateShowFPS(){
 	}
 }
 
-// Low Light
-void CMFCUCLMI3SettingsDlg::UpdateLowLight(){
-	CString temp2;
-	m_lowLightOn.GetWindowText(temp2);
-	if (temp2 == "ON") {
-		m_lowLightOn.SetWindowText(L"OFF");
-		globalLowLight = false;
-	}
-	else {
-		m_lowLightOn.SetWindowTextW(L"ON");
-		globalLowLight = true;
-	}
-}
+
 
 void CMFCUCLMI3SettingsDlg::OnBnClickedSelectDisplaysButton()
 {
 	// TODO: Add your control notification handler code here
 	// 3. Run Illumiroom, with run argument
-	ShellExecuteA(NULL, "open", "main.dist\\main.exe", "display", NULL, SW_SHOWDEFAULT);
+	ShellExecuteA(NULL, "open", "UCL_Open-Illumiroom_V2.dist\\UCL_Open-Illumiroom_V2.exe", "display", NULL, SW_SHOWDEFAULT);
 }
 
 
+void CMFCUCLMI3SettingsDlg::OnBnClickedBackgroundCaptureButton()
+{
+	// Run Illumiroom, with background_capture argument
+	ShellExecuteA(NULL, "open", "UCL_Open-Illumiroom_V2.dist\\UCL_Open-Illumiroom_V2.exe", "background_capture", NULL, SW_SHOWDEFAULT);
+}
 
+void CMFCUCLMI3SettingsDlg::OnBnClickedSelectTvEdgesButton()
+{
+	// Run Illumiroom, with select_tv argument
+	ShellExecuteA(NULL, "open", "UCL_Open-Illumiroom_V2.dist\\UCL_Open-Illumiroom_V2.exe", "select_tv", NULL, SW_SHOWDEFAULT);
+}
 
 
 
@@ -385,20 +383,36 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoFps()
 	MessageBox(_T("FPS, or Frames per second, is the rate of frames (pictures) produced every second. The higher the number is, the smoother and better the interaction with the system will be. \n\nBy default, this setting is set to 'ON' meaning the FPS number shows at the top left corner of the projected screen. Changing this option to 'OFF' will hide the FPS number."), _T("FPS Information"));
 }
 
-void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoLight()
+
+void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectDisplays()
 {
-    MessageBox(_T("Using MotionInput in a place with low lighting can cause visual control commands to not be recognised accordingly.In this case, setting Low Light option 'ON' is likely to improve interaction with MotionInput.\n\nThe Low Light indicator is set to'OFF' by default."), _T("Low Light Information"));
+	MessageBox(_T("This option allows you to select your two displays. Display windows will be shown for all connected displays, with a number next to them. For the TV and the Projector, please enter the corresponding number for the correct display"), _T("Display Selection Information"));
 }
 
+
+
+
+void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoBackgroundCapture()
+{
+	MessageBox(_T("This option allows you to select your to take a picture of your room. Please take a picture of the room using Microsoft Lens, crop the image down, then save it as room_img.jpg in 'UCL_Open-Illumiroom_V2.dist/assets. Press 'Esc' to exit the screen once you have taken your photo'"), _T("Room picture Information"));
+}
+
+
+
+void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectTvEdges()
+{
+	MessageBox(_T("This option allows you to select the edges of your TV. Please draw a box around your TV by left clicking and holding, then let go. Finally press q to save'"), _T("Select TV Edges Information"));
+}
+
+void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectMode()
+{
+	MessageBox(_T("This option allows you to chose the mode which you would like to use."), _T("Select Mode Information"));
+}
 
 void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoCamera()
 {
-    MessageBox(_T("Some computer devices may have two or more webcams available for MotionInput to use (such as Microsoft Surface devices which often have a front and a rear camera). Some users might also prefer attaching an additional camera(s) to their computer devices. \n\nThe default camera value is initially set to 0. If you are experiencing difficulties with MotionInput camera detection, set this option to a different number. In most cases, changing 0 to 1 or 2 is likely to be a solution. \nRestart MotionInput to check if the new number selected has resolved the problem. If not adjust the setting again until MotionInput is connected to the desired camera."), _T("Default Camera Information"));
+	MessageBox(_T("Some computer devices may have two or more webcams available for MotionInput to use (such as Microsoft Surface devices which often have a front and a rear camera). Some users might also prefer attaching an additional camera(s) to their computer devices. \n\nThe default camera value is initially set to 0. If you are experiencing difficulties with MotionInput camera detection, set this option to a different number. In most cases, changing 0 to 1 or 2 is likely to be a solution. \nRestart MotionInput to check if the new number selected has resolved the problem. If not adjust the setting again until MotionInput is connected to the desired camera."), _T("Default Camera Information"));
 }
-
-
-
-
 
 
 
@@ -436,9 +450,7 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
 	json general_settings = json::parse(content_config);
 
 	general_settings["show_fps"] = globalShowFPS;
-	general_settings["view"]["low_light_indicator_on"] = globalLowLight;
 	general_settings["camera"]["camera_nr"] = globalCameraNr;
-	general_settings["eye"]["Eye_mouse_speed"] = globalMouseEye;
 	general_settings["selected_mode"] = globalSelectedMode;
 	general_settings["keep_window_open"] = globalSettingsDialogOpen;
 
@@ -502,10 +514,7 @@ void CMFCUCLMI3SettingsDlg::OnStnClickedStaticSelectMode()
 }
 
 
-void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectMode()
-{
-	MessageBox(_T("This option allows you to chose the mode which you would like to use."), _T("Select Mode Information"));
-}
+
 
 
 
@@ -581,3 +590,9 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSnowMode()
 {
 	MessageBox(_T("This option allows you to chose which snow mode you would like to use. For finer control over modes, please check out the snow section of the mode_settings.json"), _T("Snow Mode information"));
 }
+
+
+
+
+
+

@@ -1,7 +1,7 @@
 {
     "blur": {
         ".compatible_with": [],
-        "blur_amount": 28,
+        "blur_amount": 56,
         "bytes_per_line_factor": 4,
         "edge_rect_colour": [
             0,
@@ -21,7 +21,7 @@
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
         "trigger_frequency": "once"
     },
-    "keep_window_open": false,
+    "keep_window_open": true,
     "low_health": {
         ".compatible_with": [],
         "bytes_per_line_factor": 3,
@@ -161,14 +161,14 @@
         "sound_threshold": 0.001,
         "trigger_frequency": "every_frame",
         "tv_bottom_right": [
-            1317,
-            831
+            1316,
+            832
         ],
         "tv_center_x": 881,
-        "tv_center_y": 573,
+        "tv_center_y": 576,
         "tv_top_left": [
             446,
-            315
+            321
         ]
     }
 }

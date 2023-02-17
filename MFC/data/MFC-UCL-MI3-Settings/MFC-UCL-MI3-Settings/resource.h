@@ -24,8 +24,10 @@
 #define IDC_BUTTON_INFO_SELECT_DISPLAYS 1009
 #define IDC_STATIC_HAND                 1010
 #define IDC_STATIC_LOW_LIGHT            1010
+#define IDC_BUTTON_INFO_BACKGROUND_CAPTURE 1010
 #define IDC_STATIC_HAND3                1011
 #define IDC_STATIC_METHOD               1011
+#define IDC_BUTTON_INFO_SELECT_TV_EDGES 1011
 #define IDC_STATIC_FPS                  1012
 #define IDC_STATIC_HAND4                1012
 #define IDC_STATIC_CAMERA               1013
@@ -33,8 +35,10 @@
 #define IDC_STATIC_SELECT_DISPLAYS      1013
 #define IDC_STATIC_MODE2                1014
 #define IDC_STATIC_TRACKING_MODE        1014
+#define IDC_STATIC_BACKGROUND_CAPTURE   1014
 #define IDC_COMBO_CAMERA                1015
 #define IDC_BUTTON_INFO_HEAD_ROTATION_RIGHT 1015
+#define IDC_STATIC_SELECT_TV_EDGES      1015
 #define IDC_STATIC_CAMERA2              1016
 #define IDC_STATIC_DEFAULT_CAMERA       1016
 #define IDC_STATIC_CAMERA3              1017
@@ -47,9 +51,9 @@
 #define IDC_STATIC_HAND2                1020
 #define IDC_STATIC_NOSE_SPEED           1020
 #define IDC_STATIC_SPEED                1020
-#define IDC_BUTTON_INFO_BLUR_AMOUNT2    1020
 #define IDC_BUTTON_INFO_SNOW_MODE       1020
 #define IDC_BUTTON_INFO_FISHFACE        1021
+#define IDC_BUTTON_INFO_SNOW_MODE2      1021
 #define IDC_BUTTON_INFO_EYEBROWS        1022
 #define IDC_BUTTON_INFO_OPEN_MOUTH      1023
 #define IDC_BUTTON_INFO_ROTATE_HEAD_LEFT 1024
@@ -115,6 +119,7 @@
 #define IDC_FPS_BUTTON                  1066
 #define IDC_COMBO18                     1067
 #define IDC_ROTATE_HEAD_RIGHT_COMBO     1067
+#define IDC_SNOW4                       1067
 #define IDC_EDIT4                       1068
 #define IDC_NOSEDISTANCE_COUNTER        1068
 #define IDC_SELECT_DISPLAYS_BUTTON      1068
@@ -126,10 +131,14 @@
 #define IDC_SNOW3                       1070
 #define IDC_RADIO4                      1071
 #define IDC_SPEECH_BUTTON               1071
+#define IDC_BACKGROUND_CAPTURE_BUTTON   1071
+#define IDC_SELECT_TV_EDGES_BUTTON      1072
 #define IDC_LIST1                       1073
 #define IDC_ABOUT_CONTENT               1073
+#define IDC_SNOW5                       1073
 #define IDC_STATIC_FACIAL_MODE_OPTIONS  1074
 #define IDC_STATIC_EYES_MODE_OPTIONS    1075
+#define IDC_SNOW6                       1075
 #define IDC_STATIC_NOSE_MODE_OPTIONS    1076
 #define IDC_STATIC_CAMERA_OPTIONS       1077
 #define IDC_ADVANCED_OPTIONS            1078
@@ -137,6 +146,7 @@
 #define IDLAUNCH                        1080
 #define IDC_SNOW_BOX                    1080
 #define ID_CANCEL                       1081
+#define IDC_SNOW_BOX2                   1081
 
 // Next default values for new objects
 // 

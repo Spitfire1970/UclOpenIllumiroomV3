@@ -24,32 +24,58 @@ app_root_path = __file__[:__file__.index("UCL_Open-Illumiroom_V2.py")]
 
 
 def main():
+    #Get the current general settings and display the menu
+    settings_access = SettingsAccess(app_root_path)
+    room_image_obj = RoomImage(settings_access)
+
     print ('Number of arguments:', len(sys.argv), 'arguments.')
     print ('Argument List:', str(sys.argv))
 
     if len(sys.argv) == 1 or sys.argv[1] == "run":
-        main_loop()
+        main_loop(settings_access)
+
     elif sys.argv[1] == "display":
-        run_display_capture()
+        run_display_capture(settings_access)
+
+    elif sys.argv[1] == "background_capture":
+        run_background_capture(room_image_obj)
+
+    elif sys.argv[1] == "select_tv":
+        run_select_tv(room_image_obj)
+
     else:
-        raise("Error: Incorrect Arguments")
+        raise ValueError("Error: Incorrect Arguments")
 
-def run_display_capture():
+def run_display_capture(settings_access):
 
-    #Get the current general settings and display the menu
-    settings_access = SettingsAccess(app_root_path)
 
     # Display settings menu
     display_selection = DisplaySelection(settings_access)
     display_selection.select_tv_projector()
 
+def run_background_capture(room_image_obj):
+    print("Step 1: Use Microsoft Lens to take a picture of the projected area. Press ESC to exit"
+                  + "the projection. \nStep 2: Select the 4 corners of the projected grey image on Lens "
+                  + "as accurately as you can. \nStep 3: Save the image to 'app\\assets\\room_image'."
+                  + "with the name 'room_img.jpg'. \nIn our next build, we'll introduce "
+                  + "an upload feature!")
+    room_image_obj.take_picture()
 
-def main_loop():
+
+def run_select_tv(room_image_obj):
+    # print("Step 1: Upload the picture of the projected area.")
+    # self.room_image_obj.save_picture()
+    print("Detect where the TV/ primary monitor is on the image "
+        + "by dragging your cursor to create a rectangle around it. "
+        + "Press 'q' when the green rectangle covers the whole TV.")
+    room_image_obj.detect_primary_display()
+
+
+
+def main_loop(settings_access):
 
         # Create PyQt app, only ever needs to be defined once
         app = QtWidgets.QApplication(sys.argv)
-        #Get the current general settings and display the menu
-        settings_access = SettingsAccess(app_root_path)
         #menu = MainMenu(settings_access)
         general_settings_json = settings_access.read_settings("general_settings.json")
 

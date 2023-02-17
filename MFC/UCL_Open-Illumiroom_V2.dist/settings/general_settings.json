@@ -1,12 +1,9 @@
 {
-    "background_image_path": "room_img.jpg",
+    "background_image_path": "room_img_noTV.jpg",
     "camera": {
         "camera_nr": 5
     },
     "exit_key_binding": "Key_Escape",
-    "eye": {
-        "Eye_mouse_speed": 14
-    },
     "selected_displays": {
         "primary_display": {
             "height": 1440,
@@ -22,8 +19,5 @@
         }
     },
     "selected_mode": "blur",
-    "show_fps": true,
-    "view": {
-        "low_light_indicator_on": false
-    }
+    "show_fps": true
 }
