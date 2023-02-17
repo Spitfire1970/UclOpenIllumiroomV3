@@ -1,7 +1,7 @@
 {
     "blur": {
         ".compatible_with": [],
-        "blur_amount": 56,
+        "blur_amount": 69,
         "bytes_per_line_factor": 4,
         "edge_rect_colour": [
             0,
@@ -136,7 +136,7 @@
             "snow_point_increment": 0.001
         },
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
-        "snow_amount": "light_snow",
+        "snow_amount": "med_snow",
         "trigger_frequency": "every_frame"
     },
     "speed_lines": {

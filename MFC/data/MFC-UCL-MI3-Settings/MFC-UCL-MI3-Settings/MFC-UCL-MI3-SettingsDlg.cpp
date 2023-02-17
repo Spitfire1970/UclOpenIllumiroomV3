@@ -112,6 +112,7 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_SELECT_TV_EDGES_BUTTON, &CMFCUCLMI3SettingsDlg::OnBnClickedSelectTvEdgesButton)
 	ON_BN_CLICKED(IDC_BUTTON_INFO_SELECT_TV_EDGES, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectTvEdges)
 	ON_BN_CLICKED(IDC_BUTTON_INFO_SELECT_DISPLAYS, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectDisplays)
+
 END_MESSAGE_MAP()
 
 // drag window cursor
@@ -288,7 +289,7 @@ void CMFCUCLMI3SettingsDlg::Save(){
 
 
 	//Kill any existing versions of the app
-	system("TASKKILL /IM UCL_Open-Illumiroom_V2.exe");
+	system("TASKKILL /IM UCL_Open-Illumiroom_V2.exe /T /F");
 
 	// Run Illumiroom, with run argument
 	ShellExecuteA(NULL, "open", "UCL_Open-Illumiroom_V2.dist\\UCL_Open-Illumiroom_V2.exe", "run", NULL, SW_SHOWDEFAULT);
@@ -486,9 +487,8 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
 
 void CMFCUCLMI3SettingsDlg::OnBnClickedCloseprojector()
 {
-	// TODO: repplace main.exe with different name for illumiroom
-
-	system("TASKKILL /IM UCL_Open-Illumiroom_V2.exe");
+	// Kill system task
+	system("TASKKILL /IM UCL_Open-Illumiroom_V2.exe /T /F");
 }
 
 
@@ -590,9 +590,6 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSnowMode()
 {
 	MessageBox(_T("This option allows you to chose which snow mode you would like to use. For finer control over modes, please check out the snow section of the mode_settings.json"), _T("Snow Mode information"));
 }
-
-
-
 
 
 

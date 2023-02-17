@@ -130,5 +130,6 @@ public:
 	afx_msg void OnBnClickedSelectTvEdgesButton();
 	afx_msg void OnBnClickedButtonInfoSelectTvEdges();
 	afx_msg void OnBnClickedButtonInfoSelectDisplays();
+	afx_msg void OnBnClickedSnowBox2();
 };
 

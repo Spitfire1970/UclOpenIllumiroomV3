@@ -53,7 +53,6 @@
 #define IDC_STATIC_SPEED                1020
 #define IDC_BUTTON_INFO_SNOW_MODE       1020
 #define IDC_BUTTON_INFO_FISHFACE        1021
-#define IDC_BUTTON_INFO_SNOW_MODE2      1021
 #define IDC_BUTTON_INFO_EYEBROWS        1022
 #define IDC_BUTTON_INFO_OPEN_MOUTH      1023
 #define IDC_BUTTON_INFO_ROTATE_HEAD_LEFT 1024
@@ -135,10 +134,8 @@
 #define IDC_SELECT_TV_EDGES_BUTTON      1072
 #define IDC_LIST1                       1073
 #define IDC_ABOUT_CONTENT               1073
-#define IDC_SNOW5                       1073
 #define IDC_STATIC_FACIAL_MODE_OPTIONS  1074
 #define IDC_STATIC_EYES_MODE_OPTIONS    1075
-#define IDC_SNOW6                       1075
 #define IDC_STATIC_NOSE_MODE_OPTIONS    1076
 #define IDC_STATIC_CAMERA_OPTIONS       1077
 #define IDC_ADVANCED_OPTIONS            1078
@@ -146,7 +143,6 @@
 #define IDLAUNCH                        1080
 #define IDC_SNOW_BOX                    1080
 #define ID_CANCEL                       1081
-#define IDC_SNOW_BOX2                   1081
 
 // Next default values for new objects
 // 
