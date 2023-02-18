@@ -1,7 +1,7 @@
 {
     "blur": {
         ".compatible_with": [],
-        "blur_amount": 69,
+        "blur_amount": 167,
         "bytes_per_line_factor": 4,
         "edge_rect_colour": [
             0,
@@ -79,7 +79,7 @@
             25
         ],
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
-        "rain_mode": "heavy",
+        "rain_mode": "drizzle",
         "torrential": {
             "falling_speed_interval": [
                 15,
@@ -136,7 +136,7 @@
             "snow_point_increment": 0.001
         },
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
-        "snow_amount": "med_snow",
+        "snow_amount": "light_snow",
         "trigger_frequency": "every_frame"
     },
     "speed_lines": {
