@@ -136,7 +136,7 @@
             "snow_point_increment": 0.001
         },
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
-        "snow_amount": "light_snow",
+        "snow_amount": "harsh_snow",
         "trigger_frequency": "every_frame"
     },
     "speed_lines": {

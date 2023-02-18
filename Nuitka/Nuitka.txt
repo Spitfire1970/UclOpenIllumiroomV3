@@ -19,3 +19,5 @@ python -m nuitka --standalone --enable-plugin=tk-inter  --enable-plugin=pyqt6  -
 Proper name just to release with console output for debug
 Proper Name:
 python -m nuitka --standalone --enable-plugin=tk-inter  --enable-plugin=pyqt6  --output-dir=release --remove-output  app/UCL_Open-Illumiroom_V2.py; cp -r app/settings release/UCL_Open-Illumiroom_V2.dist; cp -r app/assets release/UCL_Open-Illumiroom_V2.dist
+
+$(OutDir)$(TargetName)$(TargetExt)
