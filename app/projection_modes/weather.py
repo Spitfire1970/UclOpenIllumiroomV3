@@ -21,7 +21,6 @@ class Weather(Mode):
         self.audio_capture = audio_capture
         self.screenshot = self.display_capture.capture_frame()
         self.detector = weatherdetection(neural_network_dir)
-        self.projector_bounding_box = self.display_capture.get_projector_bounding_box()
 
         #Create the mode objects from the mode factory
        
