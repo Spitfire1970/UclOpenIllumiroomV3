@@ -143,11 +143,9 @@
         ".compatible_with": []
     },
     "weather": {
-        ".compatible_with": [
-            "cartoon",
-            "wobble"
-        ],
-        "trigger_frequency": "every_other_frame"
+        "qImg_format": "QtGui.QImage.Format.Format_RGB888",
+        "trigger_frequency": "every_frame"
+
     },
     "wobble": {
         ".compatible_with": [
