@@ -5,7 +5,7 @@ from .snow import Snow
 from .rain import Rain
 
 
-neural_network_dir = "C:/Users/user/Documents/weather_integration1/IllumiroomGroup33COMP0016-ImagineCupRelease/app/utils/ml_models"
+
 
 class Weather(Mode):
     def __init__(
@@ -15,29 +15,37 @@ class Weather(Mode):
             background_img,
             audio_capture=None
         ):
-        self.settings = settings_access
+        self.settings_access = settings_access
+        self.neural_network_dir = self.settings_access.get_ml_model_path()
         self.background_img = background_img
         self.display_capture = display_capture
         self.audio_capture = audio_capture
         self.screenshot = self.display_capture.capture_frame()
-        self.detector = weatherdetection(neural_network_dir)
+        self.detector = weatherdetection(self.neural_network_dir)
+        self.weather = self.detector.predict_weather(self.screenshot)
+        self.timer = time.time()
+        self.time_interval = 1
 
         #Create the mode objects from the mode factory
        
-        self.snow = Snow( self.settings, self.display_capture,  self.background_img,  self.audio_capture)
-        self.rain = Rain( self.settings, self.display_capture,  self.background_img,  self.audio_capture)
+        self.snow = Snow( self.settings_access, self.display_capture,  self.background_img,  self.audio_capture)
+        self.rain = Rain( self.settings_access, self.display_capture,  self.background_img,  self.audio_capture)
 
 
     def trigger(self):
-        # currenttime = time.time()
-        # while time.time() < currenttime + 1:
-        #     pass
-        weather = self.detector.predict_weather(self.screenshot)
-        if weather == "snow":
+        # if time.time() > self.timer + self.time_interval: 
+        #     self.screenshot = self.display_capture.capture_frame()
+        #     self.weather = self.detector.predict_weather(self.screenshot)
+        #     self.timer = time.time()
+        self.screenshot = self.display_capture.capture_frame()
+        self.weather = self.detector.predict_weather(self.screenshot)
+        if self.weather == "snow":
             snow_effect = self.snow.trigger()
             return snow_effect
-        elif weather == "rain":
+        elif self.weather == "rain" or self.weather == "sandstorm":
             rain_effect = self.rain.trigger()
             return rain_effect
+        else:
+            return []
 
 

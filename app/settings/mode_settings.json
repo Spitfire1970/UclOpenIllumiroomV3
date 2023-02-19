@@ -136,7 +136,7 @@
             "snow_point_increment": 0.001
         },
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
-        "snow_amount": "light_snow",
+        "snow_amount": "harsh_snow",
         "trigger_frequency": "every_frame"
     },
     "speed_lines": {
@@ -145,7 +145,6 @@
     "weather": {
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
         "trigger_frequency": "every_frame"
-
     },
     "wobble": {
         ".compatible_with": [
@@ -159,14 +158,14 @@
         "sound_threshold": 0.001,
         "trigger_frequency": "every_frame",
         "tv_bottom_right": [
-            537,
-            722
+            1232,
+            846
         ],
-        "tv_center_x": 537,
-        "tv_center_y": 722,
+        "tv_center_x": 855,
+        "tv_center_y": 616,
         "tv_top_left": [
-            537,
-            722
+            478,
+            386
         ]
     }
 }

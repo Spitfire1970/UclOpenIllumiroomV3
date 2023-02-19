@@ -134,7 +134,6 @@ def main_loop(settings_access):
     
             frames = mode_object.trigger()
 
-            
             if frames is not None or len(frames) != 0:
                 for frame in frames:
 

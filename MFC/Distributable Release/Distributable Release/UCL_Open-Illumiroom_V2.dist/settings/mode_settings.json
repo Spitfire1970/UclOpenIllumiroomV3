@@ -1,7 +1,7 @@
 {
     "blur": {
         ".compatible_with": [],
-        "blur_amount": 167,
+        "blur_amount": 40,
         "bytes_per_line_factor": 4,
         "edge_rect_colour": [
             0,
@@ -161,14 +161,14 @@
         "sound_threshold": 0.001,
         "trigger_frequency": "every_frame",
         "tv_bottom_right": [
-            1316,
-            832
+            1234,
+            848
         ],
-        "tv_center_x": 881,
-        "tv_center_y": 576,
+        "tv_center_x": 854,
+        "tv_center_y": 616,
         "tv_top_left": [
-            446,
-            321
+            475,
+            384
         ]
     }
 }
