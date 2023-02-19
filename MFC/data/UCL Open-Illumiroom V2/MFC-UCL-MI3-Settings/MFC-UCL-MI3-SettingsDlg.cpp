@@ -35,10 +35,12 @@ string globalSelectedRainAmount;
 string globalSelectedMode;
 int globalSelectedModeNum = 0;
 
-string modesAvailableStr[] = { "blur","wobble","cartoon","snow","rain","low_health","speed_lines" };
-LPCWSTR  modesAvailable[] = { L"blur",L"wobble",L"cartoon",L"snow",L"rain",L"low_health",L"speed_lines" };
+string modesAvailableStr[] = { "blur","wobble","cartoon","weather","snow","rain","low_health","speed_lines"};
+LPCWSTR  modesAvailable[] = { L"blur",L"wobble",L"cartoon",L"weather",L"snow",L"rain",L"low_health",L"speed_lines"};
 
 LPCSTR runProgramPath = "UCL_Open-Illumiroom_V2.dist\\UCL_Open-Illumiroom_V2.exe";
+
+LPCWSTR aboutSite = L"https://fabianbindley.github.io/IllumiroomGroup33COMP0016/";
 // general settings config data
 wstring pathConfigSGeneral = L"UCL_Open-Illumiroom_V2.dist\\settings\\general_settings.json";
 // mode settings config data
@@ -323,6 +325,8 @@ void CMFCUCLMI3SettingsDlg::ShowAbout()
 void CMFCUCLMI3SettingsDlg::ShowHelp()
 {
 	// OPEN help.txt
+	ShellExecute(NULL, NULL, aboutSite, NULL, NULL, SW_SHOWNORMAL);
+	/*
 	CComHeapPtr<WCHAR> pszPath;
 	if (SHGetKnownFolderPath(FOLDERID_Windows, KF_FLAG_CREATE, nullptr, &pszPath) == S_OK)
 	{
@@ -337,7 +341,7 @@ void CMFCUCLMI3SettingsDlg::ShowHelp()
 		si.lpFile = finalP;
 		si.nShow = SW_SHOW;
 		ShellExecuteEx(&si);
-	}
+	}*/
 }
 
 
