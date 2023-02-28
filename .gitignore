@@ -1,0 +1,14 @@
+main.dist
+
+
+
+/app/projection_modes/__pycache__/
+/app/utils/__pycache__/
+/MFC_RELEASE
+*.pyc
+MFC_RELEASE.zip
+**/__pycache__
+__pycache__/
+MFC/MFC-UCL-MI3-Settings.exe
+MFC/MFC-UCL-MI3-Settings.exe
+MFC/UCL Open-Illumiroom V2 Launcher.exe
