@@ -5,7 +5,7 @@ from .low_health import LowHealth
 from .weather import Weather
 from .rain import Rain
 from .snow import Snow
-from .speed_lines import SpeedLines
+from .speed_blur import SpeedBlur
 
 class ModesFactory:
 
@@ -23,8 +23,8 @@ class ModesFactory:
             "wobble": Wobble,
             "weather": Weather,
             "rain": Rain,
-            "snow": Snow
-            # "speed_lines": SpeedLines,
+            "snow": Snow,
+            "speed_blur": SpeedBlur
         }
         self.settings = setting_access
         self.img = background_image

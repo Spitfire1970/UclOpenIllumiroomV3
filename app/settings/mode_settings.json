@@ -139,8 +139,18 @@
         "snow_amount": "harsh_snow",
         "trigger_frequency": "every_frame"
     },
-    "speed_lines": {
-        ".compatible_with": []
+    "speed_blur": {
+        "qImg_format": "QtGui.QImage.Format.Format_RGBA8888",
+        ".compatible_with": [],
+        "speedometer_box_ratios":{
+            "square_left_ratio":0.88,
+            "square_top_ratio": 0.84,
+            "width_ratio": 0.1,
+            "height_ratio": 0.1
+        },
+        "blur_division_factor":2,
+        "show_blur_amount":false,
+        "trigger_frequency": "every_frame"
     },
     "weather": {
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",

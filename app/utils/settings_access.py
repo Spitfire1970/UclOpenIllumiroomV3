@@ -39,6 +39,11 @@ class SettingsAccess:
         else:
              # Nested JSON object
             return mode_settings_json[mode][settings[0]][settings[1]]
+        
+    def read_mode_settings_object(self, mode, settings):
+        mode_settings_json = self.read_settings("mode_settings.json")
+        return mode_settings_json[mode][settings]
+
 
     def get_image_path(self, image_path):
         img_path = self.room_img_path + image_path

@@ -38,7 +38,7 @@ class Blur(Mode):
 
     def apply_mode_to_frame(self,frame):
         #Add rectangles at edges:
-        frame = self.add_rectangles_to_frame(frame)
+        #frame = self.add_rectangles_to_frame(frame)
         return blur(frame, self.blur_tuple ,0)
 
     def trigger(self):

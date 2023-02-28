@@ -135,15 +135,21 @@ def main_loop(settings_access):
             frames = mode_object.trigger()
 
             if frames is not None or len(frames) != 0:
+        
                 for frame in frames:
-
                     #Resize frame to fit projector if requires resizing
-                    frame = display_capture.frame_projector_resize(frame)
+                    #frame = display_capture.frame_projector_resize(frame)
                     if show_fps:
                         fps.add_fps_to_image(frame, fps.get_fps())
                     #Frame display
+                    
+     
+                    print(frame.shape)
+              
                     height, width = frame.shape[:2]
                     bytes_per_line = frame.strides[0]
+
+                    print("height",bytes_per_line)
                     qImg = QtGui.QImage(frame.data, width, height, bytes_per_line, qImg_format).rgbSwapped()
                     main_window.label.setPixmap(QtGui.QPixmap(qImg))
                     app.processEvents()

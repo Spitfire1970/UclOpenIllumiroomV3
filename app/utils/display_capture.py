@@ -18,6 +18,13 @@ class DisplayCapture:
     #Use no resize if the image captured will not be directly displayed
     def capture_frame(self):
         frame = np.array(self.sct.grab(self.primary_bounding_box))
+    
+        return frame
+
+    #Use no resize if the image captured will not be directly displayed
+    def capture_frame_with_bounding_box(self, bounding_box):
+        frame = np.array(self.sct.grab(bounding_box))
+
         return frame
 
     def frame_projector_resize(self, frame):
@@ -29,7 +36,9 @@ class DisplayCapture:
     def resize_image_fit_projector(self,frame):
         #If the projector and the tv have different resolutions, quite possible if a 4k tv is being used 
         # The image from the tv needs to be resized to fit onto the projector, otherwise full size image will be shown
-        height, width, channels = frame.shape
+        height = frame.shape[0]
+        width = frame.shape[1]
+
         width = int(width * self.monitor_resize_scale_factor)
         height = int(height * self.monitor_resize_scale_factor)
         dim = (width, height)
@@ -38,3 +47,6 @@ class DisplayCapture:
 
     def get_projector_bounding_box(self):
         return self.projector_bounding_box
+    
+    def get_primary_bounding_box(self):
+        return self.primary_bounding_box
