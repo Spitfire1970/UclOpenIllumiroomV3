@@ -13,12 +13,12 @@ class Calibration:
         self.image_library_path = self.settings_access.assets_path + "calibration/grey_code_photos/img"
 
         self.num_images = 5
-        self.video_capture = cv2.VideoCapture(self.cam_port,cv2.CAP_DSHOW)
-        self.video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
-        self.video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
-    
+            
     def capture(self) :
             captured_frames = []
+            self.video_capture = cv2.VideoCapture(self.cam_port,cv2.CAP_DSHOW)
+            self.video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+            self.video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
             print("capture")
             
             #black_projection, white_projection = self.gcp.getImagesForShadowMasks(self.projector_resolution,self.projector_resolution)

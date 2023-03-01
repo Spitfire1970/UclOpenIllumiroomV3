@@ -32,7 +32,7 @@ def main():
     general_settings_json = settings_access.read_settings("general_settings.json")
     primary_bounding_box = general_settings_json["selected_displays"]["primary_display"]
     projector_bounding_box = general_settings_json["selected_displays"]["projector_display"]
-    display_capture = DisplayCapture(primary_bounding_box, projector_bounding_box)
+    display_capture = DisplayCapture(settings_access)
     calibration = Calibration(settings_access, display_capture)
 
     #print ('Number of arguments:', len(sys.argv), 'arguments.')
@@ -125,7 +125,7 @@ def main_loop(settings_access):
         primary_bounding_box = selected_displays["primary_display"]
         projector_bounding_box = selected_displays["projector_display"]
 
-        display_capture = DisplayCapture(primary_bounding_box, projector_bounding_box)
+        display_capture = DisplayCapture(settings_access)
         audio_capture = AudioCapture(settings_access)
         room_image_obj = RoomImage(settings_access,display_capture)
         room_image = room_image_obj.read_room_image(resize=False)
@@ -160,14 +160,11 @@ def main_loop(settings_access):
                     if show_fps:
                         fps.add_fps_to_image(frame, fps.get_fps())
                     #Frame display
-                    
-     
-                    print(frame.shape)
+                
               
                     height, width = frame.shape[:2]
                     bytes_per_line = frame.strides[0]
 
-                    print("height",bytes_per_line)
                     qImg = QtGui.QImage(frame.data, width, height, bytes_per_line, qImg_format).rgbSwapped()
                     main_window.label.setPixmap(QtGui.QPixmap(qImg))
                     app.processEvents()

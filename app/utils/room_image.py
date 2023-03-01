@@ -40,7 +40,7 @@ class RoomImage:
         selected_displays = settings_access.read_general_settings("selected_displays")
         self.primary_bounding_box = selected_displays["primary_display"]
         self.projector_bounding_box = selected_displays["projector_display"]
-        self.display_capture = DisplayCapture(self.primary_bounding_box, self.projector_bounding_box)
+        self.display_capture = DisplayCapture(settings_access)
 
 
     def take_picture(self):

@@ -9,7 +9,7 @@
             0,
             255
         ],
-        "qImg_format": "QtGui.QImage.Format.Format_RGBA8888",
+        "qImg_format": "QtGui.QImage.Format.Format_RGB888",
         "trigger_frequency": "every_frame"
     },
     "cartoon": {
@@ -140,7 +140,7 @@
         "trigger_frequency": "every_frame"
     },
     "speed_blur": {
-        "qImg_format": "QtGui.QImage.Format.Format_RGBA8888",
+        "qImg_format": "QtGui.QImage.Format.Format_RGB888",
         ".compatible_with": [],
         "speedometer_box_ratios":{
             "square_left_ratio":0.88,
