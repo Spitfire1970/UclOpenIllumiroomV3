@@ -15,6 +15,7 @@ from utils.display_output import DisplayOutput
 from utils.display_capture import DisplayCapture
 from utils.audio_capture import AudioCapture
 from utils.room_image import RoomImage
+from utils.calibration.calibration import Calibration
 
 from utils.fps import FPS
 
@@ -24,12 +25,18 @@ app_root_path = __file__[:__file__.index("UCL_Open-Illumiroom_V2.py")]
 
 
 def main():
+    print("main")
     #Get the current general settings and display the menu
     settings_access = SettingsAccess(app_root_path)
     room_image_obj = RoomImage(settings_access)
+    general_settings_json = settings_access.read_settings("general_settings.json")
+    primary_bounding_box = general_settings_json["selected_displays"]["primary_display"]
+    projector_bounding_box = general_settings_json["selected_displays"]["projector_display"]
+    display_capture = DisplayCapture(primary_bounding_box, projector_bounding_box)
+    calibration = Calibration(settings_access, display_capture)
 
-    print ('Number of arguments:', len(sys.argv), 'arguments.')
-    print ('Argument List:', str(sys.argv))
+    #print ('Number of arguments:', len(sys.argv), 'arguments.')
+    #print ('Argument List:', str(sys.argv))
 
     if len(sys.argv) == 1 or sys.argv[1] == "run":
         main_loop(settings_access)
@@ -42,6 +49,9 @@ def main():
 
     elif sys.argv[1] == "select_tv":
         run_select_tv(room_image_obj)
+    
+    elif sys.argv[1] == "calibration":
+        run_calibration(calibration)
 
     else:
         raise ValueError("Error: Incorrect Arguments")
@@ -69,6 +79,14 @@ def run_select_tv(room_image_obj):
         + "by dragging your cursor to create a rectangle around it. "
         + "Press 'q' when the green rectangle covers the whole TV.")
     room_image_obj.detect_primary_display()
+
+
+def run_calibration(calibration):
+    # print("Step 1: Upload the picture of the projected area.")
+    # self.room_image_obj.save_picture()
+    print("start")
+    frames=calibration.capture()
+    print(frames)
 
 
 
