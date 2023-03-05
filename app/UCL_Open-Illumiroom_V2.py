@@ -31,10 +31,9 @@ def main():
     room_image_obj = RoomImage(settings_access)
     room_image = room_image_obj.read_room_image(resize=False)
     display_capture = DisplayCapture(settings_access)
-    display_output = DisplayOutput(settings_access)
     audio_capture = AudioCapture(settings_access)
 
-    calibration = Calibration(settings_access, display_capture, display_output)
+    calibration = Calibration(settings_access, display_capture)
     fps = FPS()
 
     #Create the mode objects from the mode factory
@@ -44,7 +43,7 @@ def main():
     #print ('Argument List:', str(sys.argv))
 
     if len(sys.argv) == 1 or sys.argv[1] == "run":
-        main_loop(settings_access,  mode_factory,  display_output, fps)
+        main_loop(settings_access,  mode_factory, fps)
 
     elif sys.argv[1] == "display":
         run_display_capture(settings_access)
@@ -95,7 +94,9 @@ def run_calibration(calibration):
 
 
 
-def main_loop(settings_access, mode_factory, display_output, fps):
+def main_loop(settings_access, mode_factory, fps):
+        
+        display_output = DisplayOutput(settings_access)
 
         mode_object = mode_factory.get_mode()
         show_fps = settings_access.read_general_settings("show_fps")
