@@ -15,6 +15,8 @@ class DisplayCapture:
         self.selected_displays = settings_access.read_general_settings("selected_displays")
         self.primary_bounding_box = self.selected_displays["primary_display"]
         self.projector_bounding_box = self.selected_displays["projector_display"]
+        self.projector_resize_scale_factor = self.projector_bounding_box['width']/self.primary_bounding_box['width']
+        self.primary_resize_scale_factor = self.projector_bounding_box['width']/self.primary_bounding_box['width']
 
         """
         self.capture_card_settings = settings_access.read_general_settings("capture_card")
@@ -50,3 +52,61 @@ class DisplayCapture:
     
     def get_primary_bounding_box(self):
         return self.primary_bounding_box
+    
+
+    def frame_projector_resize(self, frame):
+        #Check if the resolution of the primary monitor and TV differ (ratio not 1)
+        if (self.monitor_resize_scale_factor) > 1.05 or (self.monitor_resize_scale_factor) < 0.95 :
+            frame = self.resize_image_fit_projector(frame)
+        return frame
+    
+    
+
+    def resize_image_fit_projector(self,frame):
+        #If the projector and the tv have different resolutions, quite possible if a 4k tv is being used 
+        # The image from the tv needs to be resized to fit onto the projector, otherwise full size image will be shown
+        height = frame.shape[0]
+        width = frame.shape[1]
+
+        width = int(width * self.monitor_resize_scale_factor)
+        height = int(height * self.monitor_resize_scale_factor)
+        dim = (width, height)
+        # resize image
+        return resize(frame, dim, interpolation = INTER_AREA)
+    
+
+    def resize_image_fit_projector_each_frame(self,frame):
+        #If the projector and the tv have different resolutions, quite possible if a 4k tv is being used 
+        # The image from the tv needs to be resized to fit onto the projector, otherwise full size image will be shown
+        height = frame.shape[0]
+        width = frame.shape[1]
+        scale_factor_w = self.projector_bounding_box["width"]/width
+        scale_factor_h = self.projector_bounding_box["height"]/height
+        print("factors",scale_factor_w, ",",scale_factor_h)
+        width = int(width * scale_factor_w)
+        height = int(height * scale_factor_h)
+        dim = (width, height)
+        # resize image
+        return resize(frame, dim, interpolation = INTER_AREA)
+    
+
+
+    def frame_primary_resize(self, frame):
+        #Check if the resolution of the primary monitor and TV differ (ratio not 1)
+        height, width = frame.shape[:2]
+        self.primary_resize_scale_factor = self.primary_bounding_box['width']/width 
+        if (self.primary_resize_scale_factor) > 1.05 or (self.primary_resize_scale_factor) < 0.95 :
+            frame = self.resize_image_fit_primary(frame)
+        return frame
+
+    def resize_image_fit_primary(self,frame):
+        #If the projector and the tv have different resolutions, quite possible if a 4k tv is being used 
+        # The image from the tv needs to be resized to fit onto the projector, otherwise full size image will be shown
+        height = frame.shape[0]
+        width = frame.shape[1]
+
+        width = int(width * self.primary_resize_scale_factor)
+        height = int(height * self.primary_resize_scale_factor)
+        dim = (width, height)
+        # resize image
+        return resize(frame, dim, interpolation = INTER_AREA)

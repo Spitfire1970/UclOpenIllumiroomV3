@@ -6,12 +6,14 @@ class Calibration:
     
     def __init__(self,settings_access, display_capture):
         self.settings_access = settings_access
-        self.projector_resolution = display_capture.get_projector_bounding_box()
+        self.display_capture = display_capture
+        self.projector_resolution = self.display_capture.get_projector_bounding_box()
         self.cam_port = settings_access.read_general_settings("camera_nr")
 
         #self.gcp = cv2.structured_light.GrayCodePattern.create(self.projector_resolution["width"],
                                                               #self.projector_resolution["height"])
-        self.grey_code_image_library_path = self.settings_access.assets_path + "calibration/grey_code_photos/img"
+        self.grey_code_image_library_path = self.settings_access.assets_path + "calibration/grey_code_photos/grey_code"
+        self.grey_code_source_library_path = self.settings_access.assets_path + "calibration/grey_code_source/grey_code"
         self.instructions_image_library_path = self.settings_access.assets_path + "calibration/instructions/"
         self.room_image_library_path = self.settings_access.assets_path + "room_image/room_img.jpg"
 
@@ -20,16 +22,17 @@ class Calibration:
         self.continue_instructions = False
         self.correct_webcam = False
 
-        self.frame_sleep_time = 0.5
+        self.frame_sleep_time = 1000
 
-        #intruction images
-        self.instruction_images =[cv2.imread(self.instructions_image_library_path+"place_webcam.jpg", 0),]
+        #get intruction images
+        self.instruction_image_names =["place_webcam.jpg","camera_select.jpg","grey_code_capture.jpg","software_calibration.jpg","calibration_complete.jpg"]
+        self.instruction_images = [self.display_capture.frame_primary_resize(cv2.imread(self.instructions_image_library_path+img)) for img in self.instruction_image_names]
 
-        self.primary_bounding_box = display_capture.get_primary_bounding_box()
-        self.projector_bounding_box = display_capture.get_projector_bounding_box()
+        self.primary_bounding_box = self.display_capture.get_primary_bounding_box()
+        self.projector_bounding_box = self.display_capture.get_projector_bounding_box()
 
-        self.confirm_img_text_1 = "Is this the correct webcam? If it is, press 'y' to continue."
-        self.confirm_img_text_2 = "If it is not, expecially if a black screen is shown, press 'n', then selet the next or previous webcam in the launcher."
+        self.confirm_img_text_1 = "Is this the image from the correct webcam? If it is, press 'y' to continue."
+        self.confirm_img_text_2 = "If it is not, expecially if a black screen is shown, press 'n'."
 
         self.captured_frames = []
 
@@ -37,7 +40,7 @@ class Calibration:
         font                   = cv2.FONT_HERSHEY_SIMPLEX
         textLocation1           = (50,50)
         textLocation2           = (50,100)
-        fontScale              = 1
+        fontScale              = 0.8
         fontColor              = (255,0,0)
         thickness              = 3
         lineType               = 2
@@ -61,19 +64,32 @@ class Calibration:
 
     def capture_grey_code_images(self):
         result, image = self.video_capture.read()
+        #grey code insstructions frame 2
+        cv2.imshow("Instructions", self.instruction_images[2])
+
+        #set up grey code window
+        cv2.namedWindow("GreyCode", flags=cv2.WINDOW_GUI_NORMAL) #gui normal makes fullscreen
+        cv2.moveWindow("GreyCode", self.projector_bounding_box["left"],self.projector_bounding_box["top"])
+        
+
+        #cclear frame buffer
+
         for res_num in range(0,self.num_images+1):
-            # reading the input using the camera
-            print(res_num-1)
-            time.sleep(self.frame_sleep_time)
+
+            #display grey code frame
+            cv2.imshow("GreyCode",cv2.imread(self.grey_code_source_library_path+str(res_num)+".jpg"))
+            #capture grey code frame
+            #wait for alloted time
+            cv2.waitKey(self.frame_sleep_time)
             result, image = self.video_capture.read()
-  
-            # If image will detected without any error, 
-            # show result
+
+            # If image is detected without any error, 
             if result:
             
-        
                 # Save image in local storage
                 cv2.imwrite(self.grey_code_image_library_path+str(res_num-1)+".jpg", image)
+
+        cv2.destroyAllWindows()
             
     def capture(self) :
             
@@ -85,7 +101,7 @@ class Calibration:
             cv2.namedWindow("Instructions")
             cv2.moveWindow("Instructions", self.primary_bounding_box["left"],self.primary_bounding_box["top"])
 
-            #show webcam setup instructions
+            #show webcam setup instructions, frame 1
             while not(self.continue_instructions):
                 cv2.imshow("Instructions",self.instruction_images[0])
 
@@ -97,7 +113,7 @@ class Calibration:
             
             #black_projection, white_projection = self.gcp.getImagesForShadowMasks(self.projector_resolution,self.projector_resolution)
             result, test_image = self.video_capture.read()
-            result, test_image = self.video_capture.read()
+            room_image = np.copy(test_image)
             #check if any image at all was returned
             if result:
                 
@@ -108,30 +124,62 @@ class Calibration:
                     self.add_confirm_text_to_image(test_image)
                     cv2.namedWindow("Webcam Output")
                     cv2.moveWindow("Webcam Output", self.primary_bounding_box["left"],self.primary_bounding_box["top"])
-                    cv2.imshow("Webcam Output",test_image)
+                    cv2.imshow("Webcam Output",self.display_capture.frame_primary_resize(test_image))
+
 
                     key = cv2.waitKey(1)
                     if key == ord("n"):
                         self.correct_webcam = False
                         self.confirmed_webcam = True
 
+                        #show webcam selection instructions, frame 1
+                        while not(self.continue_instructions):
+                            cv2.imshow("Instructions",self.instruction_images[1])
+
+                            key = cv2.waitKey(1)
+                            if key == 32: #space key
+                                self.continue_instructions =True
+                        cv2.destroyAllWindows()
+                        exit()
+
                     elif key == ord("y"):
                         self.correct_webcam = True
                         self.confirmed_webcam = True
+                        #write the image taken to the room image, as it is correct, resize to projector resolution
+                        #room_image_resized = self.display_capture.resize_image_fit_projector_each_frame(test_image)
+                        #print(room_image_resized.shape)
+                        cv2.imwrite(self.room_image_library_path, room_image)
                 
                 cv2.destroyAllWindows()
 
 
-                
+                #get the grey code images from the webcam
                 if (self.correct_webcam):
-                    
-                    
                     result, room_img = self.video_capture.read()
                     if result:
                         self.captured_frames.append(room_img)
-                        cv2.imwrite(self.room_image_library_path, room_img)
-
+                      
                         self.capture_grey_code_images()
+
+
+
+                #run calibration algorithm
+                #show instructions 3
+                cv2.imshow("Instructions",self.instruction_images[3])
+                cv2.waitKey(5000)
+
+                #calibration complete! instructions 4
+                while not(self.continue_instructions):
+                    cv2.imshow("Instructions",self.instruction_images[4])
+
+                    key = cv2.waitKey(1)
+                    if key == 32: #space key
+                        self.continue_instructions =True
+                cv2.destroyAllWindows()
+                
+                #calibration complete, exit
+
+                
                     
                 
                 

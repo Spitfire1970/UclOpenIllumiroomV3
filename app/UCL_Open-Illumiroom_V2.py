@@ -88,9 +88,8 @@ def run_select_tv(room_image_obj):
 def run_calibration(calibration):
     # print("Step 1: Upload the picture of the projected area.")
     # self.room_image_obj.save_picture()
-    print("start")
-    frames=calibration.capture()
-    print(frames)
+    calibration.capture()
+
 
 
 
