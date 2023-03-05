@@ -35,8 +35,8 @@ string globalSelectedRainAmount;
 string globalSelectedMode;
 int globalSelectedModeNum = 0;
 
-string modesAvailableStr[] = { "blur","wobble","cartoon","weather","snow","rain","low_health","speed_lines"};
-LPCWSTR  modesAvailable[] = { L"blur",L"wobble",L"cartoon",L"weather",L"snow",L"rain",L"low_health",L"speed_lines"};
+string modesAvailableStr[] = { "blur","wobble","cartoon","weather","snow","rain","low_health","speed_blur"};
+LPCWSTR  modesAvailable[] = { L"blur",L"wobble",L"cartoon",L"weather",L"snow",L"rain",L"low_health",L"speed_blur"};
 
 LPCSTR runProgramPath = "UCL_Open-Illumiroom_V2.dist\\UCL_Open-Illumiroom_V2.exe";
 
@@ -47,7 +47,8 @@ wstring pathConfigSGeneral = L"UCL_Open-Illumiroom_V2.dist\\settings\\general_se
 wstring pathConfigSModes = L"UCL_Open-Illumiroom_V2.dist\\settings\\mode_settings.json";
 
 // parameters
-#define MAX_CAMERA_INDEX 9
+//MFC does not easily support calculating actual number of connected cameras
+#define MAX_CAMERA_INDEX 5
 
 
 
@@ -101,8 +102,8 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_INFO_SNOW_MODE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSnowMode)
 	ON_BN_CLICKED(IDC_BUTTON_INFO_BLUR_AMOUNT, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoBlurAmount)
 	ON_BN_CLICKED(IDC_SELECT_DISPLAYS_BUTTON, &CMFCUCLMI3SettingsDlg::OnBnClickedSelectDisplaysButton)
-	ON_BN_CLICKED(IDC_BUTTON_INFO_BACKGROUND_CAPTURE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoBackgroundCapture)
-	ON_BN_CLICKED(IDC_BACKGROUND_CAPTURE_BUTTON, &CMFCUCLMI3SettingsDlg::OnBnClickedBackgroundCaptureButton)
+	ON_BN_CLICKED(IDC_CALIBRATE_SYSTEM_BUTTON, &CMFCUCLMI3SettingsDlg::OnBnClickedCalibrateSystemButton)
+	ON_BN_CLICKED(IDC_BUTTON_INFO_CALIBRATE_SYSTEM, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoCalibrateSystem)
 
 
 	ON_BN_CLICKED(IDCLOSEPROJECTOR, &CMFCUCLMI3SettingsDlg::OnBnClickedCloseprojector)
@@ -126,6 +127,9 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_RAIN1, &CMFCUCLMI3SettingsDlg::OnBnClickedRain1)
 	ON_BN_CLICKED(IDC_RAIN2, &CMFCUCLMI3SettingsDlg::OnBnClickedRain2)
 	ON_BN_CLICKED(IDC_RAIN3, &CMFCUCLMI3SettingsDlg::OnBnClickedRain3)
+
+
+
 END_MESSAGE_MAP()
 
 // drag window cursor
@@ -180,7 +184,7 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 	// Set general settings data
 	//globalSettingsDialogOpen = general_settings["view"]["open"]; //  keep window open
 	globalShowFPS = general_settings["show_fps"]; // FPS
-	globalCameraNr = general_settings["camera"]["camera_nr"]; // CAMERA
+	globalCameraNr = general_settings["camera_nr"]; // CAMERA
 	globalSelectedMode = general_settings["selected_mode"]; // selected mode
 
 
@@ -278,7 +282,7 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	json general_settings = json::parse(content_config_general);
 
 	general_settings["show_fps"] = globalShowFPS;
-	general_settings["camera"]["camera_nr"] = globalCameraNr;
+	general_settings["camera_nr"] = globalCameraNr;
 	general_settings["selected_mode"] = globalSelectedMode;
 	// WRITE INTO CONFIG JSON ALL CHANGES
 	ofstream outputConfigFileGeneral(pathConfigGeneral);
@@ -382,18 +386,22 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSelectDisplaysButton()
 	ShellExecuteA(NULL, "open", runProgramPath, "display", NULL, SW_SHOWDEFAULT);
 }
 
-
-void CMFCUCLMI3SettingsDlg::OnBnClickedBackgroundCaptureButton()
+void CMFCUCLMI3SettingsDlg::OnBnClickedCalibrateSystemButton()
 {
+	// TODO: Add your control notification handler code here
 	// Run Illumiroom, with background_capture argument
-	ShellExecuteA(NULL, "open", runProgramPath, "background_capture", NULL, SW_SHOWDEFAULT);
+	ShellExecuteA(NULL, "open", runProgramPath, "calibration", NULL, SW_SHOWDEFAULT);
 }
+
 
 void CMFCUCLMI3SettingsDlg::OnBnClickedSelectTvEdgesButton()
 {
 	// Run Illumiroom, with select_tv argument
 	ShellExecuteA(NULL, "open", runProgramPath, "select_tv", NULL, SW_SHOWDEFAULT);
 }
+
+
+
 
 
 
@@ -409,13 +417,13 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectDisplays()
 	MessageBox(_T("This option allows you to select your two displays. Display windows will be shown for all connected displays, with a number next to them. For the TV and the Projector, please enter the corresponding number for the correct display"), _T("Display Selection Information"));
 }
 
-
-
-
-void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoBackgroundCapture()
+void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoCalibrateSystem()
 {
-	MessageBox(_T("This option allows you to select your to take a picture of your room. Please take a picture of the room using Microsoft Lens, crop the image down, then save it as room_img.jpg in 'UCL_Open-Illumiroom_V2.dist/assets. Press 'Esc' to exit the screen once you have taken your photo'"), _T("Room picture Information"));
+	MessageBox(_T("The calibration system automatically runs a calibration program to ensure that the system is setup for your living room! \n\n For more detailed instructions and a video guide, please visit the software setup section on our website - https://expandedexperiences.com \n\n Place the webcam in the position where you will sit and play games or watch content - most likely on your sofa. The webcam should point towards your TV and the projection area. \n\n Then click the calibrate system button in the launcher; press 'y' if the correct output from the camera is shown.If not, press 'n', and select the next camera in the list, eg: 2 if you are currently on 1. \n\n Finally, allow the calibration system to run, and follow further instructions shown on screen."), _T("Display Selection Information"));
 }
+
+
+
 
 
 
@@ -431,7 +439,7 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectMode()
 
 void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoCamera()
 {
-	MessageBox(_T("Some computer devices may have two or more webcams available for MotionInput to use (such as Microsoft Surface devices which often have a front and a rear camera). Some users might also prefer attaching an additional camera(s) to their computer devices. \n\nThe default camera value is initially set to 0. If you are experiencing difficulties with MotionInput camera detection, set this option to a different number. In most cases, changing 0 to 1 or 2 is likely to be a solution. \nRestart MotionInput to check if the new number selected has resolved the problem. If not adjust the setting again until MotionInput is connected to the desired camera."), _T("Default Camera Information"));
+	MessageBox(_T("Some computer devices may have two or more webcams available for UCL Open-Illumiroom V2 to use.  \n\nThe default webcam value is initially set to 1. If this is the incorrect webcam, chose 2, then 3 and so on. In most cases, changing 1 to 2 or 3 is likely to be a solution. \n If the incorrect camera is shown, simply close the window and try a different camera until the desired one is selected."), _T("Camera Information"));
 }
 
 
@@ -470,7 +478,7 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
 	json general_settings = json::parse(content_config);
 
 	general_settings["show_fps"] = globalShowFPS;
-	general_settings["camera"]["camera_nr"] = globalCameraNr;
+	general_settings["camera_nr"] = globalCameraNr;
 	general_settings["selected_mode"] = globalSelectedMode;
 	general_settings["keep_window_open"] = globalSettingsDialogOpen;
 
@@ -649,3 +657,9 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedRain3()
 	m_torrentialRain.SetCheck(1);
 	globalSelectedRainAmount = "torrential";
 }
+
+
+
+
+
+

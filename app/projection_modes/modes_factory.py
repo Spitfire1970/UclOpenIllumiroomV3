@@ -30,13 +30,15 @@ class ModesFactory:
         self.img = background_image
         self.display_capture = display_capture
         self.audio_capture = audio_capture
+        self.selected_mode = setting_access.read_general_settings("selected_mode")
         #self.background_image = read_background_image()
 
     def get_available_modes(self):
         return self.mode_names.keys()
 
-    def get_mode(self, selected_mode):
-        return self.mode_names[selected_mode](
+    def get_mode(self):
+
+        return self.mode_names[self.selected_mode](
                                                 self.settings, 
                                                 self.display_capture, 
                                                 self.img,

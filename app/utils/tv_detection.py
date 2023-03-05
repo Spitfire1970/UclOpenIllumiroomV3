@@ -46,6 +46,8 @@ class TVDetection():
     def detect_tv(self):
         cv2.namedWindow("Detect TV")
         cv2.setMouseCallback("Detect TV", self.on_mouse)
+        #add text on the selection window with instructions, since console will not be visible
+        
         while True:
             cv2.imshow("Detect TV", self.img)
             key = cv2.waitKey(1)

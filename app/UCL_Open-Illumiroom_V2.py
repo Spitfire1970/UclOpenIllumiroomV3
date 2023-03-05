@@ -25,21 +25,26 @@ app_root_path = __file__[:__file__.index("UCL_Open-Illumiroom_V2.py")]
 
 
 def main():
-    print("main")
+
     #Get the current general settings and display the menu
     settings_access = SettingsAccess(app_root_path)
     room_image_obj = RoomImage(settings_access)
-    general_settings_json = settings_access.read_settings("general_settings.json")
-    primary_bounding_box = general_settings_json["selected_displays"]["primary_display"]
-    projector_bounding_box = general_settings_json["selected_displays"]["projector_display"]
+    room_image = room_image_obj.read_room_image(resize=False)
     display_capture = DisplayCapture(settings_access)
-    calibration = Calibration(settings_access, display_capture)
+    display_output = DisplayOutput(settings_access)
+    audio_capture = AudioCapture(settings_access)
 
+    calibration = Calibration(settings_access, display_capture, display_output)
+    fps = FPS()
+
+    #Create the mode objects from the mode factory
+    mode_factory = ModesFactory(room_image, display_capture, audio_capture, settings_access)
+    
     #print ('Number of arguments:', len(sys.argv), 'arguments.')
     #print ('Argument List:', str(sys.argv))
 
     if len(sys.argv) == 1 or sys.argv[1] == "run":
-        main_loop(settings_access)
+        main_loop(settings_access,  mode_factory,  display_output, fps)
 
     elif sys.argv[1] == "display":
         run_display_capture(settings_access)
@@ -90,87 +95,27 @@ def run_calibration(calibration):
 
 
 
-def main_loop(settings_access):
+def main_loop(settings_access, mode_factory, display_output, fps):
 
-        # Create PyQt app, only ever needs to be defined once
-        app = QtWidgets.QApplication(sys.argv)
-        #menu = MainMenu(settings_access)
-        general_settings_json = settings_access.read_settings("general_settings.json")
-
-        # Display settings menu
-
-        #mode, displays, exit_requested = menu.main_select_options()
-        mode = None
-        displays = None
-
-
-        if mode is not None: 
-            selected_mode = mode
-        else:
-            #Display currently selected modes, if there are none then get user to select
-            selected_mode = general_settings_json["selected_mode"]
-
-        if displays is not None:
-            selected_displays = displays
-        else:
-            selected_displays = general_settings_json["selected_displays"]
-
-        #print(f"Your selected mode: {selected_mode}")
-
-        #print(f"Your selected displays: {selected_displays}")
-
-        # Create instance of projection modes factory
-
-        # Create instance of display output, display capture
-        primary_bounding_box = selected_displays["primary_display"]
-        projector_bounding_box = selected_displays["projector_display"]
-
-        display_capture = DisplayCapture(settings_access)
-        audio_capture = AudioCapture(settings_access)
-        room_image_obj = RoomImage(settings_access,display_capture)
-        room_image = room_image_obj.read_room_image(resize=False)
-
-        #Create instance of FPS
-        fps = FPS()
+        mode_object = mode_factory.get_mode()
         show_fps = settings_access.read_general_settings("show_fps")
 
-        #Create the mode objects from the mode factory
-        mode_factory = ModesFactory(room_image, display_capture, audio_capture, settings_access)
-        mode_object = mode_factory.get_mode(selected_mode)
 
-        format_string = settings_access.read_mode_settings(selected_mode, "qImg_format")
-        trigger_frequency = settings_access.read_mode_settings(selected_mode, "trigger_frequency")
-        qImg_format = eval(format_string)
-
-
-
-        main_window = DisplayOutput(primary_bounding_box, projector_bounding_box)
-
-        frame_counter = 0
         # Main loop for app
-        while not main_window.stopped:
+        while not display_output.stopped:
     
             frames = mode_object.trigger()
 
             if frames is not None or len(frames) != 0:
         
                 for frame in frames:
-                    #Resize frame to fit projector if requires resizing
-                    #frame = display_capture.frame_projector_resize(frame)
+                    
                     if show_fps:
                         fps.add_fps_to_image(frame, fps.get_fps())
-                    #Frame display
-                
-              
-                    height, width = frame.shape[:2]
-                    bytes_per_line = frame.strides[0]
 
-                    qImg = QtGui.QImage(frame.data, width, height, bytes_per_line, qImg_format).rgbSwapped()
-                    main_window.label.setPixmap(QtGui.QPixmap(qImg))
-                    app.processEvents()
-                    #fps.print_fps()
-                    #time.sleep(5)
-            frame_counter+=1
+                    #Frame display
+                    display_output.display_frame(frame)
+                   
         
 
 

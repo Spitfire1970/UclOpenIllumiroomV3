@@ -139,5 +139,8 @@ public:
 	afx_msg void OnBnClickedRain1();
 	afx_msg void OnBnClickedRain2();
 	afx_msg void OnBnClickedRain3();
+	afx_msg void OnBnClickedCalibrateSystemButton();
+	afx_msg void OnBnClickedButtonInfoCalibrateSystem();
+	afx_msg void OnStnClickedStaticCalibrateSystem();
 };
 

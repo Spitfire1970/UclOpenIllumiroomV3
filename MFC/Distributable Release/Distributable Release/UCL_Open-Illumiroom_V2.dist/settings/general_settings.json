@@ -1,21 +1,21 @@
 {
     "background_image_path": "room_img_noTV.jpg",
     "camera": {
-        "camera_nr": 5
+        "camera_nr": 2
     },
     "exit_key_binding": "Key_Escape",
     "keep_window_open": true,
     "selected_displays": {
         "primary_display": {
-            "height": 1080,
+            "height": 1440,
             "left": 0,
             "top": 0,
-            "width": 1920
+            "width": 2560
         },
         "projector_display": {
             "height": 1080,
-            "left": 0,
-            "top": -1080,
+            "left": -1920,
+            "top": 669,
             "width": 1920
         }
     },
