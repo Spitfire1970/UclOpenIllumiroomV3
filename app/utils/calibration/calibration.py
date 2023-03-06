@@ -2,6 +2,10 @@ import cv2
 import itertools
 import time
 import numpy as np
+
+from app.utils.calibration.threaded_video_capture import ThreadedVideoCapture
+
+
 class Calibration:
     
     def __init__(self,settings_access, display_capture):
@@ -63,7 +67,7 @@ class Calibration:
         
 
     def capture_grey_code_images(self):
-        result, image = self.video_capture.read()
+        image = self.video_capture.read()
         #grey code insstructions frame 2
         cv2.imshow("Instructions", self.instruction_images[2])
 
@@ -81,22 +85,17 @@ class Calibration:
             #capture grey code frame
             #wait for alloted time
             cv2.waitKey(self.frame_sleep_time)
-            result, image = self.video_capture.read()
+            image = self.video_capture.read()
 
-            # If image is detected without any error, 
-            if result:
-            
-                # Save image in local storage
-                cv2.imwrite(self.grey_code_image_library_path+str(res_num-1)+".jpg", image)
+            # Save image in local storage
+            cv2.imwrite(self.grey_code_image_library_path+str(res_num-1)+".jpg", image)
 
         cv2.destroyAllWindows()
             
     def capture(self) :
             
             
-            self.video_capture = cv2.VideoCapture(self.cam_port,cv2.CAP_DSHOW)
-            self.video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
-            self.video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+            self.video_capture = ThreadedVideoCapture(self.cam_port)
 
             cv2.namedWindow("Instructions")
             cv2.moveWindow("Instructions", self.primary_bounding_box["left"],self.primary_bounding_box["top"])
@@ -112,72 +111,68 @@ class Calibration:
             self.continue_instructions = False
             
             #black_projection, white_projection = self.gcp.getImagesForShadowMasks(self.projector_resolution,self.projector_resolution)
-            result, test_image = self.video_capture.read()
+            test_image = self.video_capture.read()
             room_image = np.copy(test_image)
             #check if any image at all was returned
-            if result:
-                
-                cv2.imwrite(self.grey_code_image_library_path+"_test.jpg", test_image)
-                #check if this is the correct webcam
+            cv2.imwrite(self.grey_code_image_library_path+"_test.jpg", test_image)
+            #check if this is the correct webcam
 
-                while not(self.confirmed_webcam):
-                    self.add_confirm_text_to_image(test_image)
-                    cv2.namedWindow("Webcam Output")
-                    cv2.moveWindow("Webcam Output", self.primary_bounding_box["left"],self.primary_bounding_box["top"])
-                    cv2.imshow("Webcam Output",self.display_capture.frame_primary_resize(test_image))
+            while not(self.confirmed_webcam):
+                self.add_confirm_text_to_image(test_image)
+                cv2.namedWindow("Webcam Output")
+                cv2.moveWindow("Webcam Output", self.primary_bounding_box["left"],self.primary_bounding_box["top"])
+                cv2.imshow("Webcam Output",self.display_capture.frame_primary_resize(test_image))
 
 
-                    key = cv2.waitKey(1)
-                    if key == ord("n"):
-                        self.correct_webcam = False
-                        self.confirmed_webcam = True
+                key = cv2.waitKey(1)
+                if key == ord("n"):
+                    self.correct_webcam = False
+                    self.confirmed_webcam = True
 
-                        #show webcam selection instructions, frame 1
-                        while not(self.continue_instructions):
-                            cv2.imshow("Instructions",self.instruction_images[1])
+                    #show webcam selection instructions, frame 1
+                    while not(self.continue_instructions):
+                        cv2.imshow("Instructions",self.instruction_images[1])
 
-                            key = cv2.waitKey(1)
-                            if key == 32: #space key
-                                self.continue_instructions =True
-                        cv2.destroyAllWindows()
-                        exit()
+                        key = cv2.waitKey(1)
+                        if key == 32: #space key
+                            self.continue_instructions =True
+                    cv2.destroyAllWindows()
+                    exit()
 
-                    elif key == ord("y"):
-                        self.correct_webcam = True
-                        self.confirmed_webcam = True
-                        #write the image taken to the room image, as it is correct, resize to projector resolution
-                        #room_image_resized = self.display_capture.resize_image_fit_projector_each_frame(test_image)
-                        #print(room_image_resized.shape)
-                        cv2.imwrite(self.room_image_library_path, room_image)
-                
-                cv2.destroyAllWindows()
+                elif key == ord("y"):
+                    self.correct_webcam = True
+                    self.confirmed_webcam = True
+                    #write the image taken to the room image, as it is correct, resize to projector resolution
+                    #room_image_resized = self.display_capture.resize_image_fit_projector_each_frame(test_image)
+                    #print(room_image_resized.shape)
+                    cv2.imwrite(self.room_image_library_path, room_image)
+
+            cv2.destroyAllWindows()
 
 
-                #get the grey code images from the webcam
-                if (self.correct_webcam):
-                    result, room_img = self.video_capture.read()
-                    if result:
-                        self.captured_frames.append(room_img)
-                      
-                        self.capture_grey_code_images()
+            #get the grey code images from the webcam
+            if (self.correct_webcam):
+                room_img = self.video_capture.read()
+                self.captured_frames.append(room_img)
+                self.capture_grey_code_images()
 
 
 
-                #run calibration algorithm
-                #show instructions 3
-                cv2.imshow("Instructions",self.instruction_images[3])
-                cv2.waitKey(5000)
+            #run calibration algorithm
+            #show instructions 3
+            cv2.imshow("Instructions",self.instruction_images[3])
+            cv2.waitKey(5000)
 
-                #calibration complete! instructions 4
-                while not(self.continue_instructions):
-                    cv2.imshow("Instructions",self.instruction_images[4])
+            #calibration complete! instructions 4
+            while not(self.continue_instructions):
+                cv2.imshow("Instructions",self.instruction_images[4])
 
-                    key = cv2.waitKey(1)
-                    if key == 32: #space key
-                        self.continue_instructions =True
-                cv2.destroyAllWindows()
-                
-                #calibration complete, exit
+                key = cv2.waitKey(1)
+                if key == 32: #space key
+                    self.continue_instructions =True
+            cv2.destroyAllWindows()
+
+            #calibration complete, exit
 
                 
                     
