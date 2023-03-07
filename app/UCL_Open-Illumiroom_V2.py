@@ -23,26 +23,23 @@ from projection_modes.modes_factory import ModesFactory
 
 app_root_path = __file__[:__file__.index("UCL_Open-Illumiroom_V2.py")]
 
-
 def main():
 
-    #Get the current general settings and display the menu
+    #Instantiate required objects to be passed to main loop or display setup/calibration 
     settings_access = SettingsAccess(app_root_path)
+
     room_image_obj = RoomImage(settings_access)
     room_image = room_image_obj.read_room_image(resize=False)
-    display_capture = DisplayCapture(settings_access)
-    audio_capture = AudioCapture(settings_access)
 
+    display_capture = DisplayCapture(settings_access)
     calibration = Calibration(settings_access, display_capture)
+
     fps = FPS()
 
-    #Create the mode objects from the mode factory
-    mode_factory = ModesFactory(room_image, display_capture, audio_capture, settings_access)
-    
-    #print ('Number of arguments:', len(sys.argv), 'arguments.')
-    #print ('Argument List:', str(sys.argv))
-
+    #If no arguments passed, or argument is run, run the main loop
     if len(sys.argv) == 1 or sys.argv[1] == "run":
+        audio_capture = AudioCapture(settings_access)
+        mode_factory = ModesFactory(room_image, display_capture, audio_capture, settings_access)
         main_loop(settings_access,  mode_factory, fps)
 
     elif sys.argv[1] == "display":
@@ -63,7 +60,7 @@ def main():
 def run_display_capture(settings_access):
 
 
-    # Display settings menu
+    # Display the settings menu
     display_selection = DisplaySelection(settings_access)
     display_selection.select_tv_projector()
 
@@ -86,8 +83,7 @@ def run_select_tv(room_image_obj):
 
 
 def run_calibration(calibration):
-    # print("Step 1: Upload the picture of the projected area.")
-    # self.room_image_obj.save_picture()
+    #Run the calibration system, calibrating the projector to the TV.
     calibration.capture()
 
 
@@ -101,19 +97,21 @@ def main_loop(settings_access, mode_factory, fps):
         show_fps = settings_access.read_general_settings("show_fps")
 
 
-        # Main loop for app
+        # Main loop for app, while user has not pressed ESC
         while not display_output.stopped:
-    
+            
+            #Trigger the mode object to get the frames to display
             frames = mode_object.trigger()
 
+            #Display frames if some are returned
             if frames is not None or len(frames) != 0:
         
                 for frame in frames:
-                    
+                    #Add the FPS counter to images if required
                     if show_fps:
                         fps.add_fps_to_image(frame, fps.get_fps())
 
-                    #Frame display
+                    #Display the frame on the projector
                     display_output.display_frame(frame)
                    
         

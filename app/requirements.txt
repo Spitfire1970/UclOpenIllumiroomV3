@@ -1,0 +1,8 @@
+librosa
+keras
+cv2
+numpy
+mss
+PyQt6
+pytesseract
+screeninfo

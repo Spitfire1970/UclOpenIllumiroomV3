@@ -1,3 +1,5 @@
+#The Main menu class has been deprecated, replaced with the MFC application
+
 from projection_modes.modes_factory import ModesFactory
 from .display_selection import DisplaySelection
 from .settings_access import SettingsAccess
@@ -7,6 +9,8 @@ from .display_capture import DisplayCapture
 
 from sys import exit
 from time import sleep
+
+
 
 class MainMenu:
    def __init__(self, settings_access):

@@ -30,17 +30,13 @@ class DisplayCapture:
 
         
 
-    #Use no resize if the image captured will not be directly displayed
+    #Capture a frame from the primary display, remove the alpha channel
     def capture_frame(self):
-        # if self.use_capture_card:
-        #     result, frame = self.capture_card.read()
-        # else:
-        #     
         frame = np.array(self.sct.grab(self.primary_bounding_box))[:,:,:3]
     
         return frame
 
-    #Use no resize if the image captured will not be directly displayed
+    #Captures a frame from a specified bounding box
     def capture_frame_with_bounding_box(self, bounding_box):
         frame = np.array(self.sct.grab(bounding_box))[:,:,:3]
 
@@ -55,7 +51,7 @@ class DisplayCapture:
     
 
     def frame_projector_resize(self, frame):
-        #Check if the resolution of the primary monitor and TV differ (ratio not 1)
+        #Check if frame needs to be resized
         if (self.monitor_resize_scale_factor) > 1.05 or (self.monitor_resize_scale_factor) < 0.95 :
             frame = self.resize_image_fit_projector(frame)
         return frame
@@ -63,8 +59,8 @@ class DisplayCapture:
     
 
     def resize_image_fit_projector(self,frame):
-        #If the projector and the tv have different resolutions, quite possible if a 4k tv is being used 
-        # The image from the tv needs to be resized to fit onto the projector, otherwise full size image will be shown
+        #Resize an image from the primary display to fit the projector display,
+        #use monitor resize scale factor which is projector width / primary width
         height = frame.shape[0]
         width = frame.shape[1]
 
@@ -76,13 +72,13 @@ class DisplayCapture:
     
 
     def resize_image_fit_projector_each_frame(self,frame):
-        #If the projector and the tv have different resolutions, quite possible if a 4k tv is being used 
-        # The image from the tv needs to be resized to fit onto the projector, otherwise full size image will be shown
+        #Resizes the image to fit on the projector, but based on the frame's height/width rather than the 
+        #Primary display's - Useful for resizing images.
         height = frame.shape[0]
         width = frame.shape[1]
         scale_factor_w = self.projector_bounding_box["width"]/width
         scale_factor_h = self.projector_bounding_box["height"]/height
-        print("factors",scale_factor_w, ",",scale_factor_h)
+        #print("factors",scale_factor_w, ",",scale_factor_h)
         width = int(width * scale_factor_w)
         height = int(height * scale_factor_h)
         dim = (width, height)
@@ -92,7 +88,7 @@ class DisplayCapture:
 
 
     def frame_primary_resize(self, frame):
-        #Check if the resolution of the primary monitor and TV differ (ratio not 1)
+        #Resize a frame to fit on the primary display, based on the frame's size
         height, width = frame.shape[:2]
         self.primary_resize_scale_factor = self.primary_bounding_box['width']/width 
         if (self.primary_resize_scale_factor) > 1.05 or (self.primary_resize_scale_factor) < 0.95 :
@@ -100,8 +96,7 @@ class DisplayCapture:
         return frame
 
     def resize_image_fit_primary(self,frame):
-        #If the projector and the tv have different resolutions, quite possible if a 4k tv is being used 
-        # The image from the tv needs to be resized to fit onto the projector, otherwise full size image will be shown
+        #Resize a frame to fit on the primary display, based on the frame's size
         height = frame.shape[0]
         width = frame.shape[1]
 
