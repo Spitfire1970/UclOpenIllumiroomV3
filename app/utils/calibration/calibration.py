@@ -3,7 +3,7 @@ import itertools
 import time
 import numpy as np
 
-from app.utils.calibration.threaded_video_capture import ThreadedVideoCapture
+from .threaded_video_capture import ThreadedVideoCapture
 
 
 class Calibration:
@@ -76,7 +76,6 @@ class Calibration:
         cv2.moveWindow("GreyCode", self.projector_bounding_box["left"],self.projector_bounding_box["top"])
         
 
-        #cclear frame buffer
 
         for res_num in range(0,self.num_images+1):
 
@@ -88,7 +87,7 @@ class Calibration:
             image = self.video_capture.read()
 
             # Save image in local storage
-            cv2.imwrite(self.grey_code_image_library_path+str(res_num-1)+".jpg", image)
+            cv2.imwrite(self.grey_code_image_library_path+str(res_num)+".jpg", image)
 
         cv2.destroyAllWindows()
             

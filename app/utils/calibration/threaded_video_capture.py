@@ -7,7 +7,7 @@ from numpy.typing import NDArray
 class ThreadedVideoCapture:
 
     def __init__(self, camera_id: int):
-        self.camera = cv.VideoCapture(camera_id)
+        self.camera = cv.VideoCapture(camera_id,cv.CAP_DSHOW)
         self.queue = queue.Queue()
         self.thread = threading.Thread(target=self._frame_reader, daemon=True)
         self.thread.start()

@@ -6,6 +6,8 @@ class FPS:
         self.curr_time = time()
 
     def get_fps(self):
+
+        #Calculate the current fps
         curr_fps = round((1/(0.000001+time()-self.curr_time)),1)
         self.curr_time = time()
         return curr_fps
@@ -22,6 +24,7 @@ class FPS:
         thickness              = 3
         lineType               = 2
 
+        #Receive an image and add the FPS count in the corner
         cv2.putText(img,"FPS: "+str(fps), 
                 textLocation,
                 font, 

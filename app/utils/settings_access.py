@@ -49,5 +49,9 @@ class SettingsAccess:
         img_path = self.room_img_path + image_path
         return img_path
 
+
+    def get_assets_path(self):
+        return self.assets_path
+
     def get_ml_model_path(self):
         return self.ml_models_path
