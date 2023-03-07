@@ -4,7 +4,7 @@ import time
 from ctypes import *
 import numpy as np
 
-from app.utils.calibration.threaded_video_capture import ThreadedVideoCapture
+from .threaded_video_capture import ThreadedVideoCapture
 
 
 class Calibration:
@@ -14,6 +14,7 @@ class Calibration:
         self.display_capture = display_capture
         self.projector_resolution = self.display_capture.get_projector_bounding_box()
         self.cam_port = settings_access.read_general_settings("camera_nr")
+        self.video_capture = ThreadedVideoCapture(self.cam_port)
 
         # self.gcp = cv2.structured_light.GrayCodePattern.create(self.projector_resolution["width"],
         # self.projector_resolution["height"])
@@ -21,6 +22,8 @@ class Calibration:
         self.grey_code_source_library_path = self.settings_access.assets_path + "calibration/grey_code_source/grey_code"
         self.instructions_image_library_path = self.settings_access.assets_path + "calibration/instructions/"
         self.room_image_library_path = self.settings_access.assets_path + "room_image/room_img.jpg"
+
+        self.calibration_dll_path = self.settings_access.assets_path + "calibration/ProjectionCalibration.dll"
 
         self.num_images = 5
         self.confirmed_webcam = False
@@ -101,6 +104,7 @@ class Calibration:
 
         # black_projection, white_projection = self.gcp.getImagesForShadowMasks(self.projector_resolution,self.projector_resolution)
         test_image = self.video_capture.read()
+        self.video_capture.close()
         room_image = np.copy(test_image)
         # check if any image at all was returned
         cv2.imwrite(self.grey_code_image_library_path + "_test.jpg", test_image)
@@ -137,13 +141,13 @@ class Calibration:
 
         cv2.destroyAllWindows()
 
-        # get the grey code images from the webcam
-        if self.correct_webcam:
-            room_img = self.video_capture.read()
-            self.captured_frames.append(room_img)
-            self.capture_grey_code_images()
+        # # get the grey code images from the webcam
+        # if self.correct_webcam:
+        #     room_img = self.video_capture.read()
+        #     self.captured_frames.append(room_img)
+        #     self.capture_grey_code_images()
 
-        calib_dll = cdll.LoadLibrary("ProjectionCalibration.dll")
+        calib_dll = cdll.LoadLibrary(self.calibration_dll_path)
         calib_dll.calibrate(self.grey_code_image_library_path.encode())
         # show instructions 3
         cv2.imshow("Instructions", self.instruction_images[3])
