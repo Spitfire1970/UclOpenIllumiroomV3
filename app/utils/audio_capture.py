@@ -1,3 +1,4 @@
+"""
 #using old version of audio capture and wobble to allow to compile
 import numpy as np
 import pyaudio
@@ -61,8 +62,9 @@ class AudioCapture():
 """
 import numpy as np
 import pyaudio
-import soundcard as sc
-import soundfile as sf
+import wave
+# import soundcard as sc
+# import soundfile as sf
 # import os
 # os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 from keras.models import load_model
@@ -170,9 +172,9 @@ class AudioCapture():
         predicted_proba_vector = self.model.predict(prediction_feature, verbose=0)
         predicted_proba = predicted_proba_vector[0]
 
-        print("------------------")
-        for i in range(len(predicted_proba)): 
-            print(self.classes[i], "\t\t : ", format(predicted_proba[i], '.32f') )
+#         print("------------------")
+#         for i in range(len(predicted_proba)): 
+#             print(self.classes[i], "\t\t : ", format(predicted_proba[i], '.32f') )
         
         dog_bark = predicted_proba[3]
         drilling = predicted_proba[4]
@@ -180,7 +182,7 @@ class AudioCapture():
         gun_shot = predicted_proba[6]
         jackhammer = predicted_proba[7]
         siren = predicted_proba[8]
-        if (dog_bark > 0.65 or drilling > 0.5
+        if (dog_bark > 0.7 or drilling > 0.5
             or engine_idling > 0.5 or gun_shot > 0.5 
             or jackhammer > 0.45 or siren > 0.7):
             return True
@@ -188,24 +190,34 @@ class AudioCapture():
             return False
 
 
-    def get_system_audio(self):
-        sample_rate = 48000
+    def get_mic_audio(self):        
+        p = pyaudio.PyAudio()
+        # Open a stream
+        stream = p.open(
+            format=pyaudio.paInt16, channels=self.channels, 
+            rate=self.sample_rate, input=True, 
+            frames_per_buffer=self.buffer_size
+        )
+        # Read audio
+        frames = []
         duration = 1.5
-        with sc.get_microphone(id=str(sc.default_speaker().name), include_loopback=True).recorder(samplerate=sample_rate) as mic:
-            # record audio with loopback from default speaker.
-            try:
-                data = mic.record(numframes=sample_rate*duration)
-                # change "data=data[:, 0]" to "data=data", if you would like to write audio as multiple-channels.
-                sf.write(file=self.output_file_name, data=data[:, 0], samplerate=sample_rate)
-            except TypeError:
-                raise TypeError
+        for i in range(0, int(self.sample_rate / self.buffer_size * duration)):
+            data = stream.read(self.buffer_size)
+            frames.append(data)
+        # Close the stream
+        stream.stop_stream()
+        stream.close()
+        p.terminate()
+
+        waveFile = wave.open(self.output_file_name, 'wb')
+        waveFile.setnchannels(self.channels)
+        waveFile.setsampwidth(p.get_sample_size(pyaudio.paInt16))
+        waveFile.setframerate(self.sample_rate)
+        waveFile.writeframes(b''.join(frames))
+        waveFile.close()
 
 
     def detect_explosive_sound(self):
-        try: 
-            self.get_system_audio()
-            return self.get_prediction(self.output_file_name)
-        except TypeError:
-            # print("No audio has been detected. Please play a video")
-            return False
-"""
+        self.get_mic_audio()
+        return self.get_prediction(self.output_file_name)
+
