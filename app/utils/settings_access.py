@@ -3,8 +3,8 @@ import json
 
 class SettingsAccess:
     def __init__(self, app_root_path):
-        #Get the path to the settings app up to the app folder
-        #self.path = __file__[:__file__.index("app") + len("app")]+"/settings/"
+        
+        
         self.app_root_path = app_root_path
         self.assets_path = app_root_path+"assets\\"
         self.settings_path = app_root_path+"settings\\"

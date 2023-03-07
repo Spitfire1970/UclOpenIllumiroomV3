@@ -21,6 +21,8 @@ from utils.fps import FPS
 
 from projection_modes.modes_factory import ModesFactory
 
+#Get the app root path of the project in user's file system
+#Allows assets to be loaded in
 app_root_path = __file__[:__file__.index("UCL_Open-Illumiroom_V2.py")]
 
 def main():
