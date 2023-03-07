@@ -1,3 +1,4 @@
+"""
 from .mode import Mode
 from utils.audio_capture import AudioCapture
 from utils.settings_access import SettingsAccess
@@ -173,4 +174,3 @@ class Wobble(Mode):
             # print("No loud sound")
             frames = [self.img]
         return frames
-"""
