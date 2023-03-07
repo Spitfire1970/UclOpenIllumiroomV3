@@ -14,7 +14,10 @@ class Calibration:
         self.display_capture = display_capture
         self.projector_resolution = self.display_capture.get_projector_bounding_box()
         self.cam_port = settings_access.read_general_settings("camera_nr")
-        self.video_capture = ThreadedVideoCapture(self.cam_port)
+
+        #Only set up video capture once capture called
+        self.video_capture = None
+        
 
         # self.gcp = cv2.structured_light.GrayCodePattern.create(self.projector_resolution["width"],
         # self.projector_resolution["height"])
@@ -88,6 +91,8 @@ class Calibration:
                           self.primary_bounding_box["top"])
 
     def capture(self):
+        
+        self.video_capture = ThreadedVideoCapture(self.cam_port)
 
         cv2.namedWindow("Instructions")
         cv2.moveWindow("Instructions", self.primary_bounding_box["left"], self.primary_bounding_box["top"])
@@ -104,10 +109,10 @@ class Calibration:
 
         # black_projection, white_projection = self.gcp.getImagesForShadowMasks(self.projector_resolution,self.projector_resolution)
         test_image = self.video_capture.read()
-        self.video_capture.close()
         room_image = np.copy(test_image)
         # check if any image at all was returned
         cv2.imwrite(self.grey_code_image_library_path + "_test.jpg", test_image)
+        #self.video_capture.release()
         # check if this is the correct webcam
 
         while not (self.confirmed_webcam):

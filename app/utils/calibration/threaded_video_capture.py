@@ -8,6 +8,8 @@ class ThreadedVideoCapture:
 
     def __init__(self, camera_id: int):
         self.camera = cv.VideoCapture(camera_id,cv.CAP_DSHOW)
+        self.camera.set(cv.CAP_PROP_FRAME_WIDTH, 1920)
+        self.camera.set(cv.CAP_PROP_FRAME_HEIGHT, 1080)
         self.queue = queue.Queue()
         self.thread = threading.Thread(target=self._frame_reader, daemon=True)
         self.thread.start()

@@ -34,8 +34,7 @@ def main():
     room_image = room_image_obj.read_room_image(resize=False)
 
     display_capture = DisplayCapture(settings_access)
-    calibration = Calibration(settings_access, display_capture)
-
+    
     fps = FPS()
 
     #If no arguments passed, or argument is run, run the main loop
@@ -54,6 +53,7 @@ def main():
         run_select_tv(room_image_obj)
     
     elif sys.argv[1] == "calibration":
+        calibration = Calibration(settings_access, display_capture)
         run_calibration(calibration)
 
     else:
