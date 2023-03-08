@@ -1,5 +1,5 @@
 from .mode import Mode
-import cv2
+from cv2 import cvtColor, COLOR_RGB2HLS, COLOR_HLS2RGB, circle, addWeighted
 import numpy as np
 import random
 
@@ -33,7 +33,7 @@ class Snow(Mode):
 
     def add_settling_snow(self, image):
         # Conversion to HLS
-        image_HLS = cv2.cvtColor(image,cv2.COLOR_RGB2HLS)
+        image_HLS = cvtColor(image,COLOR_RGB2HLS)
         image_HLS = np.array(image_HLS, dtype = np.float64)
         brightness_coefficient = 2.5
 
@@ -46,7 +46,7 @@ class Snow(Mode):
 
         # Convert to RGB
         image_HLS = np.array(image_HLS, dtype = np.uint8)    
-        image_RGB = cv2.cvtColor(image_HLS,cv2.COLOR_HLS2RGB)
+        image_RGB = cvtColor(image_HLS,COLOR_HLS2RGB)
         # Change contrast, brightness
         # cv2.convertScaleAbs(image_RGB, alpha=1, beta=0)
  
@@ -79,7 +79,7 @@ class Snow(Mode):
             elif snowflake[2] > max_radius:
                 snowflake[2] = max_radius
 
-            cv2.circle(
+            circle(
                 self.snow, (snowflake[0], snowflake[1]), 
                 int(snowflake[2]), (255, 255, 255), -1
             )
@@ -92,7 +92,7 @@ class Snow(Mode):
 
 
     def add_snow_to_image(self):
-        return cv2.addWeighted(self.img, 0.8, self.snow, 0.3, 0)
+        return addWeighted(self.img, 0.8, self.snow, 0.3, 0)
 
 
     def trigger(self):
