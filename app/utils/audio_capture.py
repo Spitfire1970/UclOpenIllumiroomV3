@@ -149,7 +149,7 @@ class AudioCapture():
         self.buffer[-1] = rms
 
         # moving_average = np.mean(self.buffer)
-        print("rms = ", rms)
+        # print("rms = ", rms)
 
         if rms > self.threshold:
             return True
@@ -209,9 +209,9 @@ class AudioCapture():
         predicted_proba_vector = self.model.predict(prediction_feature, verbose=0)
         predicted_proba = predicted_proba_vector[0]
 
-        print("------------------")
-        for i in range(len(predicted_proba)): 
-            print(self.classes[i], "\t\t : ", format(predicted_proba[i], '.32f') )
+        # print("------------------")
+        # for i in range(len(predicted_proba)): 
+        #     print(self.classes[i], "\t\t : ", format(predicted_proba[i], '.32f') )
 
         dog_bark = predicted_proba[3]
         drilling = predicted_proba[4]
@@ -229,11 +229,7 @@ class AudioCapture():
 
     def detect_explosive_sound(self):
         self.get_mic_audio(save_to_file=True)
-        try: 
-            return self.get_prediction(self.output_file_name)
-        except AttributeError:
-            # print("No audio has been detected. Please play a video")
-            return False
+        return self.get_prediction(self.output_file_name)
 
 
     # def get_system_audio(self):
