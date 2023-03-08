@@ -1,5 +1,5 @@
 from .mode import Mode
-import cv2
+from cv2 import cvtColor,COLOR_RGB2HLS, COLOR_HLS2RGB, line, addWeighted
 import numpy as np
 import random
 
@@ -34,7 +34,7 @@ class Rain(Mode):
 
     def add_settling_rain(self, image):
         # Conversion to HLS
-        image_HLS = cv2.cvtColor(image,cv2.COLOR_RGB2HLS)
+        image_HLS = cvtColor(image,COLOR_RGB2HLS)
         image_HLS = np.array(image_HLS, dtype = np.float64)
         brightness_coefficient = 0.7
 
@@ -45,7 +45,7 @@ class Rain(Mode):
 
         # Convert to RGB
         image_HLS = np.array(image_HLS, dtype = np.uint8)    
-        image_RGB = cv2.cvtColor(image_HLS,cv2.COLOR_HLS2RGB)
+        image_RGB = cvtColor(image_HLS,COLOR_HLS2RGB)
         # Change contrast, brightness
         # cv2.convertScaleAbs(image_RGB, alpha=1, beta=0)
  
@@ -83,7 +83,7 @@ class Rain(Mode):
             elif raindrop[2] > max_scale:
                 raindrop[2] = max_scale
 
-            cv2.line(
+            line(
                 self.rain,(raindrop[0], raindrop[1]), (raindrop[0]+slant, raindrop[1]+self.get_random_drop_length()), self.get_random_drop_color(), drop_width)
 
             # Keep raindrops within background image
@@ -94,7 +94,7 @@ class Rain(Mode):
 
 
     def add_rain_to_image(self):
-        return cv2.addWeighted(self.img, 0.8, self.rain, 0.8, 0)
+        return addWeighted(self.img, 0.8, self.rain, 0.8, 0)
 
     def get_random_drop_color(self):
         return tuple(random.choice(self.possible_drop_colours))

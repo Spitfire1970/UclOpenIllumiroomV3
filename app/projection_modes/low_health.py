@@ -1,5 +1,5 @@
 from .mode import Mode
-import cv2
+from cv2 import TERM_CRITERIA_EPS, TERM_CRITERIA_MAX_ITER, KMEANS_RANDOM_CENTERS, kmeans, cvtColor, COLOR_BGR2GRAY, medianBlur, adaptiveThreshold, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, COLOR_GRAY2BGR, addWeighted
 import numpy as np
 from pathlib import Path
 
@@ -19,8 +19,8 @@ class LowHealth(Mode):
         self.low_health_frames = self.generate_low_health_frames()
 
         self.number_clusters = 1
-        self.criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
-        self.flags = cv2.KMEANS_RANDOM_CENTERS
+        self.criteria = (TERM_CRITERIA_EPS + TERM_CRITERIA_MAX_ITER, 10, 1.0)
+        self.flags = KMEANS_RANDOM_CENTERS
 
         self.previous_avgBG = None
         self.start_low_health = 1.2
@@ -31,7 +31,7 @@ class LowHealth(Mode):
         
     def kmeans_get_colour(self, data):
         #number of colors
-        _, _, colour_list = cv2.kmeans(data, self.number_clusters, None, self.criteria, 10, self.flags)
+        _, _, colour_list = kmeans(data, self.number_clusters, None, self.criteria, 10, self.flags)
         return colour_list[0]
 
     def crop_and_resize_image_to_data(self,frame):
@@ -91,17 +91,17 @@ class LowHealth(Mode):
         return frame_num
     
     def generate_low_health_frames(self):
-        gray = cv2.cvtColor(self.background_img, cv2.COLOR_BGR2GRAY)
+        gray = cvtColor(self.background_img, COLOR_BGR2GRAY)
         
-        gray = cv2.medianBlur(gray, 5)
+        gray = medianBlur(gray, 5)
         
         # Detect edges in image, create colour image
-        edges = cv2.adaptiveThreshold(
-                    gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, 
-                    cv2.THRESH_BINARY,11, 7
+        edges = adaptiveThreshold(
+                    gray, 255, ADAPTIVE_THRESH_MEAN_C, 
+                    THRESH_BINARY,11, 7
                 )
         
-        colour_edges = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)       
+        colour_edges = cvtColor(edges, COLOR_GRAY2BGR)       
         colour_edges[np.where((colour_edges == [0,0,0]).all(axis = 2))] = [0, 0, 0] #BGR - Colour of lines
         colour_edges[np.where((colour_edges == [255,255,255]).all(axis = 2))] = [0, 0, 200] #BGR - colour of background
 
@@ -111,7 +111,7 @@ class LowHealth(Mode):
         for opacity in range(0,self.num_low_health_frames,1):
             opacity_background = round(1-opacity/self.num_low_health_frames,2)
             opacity_edges= round(opacity/self.num_low_health_frames,2)
-            generated_frames.append(cv2.addWeighted(self.background_img, opacity_background, colour_edges, opacity_edges, -5))
+            generated_frames.append(addWeighted(self.background_img, opacity_background, colour_edges, opacity_edges, -5))
         return generated_frames
 
 

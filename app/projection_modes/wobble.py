@@ -4,7 +4,7 @@ from utils.audio_capture import AudioCapture
 from utils.settings_access import SettingsAccess
 
 import numpy as np
-import cv2
+from cv2 import rectangle, remap, INTER_LANCZOS4
 
 # TODO: refactor generate_frames method
 # - single responsibility principle!!
@@ -49,7 +49,7 @@ class Wobble(Mode):
             top_left_coords = self.settings.read_mode_settings("wobble", "tv_top_left")
             bottom_right_coors = self.settings.read_mode_settings("wobble", "tv_bottom_right")
             mask = np.zeros(self.img.shape[:2], dtype=np.uint8)
-            cv2.rectangle(mask, top_left_coords, bottom_right_coors, (255, 255, 255), -1)
+            rectangle(mask, top_left_coords, bottom_right_coors, (255, 255, 255), -1)
 
             # Calculate distance from the center of the effect
             center_x = self.settings.read_mode_settings("wobble", "tv_center_x")
@@ -74,7 +74,7 @@ class Wobble(Mode):
 
             # Use remap with new coords and Lanczos Interpolation method
             # For future: can re-map onto a cartoon image
-            output_img = cv2.remap(self.img, new_x, new_y, cv2.INTER_LANCZOS4)
+            output_img = remap(self.img, new_x, new_y, INTER_LANCZOS4)
             self.frames.append(output_img)
 
 
