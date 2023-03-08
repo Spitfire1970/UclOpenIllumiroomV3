@@ -152,8 +152,8 @@ class Calibration:
         #     self.captured_frames.append(room_img)
         #     self.capture_grey_code_images()
 
-        calib_dll = cdll.LoadLibrary(self.calibration_dll_path)
-        calib_dll.calibrate(self.grey_code_image_library_path.encode())
+        #calib_dll = cdll.LoadLibrary(self.calibration_dll_path)
+        #calib_dll.calibrate(self.grey_code_image_library_path.encode())
         # show instructions 3
         cv2.imshow("Instructions", self.instruction_images[3])
         cv2.waitKey(5000)

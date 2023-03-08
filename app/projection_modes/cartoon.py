@@ -38,7 +38,7 @@ class Cartoon(Mode):
         # cartoon_img_name = (__file__[:__file__.index("app")
         #     + len("app")]+"/assets/generated/cartoon_view.jpeg")
         #All images are stored in the assets folder
-        cartoon_img_name = self.settings_access.assets_path + "generated\cartoon_view.jpeg"
+        cartoon_img_name = self.settings_access.get_assets_path() + "generated\cartoon_view.jpeg"
         cartoon_img = Path(cartoon_img_name)
         if cartoon_img.is_file():
             self.img = cv2.imread(cartoon_img_name)

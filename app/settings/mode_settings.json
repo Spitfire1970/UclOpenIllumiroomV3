@@ -176,5 +176,10 @@
             441,
             315
         ]
+    },
+    "display_image": {
+        "qImg_format": "QtGui.QImage.Format.Format_RGB888",
+        "trigger_frequency": "every_frame",
+        "display_image_file":"image.jpeg"
     }
 }
