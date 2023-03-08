@@ -1,9 +1,7 @@
 from .settings_access import SettingsAccess
 from mss import mss
 from PIL import Image, ImageTk
-from screeninfo import get_monitors
 from tkinter import Tk, Label, Button, Entry, IntVar
-
 import numpy as np
 import cv2
 
@@ -12,17 +10,21 @@ class DisplaySelection:
 
     def __init__(self, settings_access):
         self.settings_access = settings_access
+        self.monitors_selected = False
         self.monitor_num_prim = None
         self.monitor_num_proj = None
         self.win = Tk()
-
-
+        self.monitor_num_tk_prim = IntVar()
+        self.monitor_num_tk_proj = IntVar()
 
     def getImageForTkinter(self,sct,mons):
-        proj_r = 6
+
         disp_image = None
 
+        #Iterate over connected displays
         for num, monitor in enumerate(mons):
+
+            #Take a screenshot from each monitor to display in the tkinter window
             sct_img_whole = np.array(sct.grab(monitor))
             scale_percent = 25 # percent of original size
 
@@ -30,7 +32,7 @@ class DisplaySelection:
             width = int(widthSCT * scale_percent / 100)
             height = int(heightSCT * scale_percent / 100)
             dim = (width, height)
-            # resize image
+            # resize image to fit in window
             resized = cv2.resize(sct_img_whole, dim, interpolation = cv2.INTER_AREA)
 
             if disp_image is None:
@@ -59,6 +61,7 @@ class DisplaySelection:
         lineType               = 2
 
         height, width, channels = disp_image.shape
+        #Label the display images of the monitors, 1 to n monitors
         for count in range(0,len(mons)):
             textLocation = (int(width*3/4) , int(height/len(mons)/2 + (count*height/len(mons))))
             cv2.putText(disp_image,str(count+1), 
@@ -73,17 +76,19 @@ class DisplaySelection:
 
     def getMonitorNumWithTkinter(self,disp_image):
           
-
-        while self.monitor_num_prim is None:
+        #Display the tkinter window until the monitor nums have been entered
+        while (not(self.monitors_selected)):
             
-            monitor_num_tk_prim = IntVar()
-            monitor_num_tk_proj = IntVar()
-            def get_value():
-                monitor_num_tk_prim.set(entryPrim.get())
-                monitor_num_tk_proj.set(entryProj.get())
+           
 
-                self.monitor_num_prim = monitor_num_tk_prim.get()
-                self.monitor_num_proj = monitor_num_tk_proj.get()
+            #Updated the values on button click
+            def get_value():
+                self.monitor_num_tk_prim.set(entryPrim.get())
+                self.monitor_num_tk_proj.set(entryProj.get())
+
+                self.monitor_num_prim = self.monitor_num_tk_prim.get()
+                self.monitor_num_proj = self.monitor_num_tk_proj.get()
+                self.monitors_selected = True
                 self.win.destroy()
 
                 
@@ -102,10 +107,12 @@ class DisplaySelection:
             imgtk = ImageTk.PhotoImage(image=im)
             Label(self.win, image= imgtk).pack()
 
-            Label(self.win, text="Please chose your primary monitor by entering the appropriate number ").pack()
+            #TKinter boxes for monitor number entry
+            Label(self.win, text="Please chose your primary monitor by entering the appropriate number.").pack()
+            Label(self.win, text="If the window reopens, then you have entered the incorrect monitor number.").pack()
             entryPrim = Entry(self.win,font=('Century 12'),width=40)
             entryPrim.pack(pady= 10)
-            Label(self.win, text="Please also chose your projector ").pack()
+            Label(self.win, text="Please also chose your projector.").pack()
             entryProj = Entry(self.win,font=('Century 12'),width=40)
             entryProj.pack(pady= 10)
             Button(self.win, text="Enter", command= get_value).pack()
@@ -118,16 +125,23 @@ class DisplaySelection:
         mons = sct.monitors[1:]
         disp_image = self.getImageForTkinter(sct,mons)
 
-        #Get the monitor number from the TKinter window, and set the displays 
-        #to the apprpriate mss
-        self.getMonitorNumWithTkinter(disp_image)
+        while(not(self.monitors_selected)):
+            #Get the monitor number from the TKinter window, and set the displays 
+            #to the apprpriate mss
+            self.getMonitorNumWithTkinter(disp_image)
+            if self.monitor_num_prim > 0 and self.monitor_num_proj > 0 and self.monitor_num_prim <=len(mons) and self.monitor_num_proj <=len(mons):
+                #Valid monitor numbers entered
+                self.monitors_selected = True
+                
+            else:
+                self.monitors_selected = False
+                self.win = Tk()
+
         displays = {"primary_display":sct.monitors[self.monitor_num_prim],"projector_display":sct.monitors[self.monitor_num_proj]}
         
         #Write the selected displays to the general settings json
-     
         general_settings_json = self.settings_access.read_settings("general_settings.json")
         general_settings_json['selected_displays'] = displays
         self.settings_access.write_settings("general_settings.json", general_settings_json)
 
-        print("Selected Displays!")
         return displays

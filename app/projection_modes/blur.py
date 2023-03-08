@@ -14,19 +14,21 @@ class Blur(Mode):
     ):
         self.settings_access = settings_access
         self.blur_amount = self.get_blur_amount_from_settings()
+        self.rect_color = self.get_blur_edge_rect_from_settings()
+
         self.blur_tuple = (self.blur_amount, self.blur_amount)
 
         self.display_capture = display_capture
         self.projector_bounding_box = display_capture.get_projector_bounding_box()
-        self.rect_color = self.get_blur_edge_rect_from_settings()
-        height_factor = 128
-        width_factor = 196
+        
+        height_factor = 32
+        width_factor = 32
         self.top_rect_coords = [0,0,int(self.projector_bounding_box['width']),int(self.projector_bounding_box['height']/height_factor)]
         self.bottom_rect_coords = [0,int(self.projector_bounding_box['height']*(height_factor-1)/height_factor),int(self.projector_bounding_box['width']),int(self.projector_bounding_box['height'])]
         self.left_rect_coords = [0,0,int(self.projector_bounding_box['width']/width_factor),int(self.projector_bounding_box['height'])]
         self.right_rect_coords = [int(self.projector_bounding_box['width']*(width_factor-1)/width_factor),0,int(self.projector_bounding_box['width']),int(self.projector_bounding_box['height'])]
         
-
+    #Add rectangles doesn't seem to work right now, issue with resolution
     def add_rectangles_to_frame(self, frame):
         #Top rectangle
         rectangle(frame, (self.top_rect_coords[0], self.top_rect_coords[1]), (self.top_rect_coords[2], self.top_rect_coords[3]), self.rect_color, -1)
@@ -43,12 +45,10 @@ class Blur(Mode):
 
     def trigger(self):
         #Once triggered, screen record a frame, apply the blurring, then return the frame
-        
-        frames = [None]
         #frame= self.display_capture.capture_frame_projector_resize()
         frame = self.display_capture.capture_frame()
-        frames[0] = self.apply_mode_to_frame(frame)
-        return frames
+        frame = self.apply_mode_to_frame(frame)
+        return [frame]
 
     def get_blur_amount_from_settings(self):
         mode_settings_json = self.settings_access.read_settings("mode_settings.json")

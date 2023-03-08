@@ -6,6 +6,7 @@ from .weather import Weather
 from .rain import Rain
 from .snow import Snow
 from .speed_blur import SpeedBlur
+from .display_image import DisplayImage
 
 class ModesFactory:
 
@@ -24,7 +25,8 @@ class ModesFactory:
             "weather": Weather,
             "rain": Rain,
             "snow": Snow,
-            "speed_blur": SpeedBlur
+            "speed_blur": SpeedBlur,
+            "display_image": DisplayImage,
         }
         self.settings = setting_access
         self.img = background_image

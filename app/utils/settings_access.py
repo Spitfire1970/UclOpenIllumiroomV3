@@ -3,8 +3,8 @@ import json
 
 class SettingsAccess:
     def __init__(self, app_root_path):
-        #Get the path to the settings app up to the app folder
-        #self.path = __file__[:__file__.index("app") + len("app")]+"/settings/"
+        
+        
         self.app_root_path = app_root_path
         self.assets_path = app_root_path+"assets\\"
         self.settings_path = app_root_path+"settings\\"
@@ -48,6 +48,10 @@ class SettingsAccess:
     def get_image_path(self, image_path):
         img_path = self.room_img_path + image_path
         return img_path
+
+
+    def get_assets_path(self):
+        return self.assets_path
 
     def get_ml_model_path(self):
         return self.ml_models_path

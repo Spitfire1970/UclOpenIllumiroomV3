@@ -12,10 +12,8 @@ import cv2
 
 import numpy as np
 from cv2 import resize ,INTER_AREA
-from PyQt6 import QtWidgets, QtGui, QtCore
 from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QPushButton, QApplication
-from PyQt6.QtGui import QPalette, QColor
-from PyQt6.QtCore import Qt, pyqtSlot
+from PyQt6.QtCore import  pyqtSlot
 
 import glob
 import sys
