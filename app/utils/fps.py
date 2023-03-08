@@ -1,5 +1,5 @@
 from time import time
-import cv2
+from cv2 import putText, FONT_HERSHEY_SIMPLEX
 
 class FPS:
     def __init__(self):
@@ -17,7 +17,7 @@ class FPS:
 
 
     def add_fps_to_image(self,img,fps):
-        font                   = cv2.FONT_HERSHEY_SIMPLEX
+        font                   = FONT_HERSHEY_SIMPLEX
         textLocation           = (30,40)
         fontScale              = 1
         fontColor              = (255,255,255)
@@ -25,7 +25,7 @@ class FPS:
         lineType               = 2
 
         #Receive an image and add the FPS count in the corner
-        cv2.putText(img,"FPS: "+str(fps), 
+        putText(img,"FPS: "+str(fps), 
                 textLocation,
                 font, 
                 fontScale,

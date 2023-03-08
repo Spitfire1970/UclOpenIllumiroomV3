@@ -2,13 +2,9 @@
 
 from projection_modes.modes_factory import ModesFactory
 from .display_selection import DisplaySelection
-from .settings_access import SettingsAccess
 from .room_image import RoomImage
 
-from .display_capture import DisplayCapture
-
 from time import sleep
-
 
 
 class MainMenu:

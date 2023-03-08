@@ -2,8 +2,6 @@
 # 2) Menu is opened for the user, can update settings eg: their primary and 
 # projector displays and other settings
 import sys
-import numpy as np
-from PyQt6 import QtWidgets, QtGui
 
 from utils.settings_access import SettingsAccess
 from utils.display_selection import DisplaySelection

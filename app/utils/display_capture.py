@@ -1,10 +1,6 @@
-from .settings_access import SettingsAccess
 from mss import mss
-
-
 import numpy as np
-from cv2 import resize ,INTER_AREA
-import cv2
+from cv2 import resize, INTER_AREA
 
 
 class DisplayCapture:

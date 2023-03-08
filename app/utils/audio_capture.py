@@ -66,7 +66,6 @@ import wave
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 from keras.models import load_model
-# import librosa
 from librosa import load
 from librosa.feature import mfcc
 # To read system audio:

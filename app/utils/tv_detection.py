@@ -1,8 +1,10 @@
-import cv2
-# # Note: window displayed using cv2.imshow, TODO: change this
+from cv2 import (rectangle, imshow, namedWindow, setMouseCallback,
+waitKey, destroyAllWindows, EVENT_LBUTTONDOWN, EVENT_LBUTTONUP
+)
+# Note: window displayed using cv2.imshow, TODO: change this
 # from utils.settings_access import SettingsAccess
 
-# # TODO: consider other modes like snow
+# TODO: consider other modes like snow
 MODE = "wobble"
 
 class TVDetection():
@@ -24,12 +26,12 @@ class TVDetection():
 
     def on_mouse(self, event, x, y, flags, params):
         # Allow user to create a boundary box for the TV
-        if event == cv2.EVENT_LBUTTONDOWN:
+        if event == EVENT_LBUTTONDOWN:
             self.top_left = (x, y)
-        elif event == cv2.EVENT_LBUTTONUP:
+        elif event == EVENT_LBUTTONUP:
             self.bottom_right = (x, y)
-            cv2.rectangle(self.img, self.top_left, self.bottom_right, (0, 255, 0), 2)
-            cv2.imshow("Detect TV", self.img)
+            rectangle(self.img, self.top_left, self.bottom_right, (0, 255, 0), 2)
+            imshow("Detect TV", self.img)
 
     def calc_center(self):
         # Calculate the center of the TV
@@ -44,21 +46,21 @@ class TVDetection():
         # return center_x, center_y
 
     def detect_tv(self):
-        cv2.namedWindow("Detect TV")
-        cv2.setMouseCallback("Detect TV", self.on_mouse)
+        namedWindow("Detect TV")
+        setMouseCallback("Detect TV", self.on_mouse)
         #add text on the selection window with instructions, since console will not be visible
         
         while True:
-            cv2.imshow("Detect TV", self.img)
-            key = cv2.waitKey(1)
+            imshow("Detect TV", self.img)
+            key = waitKey(1)
             if key == ord("q") and self.top_left is not None:
                 break
             elif key == ord("q") and self.top_left is None:
                 print("Please select your primary monitor before exiting!")
                 pass
-        cv2.destroyAllWindows()
+        destroyAllWindows()
         for i in range (1,5):
-            cv2.waitKey(1)
+            waitKey(1)
 
         self.calc_center()
         return self.img

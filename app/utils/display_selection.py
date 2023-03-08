@@ -1,9 +1,10 @@
-from .settings_access import SettingsAccess
 from mss import mss
 from PIL import Image, ImageTk
 from tkinter import Tk, Label, Button, Entry, IntVar
 import numpy as np
-import cv2
+from cv2 import (resize, vconcat, hconcat, split, 
+    merge, putText, INTER_AREA, FONT_HERSHEY_SIMPLEX
+)
 
 
 class DisplaySelection:
@@ -18,7 +19,6 @@ class DisplaySelection:
         self.monitor_num_tk_proj = IntVar()
 
     def getImageForTkinter(self,sct,mons):
-
         disp_image = None
 
         #Iterate over connected displays
@@ -33,7 +33,7 @@ class DisplaySelection:
             height = int(heightSCT * scale_percent / 100)
             dim = (width, height)
             # resize image to fit in window
-            resized = cv2.resize(sct_img_whole, dim, interpolation = cv2.INTER_AREA)
+            resized = resize(sct_img_whole, dim, interpolation = INTER_AREA)
 
             if disp_image is None:
                 disp_image = resized
@@ -46,15 +46,15 @@ class DisplaySelection:
                 height = int(heightSCT  * monitor_res_dif_factor)
                 dim = (width, height)
                 # resize image
-                resized = cv2.resize(resized, dim, interpolation = cv2.INTER_AREA)
+                resized = resize(resized, dim, interpolation = INTER_AREA)
 
-                disp_image = cv2.vconcat([disp_image, resized])
+                disp_image = vconcat([disp_image, resized])
 
         height, width, channels = disp_image.shape
         black_image = np.zeros((height,width,4), np.uint8)
 
-        disp_image = cv2.hconcat([disp_image, black_image])
-        font                   = cv2.FONT_HERSHEY_SIMPLEX
+        disp_image = hconcat([disp_image, black_image])
+        font                   = FONT_HERSHEY_SIMPLEX
         fontScale              = 1
         fontColor              = (255,255,255)
         thickness              = 3
@@ -64,7 +64,7 @@ class DisplaySelection:
         #Label the display images of the monitors, 1 to n monitors
         for count in range(0,len(mons)):
             textLocation = (int(width*3/4) , int(height/len(mons)/2 + (count*height/len(mons))))
-            cv2.putText(disp_image,str(count+1), 
+            putText(disp_image,str(count+1), 
                 textLocation,
                 font, 
                 fontScale,
@@ -101,8 +101,8 @@ class DisplaySelection:
             #Load the image
 
             #Rearrange colors
-            blue,green,red,alpha = cv2.split(disp_image)
-            img = cv2.merge((red,green,blue))
+            blue,green,red,alpha = split(disp_image)
+            img = merge((red,green,blue))
             im = Image.fromarray(img)
             imgtk = ImageTk.PhotoImage(image=im)
             Label(self.win, image= imgtk).pack()

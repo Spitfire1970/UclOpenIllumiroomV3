@@ -1,5 +1,5 @@
 from keras.models import load_model
-import cv2
+from cv2 import resize
 import numpy as np
 import os
 
@@ -8,9 +8,9 @@ class weatherdetection:
         self.model = load_model(os.path.join(model_path, "neural_network"))
 
     def predict_weather(self, frame):
-        # weather_img = cv2.imread(str(image_path))
+        # weather_img = imread(str(image_path))
         frame = np.flip(frame[:,:,:3],2)
-        img_array = cv2.resize(frame, (64,64))
+        img_array = resize(frame, (64,64))
         img_array = (img_array/255).astype(np.float32)
 
         print(np.min(img_array), np.max(img_array))

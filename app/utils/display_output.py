@@ -1,13 +1,7 @@
-from .settings_access import SettingsAccess
-
-
-import numpy as np
-from cv2 import imshow, namedWindow, setWindowProperty, waitKey, resize, destroyAllWindows, WINDOW_NORMAL, WND_PROP_FULLSCREEN, WINDOW_FULLSCREEN, INTER_AREA
+from cv2 import resize, INTER_AREA
 import sys
 from PyQt6 import QtWidgets, QtGui
 from PyQt6.QtCore import Qt
-
-import time
 
 
 class DisplayOutput(QtWidgets.QMainWindow):
