@@ -2,7 +2,6 @@ from .settings_access import SettingsAccess
 from mss import mss
 from PIL import Image, ImageTk
 from tkinter import Tk, Label, Button, Entry, IntVar
-import screeninfo
 import numpy as np
 import cv2
 
@@ -129,7 +128,6 @@ class DisplaySelection:
         while(not(self.monitors_selected)):
             #Get the monitor number from the TKinter window, and set the displays 
             #to the apprpriate mss
-            print("run")
             self.getMonitorNumWithTkinter(disp_image)
             if self.monitor_num_prim > 0 and self.monitor_num_proj > 0 and self.monitor_num_prim <=len(mons) and self.monitor_num_proj <=len(mons):
                 #Valid monitor numbers entered

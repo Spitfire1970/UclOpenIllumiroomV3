@@ -2,15 +2,12 @@ from .mode import Mode
 
 import numpy as np
 import cv2
-from mss import mss
 from PIL import Image
 from screeninfo import get_monitors
 from time import time, sleep
 
 # import the necessary packages for tesseract OCR
 import pytesseract
-import argparse
-import re
 
 class SpeedBlur(Mode):
     def __init__(

@@ -2,7 +2,6 @@ from .mode import Mode
 import cv2
 import numpy as np
 from pathlib import Path
-import time
 
 class LowHealth(Mode):
     def __init__(

@@ -7,7 +7,6 @@ from .room_image import RoomImage
 
 from .display_capture import DisplayCapture
 
-from sys import exit
 from time import sleep
 
 

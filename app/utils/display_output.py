@@ -1,13 +1,10 @@
 from .settings_access import SettingsAccess
-from mss import mss
 
 
 import numpy as np
 from cv2 import imshow, namedWindow, setWindowProperty, waitKey, resize, destroyAllWindows, WINDOW_NORMAL, WND_PROP_FULLSCREEN, WINDOW_FULLSCREEN, INTER_AREA
 import sys
-from PyQt6 import QtWidgets, QtGui, QtCore
-from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel
-from PyQt6.QtGui import QPixmap, QImage,QScreen, QScreen
+from PyQt6 import QtWidgets, QtGui
 from PyQt6.QtCore import Qt
 
 import time
