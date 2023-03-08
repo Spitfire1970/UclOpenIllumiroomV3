@@ -89,7 +89,7 @@ class AudioCapture():
         self.num_columns = 174
         self.num_channels = 1
         self.model = None
-        self.output_file_name = self.settings_access.utils_path + "audio_output/out.wav"
+        self.output_file_name = self.settings_access.utils_path + "audio_output\\out.wav"
         # classes based on UrbanSound8K dataset
         self.classes = ['air_conditioner', 'car_horn', 'children_playing', 
             'dog_bark', 'drilling', 'engine_idling', 'gun_shot', 
@@ -229,7 +229,11 @@ class AudioCapture():
 
     def detect_explosive_sound(self):
         self.get_mic_audio(save_to_file=True)
-        return self.get_prediction(self.output_file_name)
+        try: 
+            return self.get_prediction(self.output_file_name)
+        except AttributeError:
+            # print("No audio has been detected. Please play a video")
+            return False
 
 
     # def get_system_audio(self):
