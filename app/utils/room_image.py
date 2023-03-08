@@ -4,19 +4,15 @@ from .display_capture import DisplayCapture
 from .display_output import DisplayOutput
 
 from .tv_detection import TVDetection
-
 import os
-
-import cv2
 
 import numpy as np
 from cv2 import (namedWindow, setWindowProperty, moveWindow, imshow, waitKey, destroyAllWindows,
-imread, imwrite, resize, rectangle, WND_PROP_FULLSCREEN, WINDOW_FULLSCREEN, INTER_AREA
+    imread, imwrite, resize, rectangle, WND_PROP_FULLSCREEN, WINDOW_FULLSCREEN, INTER_AREA
 )
-from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QPushButton, QApplication
-from PyQt6.QtCore import  pyqtSlot
+from PyQt6.QtWidgets import QApplication, QFileDialog, QPushButton, QApplication
+from PyQt6.QtCore import pyqtSlot
 
-import glob
 import sys
 
 class RoomImage:
