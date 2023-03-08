@@ -3,7 +3,7 @@ import itertools
 import time
 import numpy as np
 
-from app.utils.calibration.threaded_video_capture import ThreadedVideoCapture
+from .threaded_video_capture import ThreadedVideoCapture
 
 
 class Calibration:
