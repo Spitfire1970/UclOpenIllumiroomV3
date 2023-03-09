@@ -42,6 +42,7 @@ def _add_confirm_text_to_image(img):
 
 class Calibration:
     def __init__(self, settings_access, display_capture):
+        print("Calibration init")
         self.data_folder = settings_access.assets_path + "calibration/grey_code_photos/grey_code"
         self.display_capture = display_capture
         self.cam_port = settings_access.read_general_settings("camera_nr")
@@ -60,6 +61,7 @@ class Calibration:
         Capture gray code pattern frames
         """
         # Setup displays and start camera
+        print("Starting webcam")
         camera = ThreadedVideoCapture(self.cam_port)
         tv_monitor = Monitor("Instructions",
                              (self.primary_bounding_box["left"], self.primary_bounding_box["top"]),
@@ -71,6 +73,7 @@ class Calibration:
                                     (self.projector_bounding_box["width"], self.projector_bounding_box["height"]))
 
         # Show first instruction slide
+        print("first instrctuion slide")
         tv_monitor.display_image(self.instruction_images[0])
         while cv2.waitKey(1) != 32:
             pass
@@ -104,7 +107,7 @@ class Calibration:
         projector_monitor.display_image(black_projection)
         for projection in itertools.chain(gcp.generate()[1], [black_projection, white_projection]):
             projector_monitor.display_image(projection)
-            cv2.waitKey(300)
+            cv2.waitKey(500)
             captured_frames.append(camera.read())
 
         projector_monitor.close()
