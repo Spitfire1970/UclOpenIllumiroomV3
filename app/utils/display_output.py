@@ -1,4 +1,6 @@
-from cv2 import resize, INTER_AREA
+import os
+
+from cv2 import resize, INTER_AREA, FileStorage, FILE_STORAGE_READ, remap, INTER_LINEAR
 import sys
 from PyQt6 import QtWidgets, QtGui
 from PyQt6.QtCore import Qt
@@ -11,6 +13,17 @@ class DisplayOutput(QtWidgets.QMainWindow):
         super().__init__()
         self.settings_access = settings_access
         self.full_screen = self.settings_access.read_general_settings("full_screen")
+        self.use_calibration = self.settings_access.read_general_settings("use_calibration")
+        self.calibration_map1 = None
+        self.calibration_map2 = None
+        if self.use_calibration:
+            fs = FileStorage(os.path.join(settings_access.assets_path,
+                                          "calibration/grey_code_photos/grey_code/map.ext"), FILE_STORAGE_READ)
+            self.calibration_map1 = fs.getNode("map1").mat()
+            self.calibration_map2 = fs.getNode("map2").mat()
+            fs.release()
+        if self.calibration_map1 is None or self.calibration_map2 is None:
+            self.use_calibration=False
         self.selected_displays = self.settings_access.read_general_settings("selected_displays")
         self.primary_bounding_box = self.selected_displays["primary_display"]
         self.projector_bounding_box = self.selected_displays["projector_display"]
@@ -52,6 +65,8 @@ class DisplayOutput(QtWidgets.QMainWindow):
 
         #Display the supplied frame on the projecot, resizing if necessary
         frame = self.frame_projector_resize(frame)
+        if self.use_calibration:
+            frame = remap(frame, self.calibration_map1, self.calibration_map2, INTER_LINEAR)
         height, width = frame.shape[:2]
         bytes_per_line = frame.strides[0]
 
