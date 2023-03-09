@@ -10,7 +10,7 @@ class SettingsAccess:
         self.settings_path = app_root_path+"settings\\"
         self.room_img_path = self.assets_path+"room_image\\"
         self.utils_path = app_root_path+"utils\\"
-        self.ml_models_path = app_root_path + "utils\\ml_models\\"
+        self.ml_models_path = app_root_path + "assets\\ml_models\\"
 
 
     def read_settings(self, settings_name):
