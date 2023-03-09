@@ -62,7 +62,8 @@ class Calibration:
         """
         # Setup displays and start camera
         print("Starting webcam")
-        camera = ThreadedVideoCapture(self.cam_port)
+        #camera = ThreadedVideoCapture(self.cam_port)
+        camera = cv2.VideoCapture(self.cam_port, cv2.CAP_DSHOW)
         tv_monitor = Monitor("Instructions",
                              (self.primary_bounding_box["left"], self.primary_bounding_box["top"]),
                              (self.primary_bounding_box["width"], self.primary_bounding_box["height"]))
@@ -78,7 +79,7 @@ class Calibration:
         while cv2.waitKey(1) != 32:
             pass
 
-        room_img = camera.read()
+        result, room_img = camera.read()
         tv_monitor.display_image(self.display_capture.frame_primary_resize(_add_confirm_text_to_image(room_img)))
 
         while True:
@@ -86,7 +87,8 @@ class Calibration:
             if key == ord('y'):
                 break
             if key == ord('n'):
-                camera.close()
+                #camera.close()
+                camera.release()
                 tv_monitor.display_image(self.instruction_images[1])
                 while cv2.waitKey(1) != 32:
                     pass
@@ -108,11 +110,11 @@ class Calibration:
         for projection in itertools.chain(gcp.generate()[1], [black_projection, white_projection]):
             projector_monitor.display_image(projection)
             cv2.waitKey(500)
-            captured_frames.append(camera.read())
+            captured_frames.append(camera.read()[1])
 
         projector_monitor.close()
-        camera.close()
-
+        #camera.close()
+        camera.release()
         if not os.path.exists(self.data_folder):
             os.makedirs(self.data_folder)
 
