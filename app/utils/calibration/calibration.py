@@ -137,8 +137,8 @@ class Calibration:
         """
         r = cv2.selectROI("Select the TV", cv2.imread(os.path.join(self.data_folder, "blackFrame.png")))
         cv2.destroyWindow("Select the TV")
-        pnt1 = (r[0] - (r[2]/2), r[1] - (r[3]/2))
-        pnt2 = (r[0] + (3 * r[2]/2), r[1] + (3 * r[3]/2))
+        pnt1 = (int(r[0] - (r[2]/2)), int(r[1] - (r[3]/2)))
+        pnt2 = (int(r[0] + (3 * r[2]/2)), int(r[1] + (3 * r[3]/2)))
         contour = (c_int * 8)(pnt1[0], pnt1[1], pnt2[0], pnt1[1], pnt2[0], pnt2[1], pnt1[0], pnt2[1])
         self.calib_dll.calibrate(self.data_folder.encode(), contour)
 
