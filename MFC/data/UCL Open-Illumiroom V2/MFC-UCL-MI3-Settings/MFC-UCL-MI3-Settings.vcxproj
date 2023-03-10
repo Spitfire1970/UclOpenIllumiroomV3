@@ -98,6 +98,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
+      <OutputFile>C:\Users\fabia\Documents\GitHub\IllumiroomGroup33COMP0016\MFC\UCL Open-Illumiroom V2 Launcher.exe</OutputFile>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -172,7 +173,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <OutputFile>D:\Users\fabia\Documents\GitHub\IllumiroomGroup33COMP0016\MFC\UCL Open-Illumiroom V2 Launcher.exe</OutputFile>
+      <OutputFile>C:\Users\fabia\Documents\GitHub\IllumiroomGroup33COMP0016\MFC\UCL Open-Illumiroom V2 Launcher.exe</OutputFile>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>

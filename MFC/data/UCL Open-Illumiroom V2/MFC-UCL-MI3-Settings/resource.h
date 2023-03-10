@@ -93,6 +93,8 @@
 #define IDC_KEEP_SETTINGS_OPEN          1051
 #define IDC_SLIDER4                     1052
 #define IDC_EYEMOUSE_SPEED_SLIDER       1052
+#define IDC_KEEP_SETTINGS_OPEN2         1052
+#define IDC_USE_CALIBRATION             1052
 #define IDC_COMBO14                     1053
 #define IDC_FISH_FACE_COMBO             1053
 #define IDC_BLUR_AMOUNT_SLIDER          1053

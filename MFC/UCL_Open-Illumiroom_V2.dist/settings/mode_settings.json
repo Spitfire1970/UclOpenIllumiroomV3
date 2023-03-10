@@ -1,7 +1,7 @@
 {
     "blur": {
         ".compatible_with": [],
-        "blur_amount": 40,
+        "blur_amount": 152,
         "bytes_per_line_factor": 4,
         "edge_rect_colour": [
             0,
@@ -9,7 +9,7 @@
             0,
             255
         ],
-        "qImg_format": "QtGui.QImage.Format.Format_RGBA8888",
+        "qImg_format": "QtGui.QImage.Format.Format_RGB888",
         "trigger_frequency": "every_frame"
     },
     "cartoon": {
@@ -79,7 +79,7 @@
             25
         ],
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
-        "rain_mode": "drizzle",
+        "rain_mode": "heavy",
         "torrential": {
             "falling_speed_interval": [
                 15,
@@ -139,15 +139,22 @@
         "snow_amount": "harsh_snow",
         "trigger_frequency": "every_frame"
     },
-    "speed_lines": {
-        ".compatible_with": []
+    "speed_blur": {
+        ".compatible_with": [],
+        "blur_division_factor": 2,
+        "qImg_format": "QtGui.QImage.Format.Format_RGB888",
+        "show_blur_amount": false,
+        "speedometer_box_ratios": {
+            "height_ratio": 0.1,
+            "square_left_ratio": 0.88,
+            "square_top_ratio": 0.84,
+            "width_ratio": 0.1
+        },
+        "trigger_frequency": "every_frame"
     },
     "weather": {
-        ".compatible_with": [
-            "cartoon",
-            "wobble"
-        ],
-        "trigger_frequency": "every_other_frame"
+        "qImg_format": "QtGui.QImage.Format.Format_RGB888",
+        "trigger_frequency": "every_frame"
     },
     "wobble": {
         ".compatible_with": [
@@ -156,19 +163,22 @@
         ],
         "bytes_per_line_factor": 3,
         "fractal_amplitude": 3,
-        "num_frames": 100,
+        "initial_amplitude": 30,
+        "initial_frequency": 0.07,
+        "num_frames": 20,
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
+        "sound_analysis_type": "explosive_sound",
         "sound_threshold": 0.001,
         "trigger_frequency": "every_frame",
         "tv_bottom_right": [
-            1234,
-            848
+            2241,
+            1179
         ],
-        "tv_center_x": 854,
-        "tv_center_y": 616,
+        "tv_center_x": 1324,
+        "tv_center_y": 676,
         "tv_top_left": [
-            475,
-            384
+            408,
+            173
         ]
     }
 }

@@ -9,6 +9,8 @@
     "eye": {
         "Eye_mouse_speed": 14
     },
+    "full_screen": true,
+    "keep_window_open": true,
     "modes_available": [
         "blur",
         "wobble",
@@ -33,8 +35,9 @@
             "width": 2560
         }
     },
-    "selected_mode": "speed_blur",
-    "show_fps": true,
+    "selected_mode": "snow",
+    "show_fps": false,
+    "use_calibration": false,
     "view": {
         "low_light_indicator_on": false
     }

@@ -45,6 +45,7 @@ public:
 	CButton m_showFPS;
 	CButton m_lowLightOn;
 	CButton m_keepSettingsOpen;
+	CButton m_useCalibration;
 	afx_msg void UpdateShowFPS();
 	afx_msg void UpdateLowLight();
 
@@ -142,5 +143,6 @@ public:
 	afx_msg void OnBnClickedCalibrateSystemButton();
 	afx_msg void OnBnClickedButtonInfoCalibrateSystem();
 	afx_msg void OnStnClickedStaticCalibrateSystem();
+	afx_msg void OnBnClickedUseCalibration();
 };
 

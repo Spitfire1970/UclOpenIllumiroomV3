@@ -12,3 +12,7 @@ __pycache__/
 /MFC/UCL_Open-Illumiroom_V2.dist/
 /MFC/UCL Open-Illumiroom V2 Launcher.exe
 /app/assets/calibration/grey_code_photos/grey_code/
+*.exe
+MFC/MFC-UCL-MI3-Settings.pdb
+app/assets/calibration/grey_code_photos/grey_code/pattern1.png
+app/assets/calibration/grey_code_photos/grey_code/pattern10.png

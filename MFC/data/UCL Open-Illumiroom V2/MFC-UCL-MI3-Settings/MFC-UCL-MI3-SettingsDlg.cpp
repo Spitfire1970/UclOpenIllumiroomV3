@@ -26,6 +26,7 @@ using namespace std;
 int globalCameraNr;
 bool globalShowFPS;
 bool globalSettingsDialogOpen;
+bool globalUseCalibration;
 
 //mode settings
 int globalBlurAmount;
@@ -74,6 +75,7 @@ void CMFCUCLMI3SettingsDlg::DoDataExchange(CDataExchange* pDX){
 	DDX_Control(pDX, IDC_FPS_BUTTON, m_showFPS);
 	DDX_Control(pDX, IDC_SELECT_MODE_COMBO, m_selectMode);
 	DDX_Control(pDX, IDC_KEEP_SETTINGS_OPEN, m_keepSettingsOpen);
+	DDX_Control(pDX, IDC_USE_CALIBRATION, m_useCalibration);
 
 	DDX_Control(pDX, IDC_SNOW1, m_lightSnow);
 	DDX_Control(pDX, IDC_SNOW2, m_mediumSnow);
@@ -130,6 +132,7 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
 
 
 
+	ON_BN_CLICKED(IDC_USE_CALIBRATION, &CMFCUCLMI3SettingsDlg::OnBnClickedUseCalibration)
 END_MESSAGE_MAP()
 
 // drag window cursor
@@ -186,6 +189,7 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 	globalShowFPS = general_settings["show_fps"]; // FPS
 	globalCameraNr = general_settings["camera_nr"]; // CAMERA
 	globalSelectedMode = general_settings["selected_mode"]; // selected mode
+	globalUseCalibration = general_settings["use_calibration"]; // selected mode
 
 
 	// Initializing an object of wstring
@@ -217,6 +221,8 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 	
 	//WINDOW OPEN
 	m_keepSettingsOpen.SetCheck(globalSettingsDialogOpen);
+	//Use calibration
+	m_useCalibration.SetCheck(globalUseCalibration);
 	// FPS
 	m_showFPS.SetWindowTextW(globalShowFPS ? L"ON" : L"OFF");
 	// Camera
@@ -284,6 +290,7 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	general_settings["show_fps"] = globalShowFPS;
 	general_settings["camera_nr"] = globalCameraNr;
 	general_settings["selected_mode"] = globalSelectedMode;
+	general_settings["use_calibration"] = globalUseCalibration;
 	// WRITE INTO CONFIG JSON ALL CHANGES
 	ofstream outputConfigFileGeneral(pathConfigGeneral);
 	outputConfigFileGeneral << setw(4) << general_settings << endl;
@@ -481,6 +488,7 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
 	general_settings["camera_nr"] = globalCameraNr;
 	general_settings["selected_mode"] = globalSelectedMode;
 	general_settings["keep_window_open"] = globalSettingsDialogOpen;
+	general_settings["use_calibration"] = globalUseCalibration;
 
 
 	// WRITE INTO CONFIG JSON ALL CHANGES
@@ -600,9 +608,15 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSnow3()
 
 void CMFCUCLMI3SettingsDlg::OnBnClickedKeepSettingsOpen()
 {
-	// TODO: Add your control notification handler code here
+	
 	globalSettingsDialogOpen = m_keepSettingsOpen.GetCheck();
 }
+
+void CMFCUCLMI3SettingsDlg::OnBnClickedUseCalibration()
+{
+	globalUseCalibration = m_useCalibration.GetCheck();
+}
+
 
 
 
@@ -657,6 +671,7 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedRain3()
 	m_torrentialRain.SetCheck(1);
 	globalSelectedRainAmount = "torrential";
 }
+
 
 
 
