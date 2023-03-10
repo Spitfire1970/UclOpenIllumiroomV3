@@ -21,7 +21,7 @@ from projection_modes.modes_factory import ModesFactory
 app_root_path = __file__[:__file__.index("UCL_Open-Illumiroom_V2.py")]
 
 def main():
-
+    print("run main")
     #Instantiate required objects to be passed to main loop or display setup/calibration 
     settings_access = SettingsAccess(app_root_path)
 
@@ -34,6 +34,7 @@ def main():
 
     #If no arguments passed, or argument is run, run the main loop
     if len(sys.argv) == 1 or sys.argv[1] == "run":
+        print("run main loop")
         audio_capture = AudioCapture(settings_access)
         mode_factory = ModesFactory(room_image, display_capture, audio_capture, settings_access)
         main_loop(settings_access,  mode_factory, fps)
