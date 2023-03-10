@@ -1,7 +1,7 @@
 {
     "blur": {
         ".compatible_with": [],
-        "blur_amount": 152,
+        "blur_amount": 64,
         "bytes_per_line_factor": 4,
         "edge_rect_colour": [
             0,

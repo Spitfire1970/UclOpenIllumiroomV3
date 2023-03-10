@@ -10,7 +10,6 @@
         "Eye_mouse_speed": 14
     },
     "full_screen": true,
-    "keep_window_open": true,
     "modes_available": [
         "blur",
         "wobble",
@@ -29,14 +28,14 @@
             "width": 1920
         },
         "projector_display": {
-            "height": 1440,
-            "left": -2560,
-            "top": -740,
-            "width": 2560
+            "height": 1080,
+            "left": 0,
+            "top": -1080,
+            "width": 1920
         }
     },
-    "selected_mode": "snow",
-    "show_fps": false,
+    "selected_mode": "blur",
+    "show_fps": true,
     "use_calibration": false,
     "view": {
         "low_light_indicator_on": false

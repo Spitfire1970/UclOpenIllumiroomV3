@@ -136,7 +136,7 @@
             "snow_point_increment": 0.001
         },
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
-        "snow_amount": "harsh_snow",
+        "snow_amount": "med_snow",
         "trigger_frequency": "every_frame"
     },
     "speed_blur": {
@@ -180,5 +180,10 @@
             408,
             173
         ]
+    },
+    "display_image": {
+        "qImg_format": "QtGui.QImage.Format.Format_RGB888",
+        "trigger_frequency": "every_frame",
+        "display_image_file":"room_img_noTV.jpg"
     }
 }
