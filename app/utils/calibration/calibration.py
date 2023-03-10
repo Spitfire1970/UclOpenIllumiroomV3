@@ -4,6 +4,7 @@ from ctypes import *
 from dataclasses import dataclass
 
 import cv2
+import numpy as np
 
 from .threaded_video_capture import ThreadedVideoCapture
 
@@ -107,7 +108,7 @@ class Calibration:
 
         #Take extra image for room image, maximum resolution.
         
-        self.select_projection_area_and_tv()
+        self.select_projection_area_and_tv(projector_monitor)
 
         tv_monitor.display_image(self.instruction_images[4])
         while cv2.waitKey(1) != 32:
@@ -127,12 +128,16 @@ class Calibration:
         contour = (c_int * 8)(pnt1[0], pnt1[1], pnt2[0], pnt1[1], pnt2[0], pnt2[1], pnt1[0], pnt2[1])
         self.calib_dll.calibrate(self.data_folder.encode(), contour)
 
-    def select_projection_area_and_tv(self):
+    def select_projection_area_and_tv(self, monitor):
         room_image_camera = cv2.VideoCapture(self.cam_port, cv2.CAP_DSHOW)
         room_image_camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
         room_image_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 
+        self.take_picture_background(monitor)
+        cv2.waitKey(2000)
         result, projection_area = room_image_camera.read()
+        monitor.close()
+
         projection_area_roi = self.add_text_to_image(projection_area.copy(), "Please draw a box around the projection area, then press 'space'")
         area = cv2.selectROI("Select Projection Area", projection_area_roi)
         cv2.destroyAllWindows()
@@ -210,6 +215,19 @@ class Calibration:
 
 
         return img
+    
+
+
+    def take_picture_background(self, monitor):
+        height = self.projector_bounding_box['height']
+        width = self.projector_bounding_box['width']
+        image = np.zeros((height, width, 3), np.uint8)
+        
+        rgb_color = (74,78,84)
+        colour = tuple(reversed(rgb_color))
+        image[:] = colour
+        
+        monitor.display_image(image)
 
 
 @dataclass
