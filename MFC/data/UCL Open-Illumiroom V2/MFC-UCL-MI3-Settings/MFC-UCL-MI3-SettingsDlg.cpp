@@ -36,8 +36,8 @@ string globalSelectedRainAmount;
 string globalSelectedMode;
 int globalSelectedModeNum = 0;
 
-string modesAvailableStr[] = { "blur","wobble","cartoon","weather","snow","rain","low_health","speed_blur"};
-LPCWSTR  modesAvailable[] = { L"blur",L"wobble",L"cartoon",L"weather",L"snow",L"rain",L"low_health",L"speed_blur"};
+string modesAvailableStr[] = { "blur","wobble","cartoon","weather","snow","rain","low_health","speed_blur","display_image"};
+LPCWSTR  modesAvailable[] = { L"blur",L"wobble",L"cartoon",L"weather",L"snow",L"rain",L"low_health",L"speed_blur",L"display_image"};
 
 LPCSTR runProgramPath = "UCL_Open-Illumiroom_V2.dist\\UCL_Open-Illumiroom_V2.exe";
 

@@ -10,6 +10,7 @@
         "Eye_mouse_speed": 14
     },
     "full_screen": true,
+    "keep_window_open": true,
     "modes_available": [
         "blur",
         "wobble",
@@ -18,7 +19,8 @@
         "snow",
         "rain",
         "low_health",
-        "speed_blur"
+        "speed_blur",
+        "display_image"
     ],
     "selected_displays": {
         "primary_display": {
@@ -34,8 +36,8 @@
             "width": 1920
         }
     },
-    "selected_mode": "blur",
-    "show_fps": true,
+    "selected_mode": "display_image",
+    "show_fps": false,
     "use_calibration": false,
     "view": {
         "low_light_indicator_on": false
