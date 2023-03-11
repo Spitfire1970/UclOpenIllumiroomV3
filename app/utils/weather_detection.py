@@ -15,7 +15,7 @@ class weatherdetection:
 
         print(np.min(img_array), np.max(img_array))
         img_array = np.expand_dims(img_array, axis=0)
-        predictions = self.model.predict(img_array)
+        predictions = self.model(img_array)
         predicted_class_index = np.argmax(predictions)
 
         if predicted_class_index == 0:
