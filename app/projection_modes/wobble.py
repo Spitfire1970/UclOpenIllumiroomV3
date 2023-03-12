@@ -130,7 +130,7 @@ class Wobble(Mode):
             amplitude = 30 * (i/self.num_frames)
             frequency = 0.10 * (i/self.num_frames)
             # Interpolation factor
-            factor = 1 - i / self.num_frames
+            factor = 1 - i / (self.num_frames-1)
 
             # Create a mask to exclude pixels inside the TV rectangle
             top_left_coords = self.settings.read_mode_settings("wobble", "tv_top_left")

@@ -5,6 +5,7 @@ from dataclasses import dataclass
 
 import cv2
 import numpy as np
+from scipy.spatial import distance as dist
 
 from .threaded_video_capture import ThreadedVideoCapture
 
@@ -20,6 +21,7 @@ class Calibration:
         self.data_folder = settings_access.assets_path + "calibration/grey_code_photos/grey_code"
         self.room_image_path = settings_access.assets_path + "room_image/"
         self.display_capture = display_capture
+        self.settings_access = settings_access
         self.cam_port = settings_access.read_general_settings("camera_nr")
         self.calib_dll = cdll.LoadLibrary(settings_access.assets_path + "calibration/dlls/ProjectionCalibration.dll")
         self.primary_bounding_box = self.display_capture.get_primary_bounding_box()
@@ -106,9 +108,10 @@ class Calibration:
         tv_monitor.display_image(self.instruction_images[3])
         self.calibrate()
 
-        #Take extra image for room image, maximum resolution.
-        
-        self.select_projection_area_and_tv(projector_monitor)
+        # Take extra image for room image (maximum resolution),
+        # locate projection and TV areas
+
+        self.select_projection_area_and_tv(projector_monitor)        
 
         tv_monitor.display_image(self.instruction_images[4])
         while cv2.waitKey(1) != 32:
@@ -138,21 +141,34 @@ class Calibration:
         result, projection_area = room_image_camera.read()
         monitor.close()
 
-        projection_area_roi = self.add_text_to_image(projection_area.copy(), "Please draw a box around the projection area, then press 'space'")
-        area = cv2.selectROI("Select Projection Area", projection_area_roi)
-        cv2.destroyAllWindows()
-        projection_area = projection_area[int(area[1]):int(area[1]+area[3]), int(area[0]):int(area[0]+area[2])]
-        cv2.imwrite(self.room_image_path+"room_img.jpg", projection_area)
+        # img = projection_area
+        projection_area_roi = self.add_text_to_image(projection_area.copy(), 
+            "Select the 4 corners of the projection area, then press 'Space'. Right click to reselect.")
+        img_height, img_width, _  = projection_area_roi.shape
+        img = cv2.resize(projection_area_roi, (img_width//2, img_height//2))    # double-check resizing
+        corners = self.get_projection_corners(img=img)
+        corners = self.order_corners(crns=corners)
+        transformed_proj_roi = self.perspective_transform(img, corners)
+        # Resize the image to projector resolution
+        transformed_proj_roi = self.display_capture.resize_image_fit_projector_each_frame(transformed_proj_roi)
 
-        tv_area = projection_area.copy()
-        tv_area_roi = self.add_text_to_image(tv_area.copy(), "Please draw a box around the tv, then press 'Space'")
+        # projection_area_roi = self.add_text_to_image(projection_area.copy(), "Please draw a box around the projection area, then press 'space'")
+        # area = cv2.selectROI("Select Projection Area", projection_area_roi)
+        # cv2.destroyAllWindows()
+        # projection_area = projection_area[int(area[1]):int(area[1]+area[3]), int(area[0]):int(area[0]+area[2])]
+        # cv2.imwrite(self.room_image_path+"room_img.jpg", projection_area)
+
+        tv_area = transformed_proj_roi.copy()
+        tv_area_roi = self.add_text_to_image(tv_area.copy(), 
+            "Please draw a box around the TV, then press 'Space'")
         area = cv2.selectROI("Select TV", tv_area_roi)
         cv2.destroyAllWindows()
         tv_area[int(area[1]):int(area[1]+area[3]), int(area[0]):int(area[0]+area[2])] = 0
 
-        #Resize the image to projector resolution
-        tv_area = self.display_capture.resize_image_fit_projector_each_frame(tv_area)
+        # tv_area = self.display_capture.resize_image_fit_projector_each_frame(tv_area)
         cv2.imwrite(self.room_image_path+"room_img_noTV.jpg", tv_area)
+
+        self.save_tv_coords(area)
 
 
     def read_maps(self):
@@ -166,7 +182,6 @@ class Calibration:
         fs.release()
         return map1, map2
     
-
 
     def add_confirm_text_to_image(self,img):
         img_copy = img.copy()
@@ -215,7 +230,6 @@ class Calibration:
 
 
         return img
-    
 
 
     def take_picture_background(self, monitor):
@@ -228,6 +242,93 @@ class Calibration:
         image[:] = colour
         
         monitor.display_image(image)
+        
+
+    def mouse_handler(self, event, x, y, flags, data):
+        if event == cv2.EVENT_LBUTTONDOWN:
+            if len(data['points']) < data['max_points']:
+                cv2.circle(data['img'], (x,y), 2, (0,255,255), -1)
+                cv2.circle(data['img'], (x,y), 12, (0,255,255), 2)
+                cv2.imshow("Select Projection Area", data['img'])
+                data['points'].append([x, y])
+        if event == cv2.EVENT_RBUTTONDOWN:
+            data['img'] = data['original_img'].copy()
+            cv2.imshow("Select Projection Area", data['img'])
+            data['points'] = []
+
+
+    def get_projection_corners(self, img):
+        # Set up data to send to mouse handler
+        max_points = 4
+        data = {}
+        data['original_img'] = img
+        data['img'] = img.copy()
+        data['points'] = []
+        data['max_points'] = max_points
+
+        cv2.imshow("Select Projection Area", img)
+        while len(data['points']) != 4:
+            print("Please select all 4 corners to proceed.")
+            # Set callback function for any mouse event
+            cv2.setMouseCallback("Select Projection Area", self.mouse_handler, data)
+            cv2.waitKey(0)
+            cv2.setMouseCallback("Select Projection Area", lambda *args: None)
+        cv2.destroyWindow("Select Projection Area")
+
+        # Convert array to np.array
+        points = np.array(data['points'], dtype="float32")
+        return points
+
+
+    def order_corners(self, crns):
+        xSorted = crns[np.argsort(crns[:, 0]), :]
+        leftMost = xSorted[:2, :]
+        rightMost = xSorted[2:, :]
+        
+        leftMost = leftMost[np.argsort(leftMost[:, 1]), :]
+        (tl, bl) = leftMost
+        
+        D = dist.cdist(tl[np.newaxis], rightMost, "euclidean")[0]
+        (br, tr) = rightMost[np.argsort(D)[::-1], :]
+        return np.array([tl, tr, br, bl], dtype="float32")
+
+
+    def perspective_transform(self, img, crns_from):
+        height, width = 1080//2, 1920//2
+        crns_to = np.array([[0, 0], [width, 0], [width, height], [0, height]], np.float32)
+
+        matrix = cv2.getPerspectiveTransform(crns_from, crns_to)
+        result = cv2.warpPerspective(img, matrix, (width, height))
+
+        # cv2.imshow('View of Projection Area', result)
+        # cv2.waitKey(0)
+        # cv2.destroyWindow("View of Projection Area")
+        return result
+
+
+    def update_mode_settings(self, settings, new_data):
+        mode_settings_json = self.settings_access.read_settings("mode_settings.json")
+        mode = "wobble"
+
+        for i in range(len(settings)):
+            mode_settings_json[mode][settings[i]] = new_data[i]
+        
+        self.settings_access.write_settings("mode_settings.json", mode_settings_json)
+
+
+    def save_tv_coords(self, tv_area_roi):
+        top_left = [tv_area_roi[0], tv_area_roi[1]]
+        bottom_right = [tv_area_roi[0]+tv_area_roi[2], tv_area_roi[1]+tv_area_roi[3]]
+
+        # Calculate the center of the TV
+        center_x = int((top_left[0] + bottom_right[0]) / 2)
+        center_y = int((top_left[1] + bottom_right[1]) / 2)
+
+        settings = ["tv_top_left", "tv_bottom_right", "tv_center_x", "tv_center_y"]
+        new_values = [top_left, bottom_right, center_x, center_y]
+
+        # Save TV coords for modes which apply a mask where the TV is
+        self.update_mode_settings(settings, new_values)
 
 
 @dataclass

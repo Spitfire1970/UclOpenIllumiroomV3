@@ -171,19 +171,19 @@
         "sound_analysis_type": "explosive_sound",
         "trigger_frequency": "every_frame",
         "tv_bottom_right": [
-            2241,
-            1179
+            1436,
+            812
         ],
-        "tv_center_x": 1324,
-        "tv_center_y": 676,
+        "tv_center_x": 985,
+        "tv_center_y": 540,
         "tv_top_left": [
-            408,
-            173
+            535,
+            268
         ]
     },
     "display_image": {
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
         "trigger_frequency": "every_frame",
-        "display_image_file":"room_img_noTV.jpg"
+        "display_image_file": "room_img_noTV.jpg"
     }
 }
