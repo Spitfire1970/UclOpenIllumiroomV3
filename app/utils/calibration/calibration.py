@@ -236,11 +236,11 @@ class Calibration:
         height = self.projector_bounding_box['height']
         width = self.projector_bounding_box['width']
         image = np.zeros((height, width, 3), np.uint8)
-        
-        rgb_color = (74,78,84)
+
+        rgb_color = (74, 78, 84)
         colour = tuple(reversed(rgb_color))
         image[:] = colour
-        
+
         monitor.display_image(image)
         
 
@@ -251,6 +251,7 @@ class Calibration:
                 cv2.circle(data['img'], (x,y), 12, (0,255,255), 2)
                 cv2.imshow("Select Projection Area", data['img'])
                 data['points'].append([x, y])
+        
         if event == cv2.EVENT_RBUTTONDOWN:
             data['img'] = data['original_img'].copy()
             cv2.imshow("Select Projection Area", data['img'])
@@ -267,7 +268,7 @@ class Calibration:
         data['max_points'] = max_points
 
         cv2.imshow("Select Projection Area", img)
-        while len(data['points']) != 4:
+        while len(data['points']) != max_points:
             print("Please select all 4 corners to proceed.")
             # Set callback function for any mouse event
             cv2.setMouseCallback("Select Projection Area", self.mouse_handler, data)
@@ -281,15 +282,20 @@ class Calibration:
 
 
     def order_corners(self, crns):
-        xSorted = crns[np.argsort(crns[:, 0]), :]
-        leftMost = xSorted[:2, :]
-        rightMost = xSorted[2:, :]
+        # Sort corners by ascending x-value
+        x_sorted = crns[np.argsort(crns[:, 0]), :]
+        left_most = x_sorted[:2, :]
+        right_most = x_sorted[2:, :]
         
-        leftMost = leftMost[np.argsort(leftMost[:, 1]), :]
-        (tl, bl) = leftMost
-        
-        D = dist.cdist(tl[np.newaxis], rightMost, "euclidean")[0]
-        (br, tr) = rightMost[np.argsort(D)[::-1], :]
+        # Sort leftmost corners by ascending y-value
+        left_most = left_most[np.argsort(left_most[:, 1]), :]
+        # Top left, bottom left
+        (tl, bl) = left_most
+
+        # Calc distance between top-left corner and the rightmost ones
+        D = dist.cdist(tl[np.newaxis], right_most, "euclidean")[0]
+        # Bottom right, top right
+        (br, tr) = right_most[np.argsort(D)[::-1], :]
         return np.array([tl, tr, br, bl], dtype="float32")
 
 
