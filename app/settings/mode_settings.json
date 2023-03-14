@@ -173,16 +173,16 @@
         "sound_analysis_type": "loud_sound",
         "trigger_frequency": "every_frame",
         "tv_data": {
+            "tv_top_left": [
+                535,
+                268
+            ],
             "tv_bottom_right": [
                 1436,
                 812
             ],
             "tv_center_x": 985,
-            "tv_center_y": 540,
-            "tv_top_left": [
-                535,
-                268
-            ]
+            "tv_center_y": 540
         }
     },
     "display_image": {
