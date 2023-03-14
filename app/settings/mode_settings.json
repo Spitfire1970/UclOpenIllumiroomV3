@@ -162,24 +162,28 @@
             "weather_snow"
         ],
         "bytes_per_line_factor": 3,
-        "fractal_amplitude": 3,
-        "initial_amplitude": 30,
-        "initial_frequency": 0.07,
-        "num_frames": 20,
+        "data": {
+            "num_frames": 20,
+            "fractal_amplitude": 3,
+            "initial_amplitude": 30,
+            "initial_frequency": 0.1
+        },
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
         "sound_threshold": 0.001,
-        "sound_analysis_type": "explosive_sound",
+        "sound_analysis_type": "loud_sound",
         "trigger_frequency": "every_frame",
-        "tv_bottom_right": [
-            1436,
-            812
-        ],
-        "tv_center_x": 985,
-        "tv_center_y": 540,
-        "tv_top_left": [
-            535,
-            268
-        ]
+        "tv_data": {
+            "tv_bottom_right": [
+                1436,
+                812
+            ],
+            "tv_center_x": 985,
+            "tv_center_y": 540,
+            "tv_top_left": [
+                535,
+                268
+            ]
+        }
     },
     "display_image": {
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
