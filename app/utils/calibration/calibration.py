@@ -1,7 +1,7 @@
-import itertools
 import os
 from ctypes import *
 from dataclasses import dataclass
+import subprocess
 
 import cv2
 import numpy as np
@@ -13,12 +13,11 @@ confirm_img_text_1 = "Is this the image from the correct webcam? If it is, press
 confirm_img_text_2 = "If it is not, especially if a black screen is shown, press 'n'."
 
 
-
-
 class Calibration:
     def __init__(self, settings_access, display_capture):
         print("Calibration init")
-        self.data_folder = settings_access.assets_path + "calibration/grey_code_photos/grey_code"
+        self.data_folder = settings_access.assets_path + "calibration/grey_code_photos/grey_code/"
+        self.exe_path = settings_access.assets_path + "calibration/exe/CalibrationExecutable.exe"
         self.room_image_path = settings_access.assets_path + "room_image/"
         self.display_capture = display_capture
         self.settings_access = settings_access
@@ -40,23 +39,19 @@ class Calibration:
         # Setup displays and start camera
         print("Starting webcam")
         camera = ThreadedVideoCapture(self.cam_port)
-        #camera = cv2.VideoCapture(self.cam_port, cv2.CAP_DSHOW)
+        # camera = cv2.VideoCapture(self.cam_port, cv2.CAP_DSHOW)
         tv_monitor = Monitor("Instructions",
                              (self.primary_bounding_box["left"], self.primary_bounding_box["top"]),
                              (self.primary_bounding_box["width"], self.primary_bounding_box["height"]))
         tv_monitor.open_fullscreen()
 
-        projector_monitor = Monitor("Projector",
-                                    (self.projector_bounding_box["left"], self.projector_bounding_box["top"]),
-                                    (self.projector_bounding_box["width"], self.projector_bounding_box["height"]))
-
         # Show first instruction slide
-        print("first instrctuion slide")
         tv_monitor.display_image(self.instruction_images[0])
         while cv2.waitKey(1) != 32:
             pass
 
         test_img = camera.read()
+        camera.close()
         tv_monitor.display_image(self.display_capture.frame_primary_resize(self.add_confirm_text_to_image(test_img)))
 
         while True:
@@ -64,8 +59,6 @@ class Calibration:
             if key == ord('y'):
                 break
             if key == ord('n'):
-                camera.close()
-                #camera.release()
                 tv_monitor.display_image(self.instruction_images[1])
                 while cv2.waitKey(1) != 32:
                     pass
@@ -74,44 +67,19 @@ class Calibration:
 
         tv_monitor.display_image(self.instruction_images[2])
 
-        gcp = cv2.structured_light.GrayCodePattern.create(self.projector_bounding_box['width'],
-                                                          self.projector_bounding_box['height'])
-        captured_frames = []
-
-        projector_monitor.open_fullscreen()
-        black_projection, white_projection = gcp.getImagesForShadowMasks((self.projector_bounding_box['width'],
-                                                                          self.projector_bounding_box['height']),
-                                                                         (self.projector_bounding_box['width'],
-                                                                          self.projector_bounding_box['height']))
-        projector_monitor.display_image(black_projection)
-        for projection in itertools.chain(gcp.generate()[1], [black_projection, white_projection]):
-            projector_monitor.display_image(projection)
-            cv2.waitKey(500)
-            captured_frames.append(camera.read())
-
-        projector_monitor.close()
-        camera.close()
-        #camera.release()
-        if not os.path.exists(self.data_folder):
-            os.makedirs(self.data_folder)
-
-        fs = cv2.FileStorage(os.path.join(self.data_folder, "projection_size.ext"), cv2.FILE_STORAGE_WRITE)
-        fs.write("h", self.projector_bounding_box['height'])
-        fs.write("w", self.projector_bounding_box['width'])
-        fs.release()
-        for i, pattern_image in enumerate(captured_frames[:-2]):
-            path = os.path.join(self.data_folder, "pattern" + str(i) + ".png")
-            cv2.imwrite(path, pattern_image)
-        cv2.imwrite(os.path.join(self.data_folder, "blackFrame.png"), captured_frames[-2])
-        cv2.imwrite(os.path.join(self.data_folder, "whiteFrame.png"), captured_frames[-1])
+        subprocess.run([self.exe_path,
+                        "capture",
+                        self.data_folder,
+                        str(self.cam_port),
+                        str(self.projector_bounding_box["left"]),
+                        str(self.projector_bounding_box["top"])], capture_output=False)
 
         tv_monitor.display_image(self.instruction_images[3])
+
         self.calibrate()
 
         # Take extra image for room image (maximum resolution),
         # locate projection and TV areas
-
-        self.select_projection_area_and_tv(projector_monitor)        
 
         tv_monitor.display_image(self.instruction_images[4])
         while cv2.waitKey(1) != 32:
@@ -124,28 +92,35 @@ class Calibration:
         Run the calibration script on this classes data folder
         """
 
-        r = cv2.selectROI("Select the TV", cv2.imread(os.path.join(self.data_folder, "blackFrame.png")))
-        cv2.destroyWindow("Select the TV")
-        pnt1 = (int(r[0] - (r[2]/2)), int(r[1] - (r[3]/2)))
-        pnt2 = (int(r[0] + (3 * r[2]/2)), int(r[1] + (3 * r[3]/2)))
-        contour = (c_int * 8)(pnt1[0], pnt1[1], pnt2[0], pnt1[1], pnt2[0], pnt2[1], pnt1[0], pnt2[1])
-        self.calib_dll.calibrate(self.data_folder.encode(), contour)
+        r = self.select_projection_area_and_tv(Monitor("Projector",
+                                                       (self.primary_bounding_box["left"],
+                                                        self.primary_bounding_box["top"]),
+                                                       (self.primary_bounding_box["width"],
+                                                        self.primary_bounding_box["height"])))
+        pnt1 = (int(r[0] - (r[2] / 2)), int(r[1] - (r[3] / 2)))
+        pnt2 = (int(r[0] + (3 * r[2] / 2)), int(r[1] + (3 * r[3] / 2)))
+        exe_data = [self.exe_path,
+                    "calibrate",
+                    self.data_folder] + \
+                   [str(pnt) for pnt in [pnt1[0], pnt1[1], pnt2[0], pnt1[1], pnt2[0], pnt2[1], pnt1[0], pnt2[1]]]
+        subprocess.run(exe_data, capture_output=False)
 
     def select_projection_area_and_tv(self, monitor):
         room_image_camera = cv2.VideoCapture(self.cam_port, cv2.CAP_DSHOW)
         room_image_camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
         room_image_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 
+        monitor.open_fullscreen()
         self.take_picture_background(monitor)
         cv2.waitKey(2000)
         result, projection_area = room_image_camera.read()
         monitor.close()
 
         # img = projection_area
-        projection_area_roi = self.add_text_to_image(projection_area.copy(), 
-            "Select the 4 corners of the projection area, then press 'Space'. Right click to reselect.")
-        img_height, img_width, _  = projection_area_roi.shape
-        img = cv2.resize(projection_area_roi, (img_width//2, img_height//2))    # double-check resizing
+        projection_area_roi = self.add_text_to_image(projection_area.copy(),
+                                                     "Select the 4 corners of the projection area, then press 'Space'. Right click to reselect.")
+        img_height, img_width, _ = projection_area_roi.shape
+        img = cv2.resize(projection_area_roi, (img_width // 2, img_height // 2))  # double-check resizing
         corners = self.get_projection_corners(img=img)
         corners = self.order_corners(crns=corners)
         transformed_proj_roi = self.perspective_transform(img, corners)
@@ -159,17 +134,17 @@ class Calibration:
         # cv2.imwrite(self.room_image_path+"room_img.jpg", projection_area)
 
         tv_area = transformed_proj_roi.copy()
-        tv_area_roi = self.add_text_to_image(tv_area.copy(), 
-            "Please draw a box around the TV, then press 'Space'")
+        tv_area_roi = self.add_text_to_image(tv_area.copy(),
+                                             "Please draw a box around the TV, then press 'Space'")
         area = cv2.selectROI("Select TV", tv_area_roi)
         cv2.destroyAllWindows()
-        tv_area[int(area[1]):int(area[1]+area[3]), int(area[0]):int(area[0]+area[2])] = 0
+        tv_area[int(area[1]):int(area[1] + area[3]), int(area[0]):int(area[0] + area[2])] = 0
 
         # tv_area = self.display_capture.resize_image_fit_projector_each_frame(tv_area)
-        cv2.imwrite(self.room_image_path+"room_img_noTV.jpg", tv_area)
+        cv2.imwrite(self.room_image_path + "room_img_noTV.jpg", tv_area)
 
         self.save_tv_coords(area)
-
+        return area
 
     def read_maps(self):
         """
@@ -181,9 +156,8 @@ class Calibration:
         map2 = fs.getNode("map2").mat()
         fs.release()
         return map1, map2
-    
 
-    def add_confirm_text_to_image(self,img):
+    def add_confirm_text_to_image(self, img):
         img_copy = img.copy()
         font = cv2.FONT_HERSHEY_SIMPLEX
         textLocation1 = (50, 50)
@@ -211,8 +185,7 @@ class Calibration:
 
         return img_copy
 
-
-    def add_text_to_image(self,img, text):
+    def add_text_to_image(self, img, text):
         font = cv2.FONT_HERSHEY_SIMPLEX
         textLocation1 = (50, 50)
         fontScale = 0.8
@@ -228,9 +201,7 @@ class Calibration:
                     thickness,
                     lineType)
 
-
         return img
-
 
     def take_picture_background(self, monitor):
         height = self.projector_bounding_box['height']
@@ -242,21 +213,19 @@ class Calibration:
         image[:] = colour
 
         monitor.display_image(image)
-        
 
     def mouse_handler(self, event, x, y, flags, data):
         if event == cv2.EVENT_LBUTTONDOWN:
             if len(data['points']) < data['max_points']:
-                cv2.circle(data['img'], (x,y), 2, (0,255,255), -1)
-                cv2.circle(data['img'], (x,y), 12, (0,255,255), 2)
+                cv2.circle(data['img'], (x, y), 2, (0, 255, 255), -1)
+                cv2.circle(data['img'], (x, y), 12, (0, 255, 255), 2)
                 cv2.imshow("Select Projection Area", data['img'])
                 data['points'].append([x, y])
-        
+
         if event == cv2.EVENT_RBUTTONDOWN:
             data['img'] = data['original_img'].copy()
             cv2.imshow("Select Projection Area", data['img'])
             data['points'] = []
-
 
     def get_projection_corners(self, img):
         # Set up data to send to mouse handler
@@ -280,13 +249,12 @@ class Calibration:
         points = np.array(data['points'], dtype="float32")
         return points
 
-
     def order_corners(self, crns):
         # Sort corners by ascending x-value
         x_sorted = crns[np.argsort(crns[:, 0]), :]
         left_most = x_sorted[:2, :]
         right_most = x_sorted[2:, :]
-        
+
         # Sort leftmost corners by ascending y-value
         left_most = left_most[np.argsort(left_most[:, 1]), :]
         # Top left, bottom left
@@ -298,9 +266,8 @@ class Calibration:
         (br, tr) = right_most[np.argsort(D)[::-1], :]
         return np.array([tl, tr, br, bl], dtype="float32")
 
-
     def perspective_transform(self, img, crns_from):
-        height, width = 1080//2, 1920//2
+        height, width = 1080 // 2, 1920 // 2
         crns_to = np.array([[0, 0], [width, 0], [width, height], [0, height]], np.float32)
 
         matrix = cv2.getPerspectiveTransform(crns_from, crns_to)
@@ -311,20 +278,18 @@ class Calibration:
         # cv2.destroyWindow("View of Projection Area")
         return result
 
-
     def update_mode_settings(self, settings, new_data):
         mode_settings_json = self.settings_access.read_settings("mode_settings.json")
         mode = "wobble"
 
         for i in range(len(settings)):
             mode_settings_json[mode][settings[i]] = new_data[i]
-        
-        self.settings_access.write_settings("mode_settings.json", mode_settings_json)
 
+        self.settings_access.write_settings("mode_settings.json", mode_settings_json)
 
     def save_tv_coords(self, tv_area_roi):
         top_left = [tv_area_roi[0], tv_area_roi[1]]
-        bottom_right = [tv_area_roi[0]+tv_area_roi[2], tv_area_roi[1]+tv_area_roi[3]]
+        bottom_right = [tv_area_roi[0] + tv_area_roi[2], tv_area_roi[1] + tv_area_roi[3]]
 
         # Calculate the center of the TV
         center_x = int((top_left[0] + bottom_right[0]) / 2)
