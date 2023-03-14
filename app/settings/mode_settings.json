@@ -169,7 +169,7 @@
             "initial_frequency": 0.1
         },
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
-        "sound_threshold": 0.001,
+        "sound_threshold": 0.01,
         "sound_analysis_type": "loud_sound",
         "trigger_frequency": "every_frame",
         "tv_data": {
