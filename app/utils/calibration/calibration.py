@@ -66,6 +66,7 @@ class Calibration:
                 exit()
 
         tv_monitor.display_image(self.instruction_images[2])
+        cv2.waitKey(100)
 
         subprocess.run([self.exe_path,
                         "capture",
