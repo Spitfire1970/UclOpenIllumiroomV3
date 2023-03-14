@@ -1,7 +1,7 @@
 {
     "blur": {
         ".compatible_with": [],
-        "blur_amount": 15,
+        "blur_amount": 64,
         "bytes_per_line_factor": 4,
         "edge_rect_colour": [
             0,
@@ -173,7 +173,7 @@
         "num_frames": 20,
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
         "sound_analysis_type": "explosive_sound",
-        "sound_threshold": 0.001,
+        "sound_threshold": 0.031099999323487282,
         "trigger_frequency": "every_frame",
         "tv_bottom_right": [
             2241,

@@ -57,12 +57,14 @@
 #define IDC_BUTTON_INFO_FISHFACE        1021
 #define IDC_BUTTON_INFO_RAIN_MODE       1021
 #define IDC_BUTTON_INFO_EYEBROWS        1022
+#define IDC_BUTTON_INFO_SOUND_THRESHOLD 1022
 #define IDC_BUTTON_INFO_OPEN_MOUTH      1023
 #define IDC_BUTTON_INFO_ROTATE_HEAD_LEFT 1024
 #define IDC_STATIC_EYES_SPEED           1025
 #define IDC_BUTTON_INFO_ROTATE_HEAD_RIGHT 1026
 #define IDC_STATIC_BLUR_AMOUNT          1026
 #define IDC_STATIC_HEAD_ROTATE_LEFT     1027
+#define IDC_STATIC_SOUND_THRESHOLD      1027
 #define IDC_STATIC_SMILE                1030
 #define IDC_STATIC_EYEBROWS             1031
 #define IDC_STATIC_FISHFACE             1032
@@ -99,6 +101,7 @@
 #define IDC_FISH_FACE_COMBO             1053
 #define IDC_BLUR_AMOUNT_SLIDER          1053
 #define IDC_SLIDER5                     1054
+#define IDC_SOUND_THRESHOLD_SLIDER      1054
 #define IDC_SLIDER6                     1055
 #define IDC_EDIT3                       1056
 #define IDC_COMBO15                     1057
@@ -110,6 +113,7 @@
 #define IDC_EDIT7                       1060
 #define IDC_BLUR_AMOUNT_COUNTER         1060
 #define IDC_EDIT8                       1061
+#define IDC_SOUND_THRESHOLD_COUNTER     1061
 #define IDC_COMBO16                     1062
 #define IDC_OPEN_MOUTH_COMBO            1062
 #define IDC_COMBO17                     1063
