@@ -19,37 +19,19 @@ class Rain(Mode):
         self.rain = np.zeros_like(background_img)
         self.raindrops = []
         self.rain_mode = self.settings.read_mode_settings("rain", "rain_mode")
-        self.rain_point = self.settings.read_mode_settings("rain", [self.rain_mode, "rain_point"])
+        self.rain_mode_settings = self.settings.read_mode_settings("rain", self.rain_mode)
+        
+        self.rain_point = self.rain_mode_settings["rain_point"]
+        self.rain_increment = self.rain_mode_settings["rain_point_increment"]
+        self.num_raindrops = self.rain_mode_settings["num_raindrops"]
+        self.speed_interval = self.rain_mode_settings["falling_speed_interval"]
+        self.wind_interval = self.rain_mode_settings["noise_wind_interval"]
+
         self.possible_drop_lengths = self.settings.read_mode_settings("rain", "possible_drop_lengths")
         self.possible_drop_colours = self.settings.read_mode_settings("rain", "possible_drop_colours")
 
-        self.rain_increment = self.settings.read_mode_settings("rain", [self.rain_mode, "rain_point_increment"])
-        self.num_raindrops = self.settings.read_mode_settings("rain", [self.rain_mode, "num_raindrops"])
-        self.speed_interval = self.settings.read_mode_settings("rain", [self.rain_mode, "falling_speed_interval"])
-        self.wind_interval = self.settings.read_mode_settings("rain", [self.rain_mode, "noise_wind_interval"])
-
         self.falling_speed = random.randint(self.speed_interval[0], self.speed_interval[1])
         self.noise_wind = random.randint(self.wind_interval[0], self.wind_interval[1])
-        
-
-    def add_settling_rain(self, image):
-        # Conversion to HLS
-        image_HLS = cvtColor(image,COLOR_RGB2HLS)
-        image_HLS = np.array(image_HLS, dtype = np.float64)
-        brightness_coefficient = 0.7
-
-        # Scale pixel values up for channel 1 (Lightness)
-        image_HLS[:,:,1][image_HLS[:,:,1]<self.rain_point] = (image_HLS[:,:,1][image_HLS[:,:,1]<self.rain_point]*brightness_coefficient)
-        # Set all values above 255 to 255
-        image_HLS[:,:,1][image_HLS[:,:,1]>255]  = 255 
-
-        # Convert to RGB
-        image_HLS = np.array(image_HLS, dtype = np.uint8)    
-        image_RGB = cvtColor(image_HLS,COLOR_HLS2RGB)
-        # Change contrast, brightness
-        # cv2.convertScaleAbs(image_RGB, alpha=1, beta=0)
- 
-        return image_RGB
 
 
     def add_to_top(self, scale):
@@ -66,9 +48,7 @@ class Rain(Mode):
     def create_falling_rain(self, max_scale, scale_factor):
         slant_extreme = 1
         slant = np.random.randint(-slant_extreme, slant_extreme)
-        #drop_length = 20
         drop_width = 2
-        #drop_color = (255,120,0)
         # Move raindrops down by falling speed and wind
         for i in range(len(self.raindrops)):
             raindrop = self.raindrops[i]
