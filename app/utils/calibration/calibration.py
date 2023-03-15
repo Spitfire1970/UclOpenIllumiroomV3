@@ -22,7 +22,6 @@ class Calibration:
         self.display_capture = display_capture
         self.settings_access = settings_access
         self.cam_port = settings_access.read_general_settings("camera_nr")
-        self.calib_dll = cdll.LoadLibrary(settings_access.assets_path + "calibration/dlls/ProjectionCalibration.dll")
         self.primary_bounding_box = self.display_capture.get_primary_bounding_box()
         self.projector_bounding_box = self.display_capture.get_projector_bounding_box()
         instruction_image_names = ["place_webcam.jpg", "camera_select.jpg", "grey_code_capture.jpg",
