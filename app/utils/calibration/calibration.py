@@ -280,10 +280,9 @@ class Calibration:
 
     def update_mode_settings(self, settings, new_data):
         mode_settings_json = self.settings_access.read_settings("mode_settings.json")
-        mode = "wobble"
 
         for i in range(len(settings)):
-            mode_settings_json[mode][settings[i]] = new_data[i]
+            mode_settings_json["wobble"]["tv_data"][settings[i]] = new_data[i]
 
         self.settings_access.write_settings("mode_settings.json", mode_settings_json)
 

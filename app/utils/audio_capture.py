@@ -257,8 +257,8 @@ from keras.models import load_model
 class AudioCapture():
     def __init__(self, settings_access, threshold=None) -> None:
         self.threshold = settings_access.read_mode_settings("wobble", "sound_threshold")
-        self.buffer_size = 1024
-        self.sample_rate = 44100
+        self.buffer_size = 8096
+        self.sample_rate = 16000
         self.channels = 1
         self.settings_access = settings_access
 
@@ -295,8 +295,8 @@ class AudioCapture():
         self.buffer[:-1] = self.buffer[1:]
         self.buffer[-1] = rms
 
-        moving_average = np.mean(self.buffer)
-        # print("rms = ", rms)
+        #moving_average = np.mean(self.buffer)
+        print("rms = ", rms)
 
         if rms > self.threshold:
             return True

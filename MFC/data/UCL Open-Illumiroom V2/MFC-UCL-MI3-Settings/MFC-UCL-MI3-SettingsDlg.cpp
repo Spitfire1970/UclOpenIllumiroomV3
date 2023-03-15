@@ -30,6 +30,9 @@ bool globalUseCalibration;
 
 //mode settings
 int globalBlurAmount;
+int globalSoundThreshold;
+float globalSoundThresholdFloat;
+
 string globalSelectedSnowAmount;
 string globalSelectedRainAmount;
 
@@ -72,6 +75,10 @@ void CMFCUCLMI3SettingsDlg::DoDataExchange(CDataExchange* pDX){
 
 	DDX_Control(pDX, IDC_BLUR_AMOUNT_SLIDER, m_blurAmount);
 	DDX_Control(pDX, IDC_BLUR_AMOUNT_COUNTER, m_blurAmountValue);
+
+	DDX_Control(pDX, IDC_SOUND_THRESHOLD_SLIDER, m_soundThresholdAmount);
+	DDX_Control(pDX, IDC_SOUND_THRESHOLD_COUNTER, m_soundThresholdAmountValue);
+
 	DDX_Control(pDX, IDC_FPS_BUTTON, m_showFPS);
 	DDX_Control(pDX, IDC_SELECT_MODE_COMBO, m_selectMode);
 	DDX_Control(pDX, IDC_KEEP_SETTINGS_OPEN, m_keepSettingsOpen);
@@ -133,6 +140,8 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
 
 
 	ON_BN_CLICKED(IDC_USE_CALIBRATION, &CMFCUCLMI3SettingsDlg::OnBnClickedUseCalibration)
+	ON_BN_CLICKED(IDC_BUTTON_INFO_SOUND_THRESHOLD, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSoundThreshold)
+
 END_MESSAGE_MAP()
 
 // drag window cursor
@@ -213,9 +222,12 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 
 	// Set mode settings data
 	globalBlurAmount = mode_settings["blur"]["blur_amount"]; // blur amount
+	globalSoundThresholdFloat = mode_settings["wobble"]["sound_threshold"];// sound threshold for wobble
 	globalSelectedSnowAmount = mode_settings["snow"]["snow_amount"]; // snow amount 
 	globalSelectedRainAmount = mode_settings["rain"]["rain_mode"]; // snow amount 
 	globalSettingsDialogOpen = mode_settings["keep_window_open"]; //  keep window open
+
+	globalSoundThreshold = (int)(globalSoundThresholdFloat * 10000);
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -256,6 +268,12 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 	m_blurAmount.SetPos(globalBlurAmount);
 	strSliderValue.Format(_T("%d"), globalBlurAmount);
 	m_blurAmountValue.SetWindowText(strSliderValue);
+
+	//sound threshold
+	m_soundThresholdAmount.SetRange(0, 5000);
+	m_soundThresholdAmount.SetPos(globalSoundThreshold);
+	strSliderValue.Format(_T("%d"), globalSoundThreshold);
+	m_soundThresholdAmountValue.SetWindowText(strSliderValue);
 
 	//Snow mode - sets to the correct radio check based on the snow mode in the settings
 	m_lightSnow.SetCheck(globalSelectedSnowAmount == "light_snow");
@@ -301,12 +319,17 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	// Update values mode settings
 	globalBlurAmount = m_blurAmount.GetPos();
 
+	// Update values mode settings
+	globalSoundThreshold = m_soundThresholdAmount.GetPos();
+	globalSoundThresholdFloat = (float)(globalSoundThreshold) / 10000;
+
 	LPCWSTR pathConfigMode = pathConfigSModes.c_str();
 	ifstream ifs_config_mode(pathConfigMode);
 	string content_config_mode((istreambuf_iterator<char>(ifs_config_mode)), (istreambuf_iterator<char>()));
 	json mode_settings = json::parse(content_config_mode);
 
 	mode_settings["blur"]["blur_amount"] = globalBlurAmount;
+	mode_settings["wobble"]["sound_threshold"] = globalSoundThresholdFloat;// sound threshold for wobble
 	mode_settings["snow"]["snow_amount"] = globalSelectedSnowAmount;
 	mode_settings["rain"]["rain_mode"] = globalSelectedRainAmount;
 	//for some reason i cannot have this setting in general settings. I do not know why. I fear this may be a problem with later settings. 
@@ -366,6 +389,13 @@ void CMFCUCLMI3SettingsDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScro
 		int iValue = m_blurAmount.GetPos(); // Get Slider value
 		strSliderValue.Format(_T("%d"), iValue);
 		m_blurAmountValue.SetWindowText(strSliderValue);
+	}
+
+	else if (pSlider == &m_soundThresholdAmount) {
+		CString strSliderValue;
+		int iValue = m_soundThresholdAmount.GetPos(); // Get Slider value
+		strSliderValue.Format(_T("%d"), iValue);
+		m_soundThresholdAmountValue.SetWindowText(strSliderValue);
 	}
 
 }
@@ -499,6 +529,10 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
 	// Update values mode settings
 	globalBlurAmount = m_blurAmount.GetPos();
 
+	// Update values mode settings
+	globalSoundThreshold = m_soundThresholdAmount.GetPos();
+	globalSoundThresholdFloat = (float)(globalSoundThreshold) / 10000;
+
 
 	LPCWSTR pathConfigMode = pathConfigSModes.c_str();
 	ifstream ifs_config_mode(pathConfigMode);
@@ -506,6 +540,7 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
 	json mode_settings = json::parse(content_config_mode);
 
 	mode_settings["blur"]["blur_amount"] = globalBlurAmount;
+	mode_settings["wobble"]["sound_threshold"] = globalSoundThresholdFloat;// sound threshold for wobble
 	mode_settings["snow"]["snow_amount"] = globalSelectedSnowAmount;
 	mode_settings["keep_window_open"] = globalSettingsDialogOpen;
 	mode_settings["rain"]["rain_mode"] = globalSelectedRainAmount;
@@ -628,6 +663,13 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoBlurAmount()
 }
 
 
+void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSoundThreshold()
+{
+	MessageBox(_T("This option allows you to chose the sound threshold required for the wobble mode to display a wobble effect when it detects a loud sound. \n\n The higher the threshold, the louder the sound needs to be to trigger a wobble."), _T("Sound threshold information"));
+}
+
+
+
 void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSnowMode()
 {
 	MessageBox(_T("This option allows you to chose which snow mode you would like to use. For finer control over the modes, please check out the snow section of the mode_settings.json"), _T("Snow Mode information"));
@@ -671,10 +713,6 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedRain3()
 	m_torrentialRain.SetCheck(1);
 	globalSelectedRainAmount = "torrential";
 }
-
-
-
-
 
 
 

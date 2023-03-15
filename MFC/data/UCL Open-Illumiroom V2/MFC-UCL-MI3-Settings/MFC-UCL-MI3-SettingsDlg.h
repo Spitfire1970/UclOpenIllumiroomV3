@@ -57,6 +57,9 @@ public:
 	CSliderCtrl m_blurAmount;
 	CEdit m_blurAmountValue;
 
+	CSliderCtrl m_soundThresholdAmount;
+	CEdit m_soundThresholdAmountValue;
+
 	CButton m_lightSnow;
 	CButton m_mediumSnow;
 	CButton m_harshSnow;
@@ -144,5 +147,6 @@ public:
 	afx_msg void OnBnClickedButtonInfoCalibrateSystem();
 	afx_msg void OnStnClickedStaticCalibrateSystem();
 	afx_msg void OnBnClickedUseCalibration();
+	afx_msg void OnBnClickedButtonInfoSoundThreshold();
 };
 
