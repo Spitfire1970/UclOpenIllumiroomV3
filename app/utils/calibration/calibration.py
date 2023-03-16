@@ -92,17 +92,15 @@ class Calibration:
         Run the calibration script on this classes data folder
         """
 
-        r = self.select_projection_area_and_tv(Monitor("Projector",
-                                                       (self.primary_bounding_box["left"],
-                                                        self.primary_bounding_box["top"]),
-                                                       (self.primary_bounding_box["width"],
-                                                        self.primary_bounding_box["height"])))
-        pnt1 = (int(r[0] - (r[2] / 2)), int(r[1] - (r[3] / 2)))
-        pnt2 = (int(r[0] + (3 * r[2] / 2)), int(r[1] + (3 * r[3] / 2)))
+        pnts = self.select_projection_area_and_tv(Monitor("Projector",
+                                                          (self.primary_bounding_box["left"],
+                                                           self.primary_bounding_box["top"]),
+                                                          (self.primary_bounding_box["width"],
+                                                           self.primary_bounding_box["height"])))
         exe_data = [self.exe_path,
                     "calibrate",
                     self.data_folder] + \
-                   [str(pnt) for pnt in [pnt1[0], pnt1[1], pnt2[0], pnt1[1], pnt2[0], pnt2[1], pnt1[0], pnt2[1]]]
+                   [str(pnt[0][i]) for i in range(2) for pnt in pnts]
         subprocess.run(exe_data, capture_output=False)
 
     def select_projection_area_and_tv(self, monitor):
@@ -123,7 +121,7 @@ class Calibration:
         img = cv2.resize(projection_area_roi, (img_width // 2, img_height // 2))  # double-check resizing
         corners = self.get_projection_corners(img=img)
         corners = self.order_corners(crns=corners)
-        transformed_proj_roi = self.perspective_transform(img, corners)
+        homography, transformed_proj_roi = self.perspective_transform(img, corners)
         # Resize the image to projector resolution
         transformed_proj_roi = self.display_capture.resize_image_fit_projector_each_frame(transformed_proj_roi)
 
@@ -139,12 +137,16 @@ class Calibration:
         area = cv2.selectROI("Select TV", tv_area_roi)
         cv2.destroyAllWindows()
         tv_area[int(area[1]):int(area[1] + area[3]), int(area[0]):int(area[0] + area[2])] = 0
+        tv_x = (area[0] - (area[2] / 2), area[0] + (3 * area[2] / 2))
+        tv_y = (area[1] - (area[3] / 2), area[1] + (3 * area[3] / 2))
+        pnts = ((tv_x[0], tv_y[0]), (tv_x[1], tv_y[0]), (tv_x[1], tv_y[1]), (tv_x[0], tv_y[1]))
 
         # tv_area = self.display_capture.resize_image_fit_projector_each_frame(tv_area)
         cv2.imwrite(self.room_image_path + "room_img_noTV.jpg", tv_area)
 
         self.save_tv_coords(area)
-        return area
+        return cv2.perspectiveTransform(np.array([[[x, y]]
+                                                  for (x, y) in pnts], dtype="float32"), np.linalg.inv(homography))
 
     def read_maps(self):
         """
@@ -276,7 +278,7 @@ class Calibration:
         # cv2.imshow('View of Projection Area', result)
         # cv2.waitKey(0)
         # cv2.destroyWindow("View of Projection Area")
-        return result
+        return matrix, result
 
     def update_mode_settings(self, settings, new_data):
         mode_settings_json = self.settings_access.read_settings("mode_settings.json")
