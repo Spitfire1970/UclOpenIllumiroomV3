@@ -1,7 +1,6 @@
 from .mode import Mode
 from cv2 import TERM_CRITERIA_EPS, TERM_CRITERIA_MAX_ITER, KMEANS_RANDOM_CENTERS, kmeans, cvtColor, COLOR_BGR2GRAY, medianBlur, adaptiveThreshold, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, COLOR_GRAY2BGR, addWeighted
 import numpy as np
-from pathlib import Path
 
 class LowHealth(Mode):
     def __init__(

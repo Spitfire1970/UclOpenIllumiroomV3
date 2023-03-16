@@ -2,7 +2,6 @@ from .mode import Mode
 
 import numpy as np
 import cv2
-from PIL import Image
 from screeninfo import get_monitors
 from time import time, sleep
 
