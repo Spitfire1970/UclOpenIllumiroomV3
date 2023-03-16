@@ -47,11 +47,11 @@ class LowHealth(Mode):
 
         #reshape and concatenate data from images
         height, width, _ = np.shape(sct_left)
-        data_left = np.reshape(sct_left, (height * width, 4))
+        data_left = np.reshape(sct_left, (height * width, 3))
         data_left = np.float32(data_left) 
 
         height, width, _ = np.shape(sct_right)
-        data_right = np.reshape(sct_left, (height * width, 4))
+        data_right = np.reshape(sct_left, (height * width, 3))
         data_right = np.float32(data_right) 
 
         data = np.concatenate((data_left,data_right))
@@ -59,19 +59,12 @@ class LowHealth(Mode):
 
     def scale_low_health_to_frames(self, colour):
 
-        b, g, r, a = colour
+        b, g, r = colour
         avgBG = (b+g+1)/2
         #print("colour is: ",colour)
         #print("red/avg :",r/avgBG)
         frame_num = 0
-        # if (r+1) / avgBG > 3:
-        #     frame_num = self.num_low_health_frames
-        # elif (r+1) / avgBG > 2.4:
-        #     frame_num = int(self.num_low_health_frames*3/4)
-        # elif (r+1) / avgBG > 1.8:
-        #     frame_num = int(self.num_low_health_frames*1/2)
-        # elif (r+1) / avgBG >= 1.45:
-        #     frame_num = int(self.num_low_health_frames*1/4)
+
 
         #In Bo2, anything below 1.2 is no blood, maximum of 2.5
         #Scale from 1.2, to 2.5 use linear scale for frame num
@@ -129,23 +122,6 @@ class LowHealth(Mode):
             frames = [self.low_health_frames[low_health_frame_num]] 
         else:
             frames = [self.low_health_frames[low_health_frame_num]] * (3)
-        print("colour: ",kmeans_colour)
-        print("frame num: ",low_health_frame_num)
+        #print("colour: ",kmeans_colour)
+        #print("frame num: ",low_health_frame_num)
         return frames
-    """
-    def trigger(self):
-        # Save image
-        # cartoon_img_name = (__file__[:__file__.index("app") 
-        #     + len("app")]+"/assets/generated/cartoon_view.jpeg")
-        #All images are stored in the assets folder
-        low_health_img_name = self.settings_access.get_image_path("generated/low_health_red_lines_view.jpeg")
-        low_health_img = Path(low_health_img_name)
-        if low_health_img.is_file():
-            self.img = cv2.imread(low_health_img_name)
-        else: 
-            self.generate_low_health_images()
-            cv2.imwrite(low_health_img_name, self.img)
-
-        frames = [self.img]
-        return frames
-    """
