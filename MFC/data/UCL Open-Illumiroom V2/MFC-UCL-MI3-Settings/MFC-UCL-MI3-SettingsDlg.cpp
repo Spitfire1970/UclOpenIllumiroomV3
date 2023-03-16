@@ -128,9 +128,6 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
 
 
 
-	ON_BN_CLICKED(IDC_SELECT_TV_EDGES_BUTTON, &CMFCUCLMI3SettingsDlg::OnBnClickedSelectTvEdgesButton)
-	ON_BN_CLICKED(IDC_BUTTON_INFO_SELECT_TV_EDGES, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectTvEdges)
-	ON_BN_CLICKED(IDC_BUTTON_INFO_SELECT_DISPLAYS, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectDisplays)
 
 	ON_BN_CLICKED(IDC_BUTTON_INFO_RAIN_MODE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoRainMode)
 	ON_BN_CLICKED(IDC_RAIN1, &CMFCUCLMI3SettingsDlg::OnBnClickedRain1)
@@ -431,11 +428,6 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedCalibrateSystemButton()
 }
 
 
-void CMFCUCLMI3SettingsDlg::OnBnClickedSelectTvEdgesButton()
-{
-	// Run Illumiroom, with select_tv argument
-	ShellExecuteA(NULL, "open", runProgramPath, "select_tv", NULL, SW_SHOWDEFAULT);
-}
 
 
 
@@ -464,10 +456,7 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoCalibrateSystem()
 
 
 
-void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectTvEdges()
-{
-	MessageBox(_T("This option allows you to select the edges of your TV. Please draw a box around your TV by left clicking and holding, then let go. Finally press q to save'"), _T("Select TV Edges Information"));
-}
+
 
 void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectMode()
 {

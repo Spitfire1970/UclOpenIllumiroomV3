@@ -1,6 +1,6 @@
 
 /release
-/release_with_launcher
+/release_with_launcher old
 
 /app/projection_modes/__pycache__/
 /app/utils/__pycache__/
