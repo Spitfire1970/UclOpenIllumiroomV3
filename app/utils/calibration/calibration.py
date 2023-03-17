@@ -51,7 +51,11 @@ class Calibration:
 
         test_img = camera.read()
         camera.close()
-        tv_monitor.display_image(self.display_capture.frame_primary_resize(self.add_confirm_text_to_image(test_img)))
+        resized_image = self.display_capture.frame_primary_resize(test_img)
+        confirm_camera_image = self.add_confirm_text_to_image(resized_image)
+        tv_monitor.display_image(confirm_camera_image)
+
+        
 
         while True:
             key = cv2.waitKey(1)
@@ -93,10 +97,10 @@ class Calibration:
         """
 
         pnts = self.select_projection_area_and_tv(Monitor("Projector",
-                                                          (self.primary_bounding_box["left"],
-                                                           self.primary_bounding_box["top"]),
-                                                          (self.primary_bounding_box["width"],
-                                                           self.primary_bounding_box["height"])))
+                                                          (self.projector_bounding_box["left"],
+                                                           self.projector_bounding_box["top"]),
+                                                          (self.projector_bounding_box["width"],
+                                                           self.projector_bounding_box["height"])))
         exe_data = [self.exe_path,
                     "calibrate",
                     self.data_folder] + \
@@ -110,8 +114,11 @@ class Calibration:
 
         monitor.open_fullscreen()
         self.take_picture_background(monitor)
-        cv2.waitKey(2000)
+        cv2.waitKey(1000)
         result, projection_area = room_image_camera.read()
+        cv2.waitKey(1000)
+        result, projection_area = room_image_camera.read()
+        cv2.waitKey(1000)
         monitor.close()
 
         # img = projection_area
@@ -164,8 +171,8 @@ class Calibration:
         font = cv2.FONT_HERSHEY_SIMPLEX
         textLocation1 = (50, 50)
         textLocation2 = (50, 100)
-        fontScale = 0.8
-        fontColor = (255, 0, 0)
+        fontScale = 1.2
+        fontColor = (255, 255, 0)
         thickness = 3
         lineType = 2
 
@@ -190,7 +197,7 @@ class Calibration:
     def add_text_to_image(self, img, text):
         font = cv2.FONT_HERSHEY_SIMPLEX
         textLocation1 = (50, 50)
-        fontScale = 0.8
+        fontScale = 1.2
         fontColor = (255, 255, 0)
         thickness = 3
         lineType = 2
