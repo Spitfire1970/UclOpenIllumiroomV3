@@ -16,9 +16,9 @@ confirm_img_text_2 = "If it is not, especially if a black screen is shown, press
 class Calibration:
     def __init__(self, settings_access, display_capture):
         print("Calibration init")
-        self.data_folder = settings_access.assets_path + "calibration/grey_code_photos/grey_code/"
-        self.exe_path = settings_access.assets_path + "calibration/exe/CalibrationExecutable.exe"
-        self.room_image_path = settings_access.assets_path + "room_image/"
+        self.data_folder = os.path.join(settings_access.assets_path, "calibration\\grey_code_photos\\grey_code\\")
+        self.exe_path = os.path.join(settings_access.assets_path, "calibration\\exe\\CalibrationExecutable.exe")
+        self.room_image_path = os.path.join(settings_access.assets_path, "room_image/")
         self.display_capture = display_capture
         self.settings_access = settings_access
         self.cam_port = settings_access.read_general_settings("camera_nr")
@@ -55,8 +55,6 @@ class Calibration:
         confirm_camera_image = self.add_confirm_text_to_image(resized_image)
         tv_monitor.display_image(confirm_camera_image)
 
-        
-
         while True:
             key = cv2.waitKey(1)
             if key == ord('y'):
@@ -75,6 +73,8 @@ class Calibration:
                         "capture",
                         self.data_folder,
                         str(self.cam_port),
+                        "640",
+                        "360",
                         str(self.projector_bounding_box["left"]),
                         str(self.projector_bounding_box["top"])], capture_output=False)
 
@@ -96,15 +96,20 @@ class Calibration:
         Run the calibration script on this classes data folder
         """
 
-        pnts = self.select_projection_area_and_tv(Monitor("Projector",
-                                                          (self.projector_bounding_box["left"],
-                                                           self.projector_bounding_box["top"]),
-                                                          (self.projector_bounding_box["width"],
-                                                           self.projector_bounding_box["height"])))
+        self.select_projection_area_and_tv(Monitor("Projector",
+                                                   (self.projector_bounding_box["left"],
+                                                    self.projector_bounding_box["top"]),
+                                                   (self.projector_bounding_box["width"],
+                                                    self.projector_bounding_box["height"])))
+        r = cv2.selectROI("Select adjusted display contour", self.add_text_to_image(cv2.imread(os.path.join(self.data_folder, "blackFrame.png")),
+                                                                                                  "Select final projection area"))
+        contour = (r[0], r[1], r[0] + r[2], r[1], r[0] + r[2], r[1] + r[3], r[0], r[1] + r[3])
         exe_data = [self.exe_path,
                     "calibrate",
-                    self.data_folder] + \
-                   [str(pnt[0][i]) for i in range(2) for pnt in pnts]
+                    self.data_folder,
+                    str(self.projector_bounding_box["width"]),
+                    str(self.projector_bounding_box["height"])] + \
+                   [str(i) for i in contour] + ["2", "7"]
         subprocess.run(exe_data, capture_output=False)
 
     def select_projection_area_and_tv(self, monitor):
@@ -152,8 +157,6 @@ class Calibration:
         cv2.imwrite(self.room_image_path + "room_img_noTV.jpg", tv_area)
 
         self.save_tv_coords(area)
-        return cv2.perspectiveTransform(np.array([[[x, y]]
-                                                  for (x, y) in pnts], dtype="float32"), np.linalg.inv(homography))
 
     def read_maps(self):
         """
