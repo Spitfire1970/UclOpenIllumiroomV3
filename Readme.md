@@ -70,7 +70,6 @@ The system can be run on any computer running Windows, and supports game console
 
 The system has been released as an open-source project, licensed under LGPL V3.0 so that developers can extend the system and create their own projection modes. Users may also download the system from the Microsoft Store and try it out for themselves! 
 
-</br>
 
 Our Project websites can be found here:
 
@@ -209,17 +208,18 @@ They summarise the setup and different projection modes.
 ### This is UCL Open-Illumiroom V2
 
 >UCL Open-Illumiroom V2's primary advert, briefly showing our coolest projection modes!
+<div align="center">
 
-[![This is UCL Open-Illumiroom V2](https://img.youtube.com/vi/QwhNlhRxhog/0.jpg)](https://www.youtube.com/watch?v=QwhNlhRxhog)
-
+  [![This is UCL Open-Illumiroom V2](https://img.youtube.com/vi/QwhNlhRxhog/0.jpg)](https://www.youtube.com/watch?v=QwhNlhRxhog)
+</div>
 </br>
 
 ### Setup and Projection Modes | UCL Open-Illumiroom V2 Dev Log
 
 >In this video, the typical software setup process and the projection modes are shown! 
-
-[![Setup and Projection Modes | UCL Open-Illumiroom V2 Dev Log](https://img.youtube.com/vi/uJ6AWTfBZs8/0.jpg)](https://www.youtube.com/watch?v=uJ6AWTfBZs8)
-
+<div align="center">
+  [![Setup and Projection Modes | UCL Open-Illumiroom V2 Dev Log](https://img.youtube.com/vi/uJ6AWTfBZs8/0.jpg)](https://www.youtube.com/watch?v=uJ6AWTfBZs8)
+</div>
 
 
 
@@ -266,12 +266,13 @@ The low health mode makes the projection area turn red when the player is on low
 </br>
 </br>
 <!-- PROJECT ROADMAP -->
+
 ## Project Roadmap
 
 - [x] Deploy to Microsoft Store
-- [] Create More Projection Modes:
-   -[] F1 Data visualisation using MultiViewer for F1 App
-- [] Error handling needs to be improved.
+- [ ] Create More Projection Modes:
+- [ ] F1 Data visualisation using MultiViewer for F1 App
+- [ ] Error handling needs to be improved.
 
 
 </br>
