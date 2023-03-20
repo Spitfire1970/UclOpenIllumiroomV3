@@ -63,7 +63,7 @@ The following Python libraries were used for the main application.
   | CV2         | BSD                 |
   | Numpy       | BSD                 |
   | MSS         | Zlib                |
-  | Py...       | ...                 |
+  | PySide 2    | LGPL v3.0           |
   | Nuitka      | Apache Version 2.0  |
   | Pytesseract | Apache Version 2.0  |
   | Librosa     | ISC                 |
