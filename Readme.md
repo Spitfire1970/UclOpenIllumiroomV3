@@ -15,10 +15,11 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-    <img src="app/assets/logo/UCL Open-Illumiroom V2 Logo.png" alt="Logo" width="100" height="100">
+    <img src="app/assets/logo/UCL Open-Illumiroom V2 Logo.png" alt="Logo" width="200" >
 
+  </br>
 
-  <h3 align="center">UCL Open-Illumiroom V2</h3>
+  # UCL Open-Illumiroom V2
 
   <p align="center">
     UCL Open-Illumiroom V2 creates real-time, accessible, expanded experiences for TV-based gaming and entertainment by projecting effects with a projector, around a user’s TV.  
@@ -27,9 +28,9 @@
 
 </div>
 
-
-
 <!-- TABLE OF CONTENTS -->
+<!--
+
 <details>
   <summary>Table of Contents</summary>
   <ol>
@@ -54,30 +55,33 @@
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
-
+-->
 
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
+UCL Open-Illumiroom V2 creates real-time, accessible, expanded experiences for TV-based gaming and entertainment by projecting effects with a projector, around a user’s TV.  
 
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
+With 8 different modes currently in operation, and the possibility for many more to be developed, UCL Open-Illumiroom V2 offers unparalleled possibilities for creating more immersive experiences.  
 
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
+The system can be run on any computer running Windows, and supports game consoles, such as the Xbox One, Series S and more!  
 
-Use the `BLANK_README.md` to get started.
+The system has been released as an open-source project, licensed under LGPL V3.0 so that developers can extend the system and create their own projection modes. Users may also download the system from the Microsoft Store and try it out for themselves! 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+</br>
+
+Our Project websites can be found here:
+
+* [Expanded Experiences - Showcase Site](https://expandedexperiences.com)
+
+* [Full Project Site](https://students.cs.ucl.ac.uk/2022/group33/) 
+</br>
+</br>
 
 
-
-### Built With
+## Built With
 
 The UCL Open-Illumiroom V2 system is primarily built in **Python**, as such the packages are Python based. 
 
@@ -117,19 +121,17 @@ The following libraries were used for the calibration executable
 To get started on working with UCL Open-Illumiroom V2, please follow the following steps
 
 
-### Installation
+### Installation of the Main System
 
 
 1. Clone the UCL Open-Illumiroom V2 repo
    ```sh
    git clone https://github.com/FabianBindley/IllumiroomGroup33COMP0016.git
-
-   cd IllumiroomGroup33COMP0016
    ```
   
 2. Install Python Libraries
    ```sh
-    pip install -r requirements.txt
+    pip install -r app/requirements.txt
    ```
 3. Launch UCL Open-Illumiroom V2
 
@@ -155,29 +157,48 @@ To get started on working with UCL Open-Illumiroom V2, please follow the followi
     ```
     > More information is provided in _app/UCL_Open-Illumiroom_V2.py_
 
+Before you launch UCL Open-Illumiroom V2, we would strongly reccomend that you select your displays, to ensure that your primary and projection displays are correct. 
+
 </br>
 
+<!-- GETTING STARTED -->
+## Compilation
 
-### Compiling the Main System
+To compile the main UCL Open-Illumiroom V2 system, the Nuitka library is used. Nuitka compiles from Python source-code to C source-code, allowing for a distributable build to be generated.
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+Compiled builds can be found in _/release/UCL_Open-Illumiroom_V2.dist_
+UCL_Open-Illumiroom_V2.exe will be generated and will be included in this folder.
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+All required libraries are statically linked in the distributable.
+
+* To compile an app, run the following bash command in a bash shell:
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   python -m nuitka --standalone --enable-plugin=tk-inter  --enable-plugin=pyside2  --output-dir=release --remove-output --disable-console  app/UCL_Open-Illumiroom_V2.py; cp -r app/settings release/UCL_Open-Illumiroom_V2.dist; cp -r app/assets release/UCL_Open-Illumiroom_V2.dist
    ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+* If you wish to create a distributable with a console output, please do not  include the '_--remove-output_' flag. 
+
+  > A build with a console output should not be deployed, only used for debugging purposes
+
+</br>
+
+<!-- MFC Run and Development -->
+## Launcher - Run and Development
+UCL Open-Illumiroom V2 makes use of a MFC based launcher to change settings in compiled builds.
+
+<div align="center">
+  <img src="Documentation/MFC Diagram.png" alt="Logo" width="500">
+</div>
 
 
+To use the launcher, copy it from _MFC/UCL Open-Illumiroom V2 Launcher.exe_ into the same directory as your _UCL_Open-Illumiroom_V2.dist_ folder.
+
+Then, click on _UCL Open-Illumiroom V2 Launcher.exe_ to open the launcher.
+
+For more information on how to use, and develop the launcher MFC, please see the `Deployment Manual.pdf`, located in the repository root directory.
+
+
+</br>
 
 <!-- USAGE EXAMPLES -->
 ## Usage Examples
@@ -190,8 +211,8 @@ They summarise the setup and different projection modes.
 </br>
 
 ### This is UCL Open-Illumiroom V2
----
-UCL Open-Illumiroom V2's primary advert, briefly showing our coolest projection modes!
+
+>UCL Open-Illumiroom V2's primary advert, briefly showing our coolest projection modes!
 
 [![This is UCL Open-Illumiroom V2](https://img.youtube.com/vi/QwhNlhRxhog/0.jpg)](https://www.youtube.com/watch?v=QwhNlhRxhog)
 
@@ -199,8 +220,7 @@ UCL Open-Illumiroom V2's primary advert, briefly showing our coolest projection 
 
 ### Setup and Projection Modes | UCL Open-Illumiroom V2 Dev Log
 
----
-In this video, the typical software setup process and the projection modes are shown! 
+>In this video, the typical software setup process and the projection modes are shown! 
 
 [![Setup and Projection Modes | UCL Open-Illumiroom V2 Dev Log](https://img.youtube.com/vi/uJ6AWTfBZs8/0.jpg)](https://www.youtube.com/watch?v=uJ6AWTfBZs8)
 
@@ -209,21 +229,61 @@ In this video, the typical software setup process and the projection modes are s
 
 
 
-<!-- ROADMAP -->
-## Roadmap
+## Project Gallery
+
+### Wobble
+
+The wobble mode triggers a sinusoidal distortion centred around the TV screen whenever an explosive sound is detected.
+
+<div align="center">
+  <img src="Documentation/wobble.png" alt="Wobble Mode" width="600">
+  </br>
+</div>
+
+
+### Blur
+
+The blur mode simply projects a blurred version of the content shown on the primary display
+
+<div align="center">
+  <img src="Documentation/blur.png" alt="Blur mode" width="600">
+  </br>
+</div>
+
+### Snow
+
+The snow mode generates a falling snow effect and the user can switch between light, medium and harsh snow.
+
+<div align="center">
+  <img src="Documentation/snow_minecraft.png" alt="Snow in Minecraft" width="600">
+  </br>
+</div>
+
+### Low Health
+
+The low health mode makes the projection area turn red when the player is on low health in a first-person shooter game.
+
+<div align="center">
+  <img src="Documentation/low_health.png" alt="Low health mode" width="600">
+  </br>
+</div>
+
+
+</br>
+</br>
+<!-- PROJECT ROADMAP -->
+## Project Roadmap
 
 - [x] Deploy to Microsoft Store
 - [] Create More Projection Modes:
    -[] F1 Data visualisation using MultiViewer for F1 App
-- [] Add more Roadmap items
-- [] Update Repo to new repo, new name
-- [] Error handling needs to be improved
+- [] Error handling needs to be improved.
 
 
 </br>
 
 <!-- CONTRIBUTING -->
-## Contributing
+## ContributiON
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
