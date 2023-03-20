@@ -36,7 +36,7 @@ UCL Open-Illumiroom V2 creates real-time, accessible, expanded experiences for T
 
 With 8 different modes currently in operation, and the possibility for many more to be developed, UCL Open-Illumiroom V2 offers unparalleled possibilities for creating more immersive experiences.  
 
-The system can be run on any computer running Windows, and supports game consoles, such as the Xbox One, Series S and more!  
+The system can be run on any computer running Windows, and supports game consoles, such as the Xbox One, Xbox Series S and more!  
 
 The system has been released as an open-source project, licensed under LGPL V3.0 so that developers can extend the system and create their own projection modes. Users may also download the system from the Microsoft Store and try it out for themselves! 
 
