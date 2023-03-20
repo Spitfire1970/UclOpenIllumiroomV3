@@ -87,7 +87,7 @@ The calibration system was implemented in C++ and compiled to an executable and 
 </br>
 The following Python libraries were used for the main application.
 
-<div align="center">
+
   | Library     | License             |
   | ----------- | --------------------|
   | CV2         | BSD                 |
@@ -97,15 +97,15 @@ The following Python libraries were used for the main application.
   | Nuitka      | Apache Version 2.0  |
   | Pytesseract | Apache Version 2.0  |
   | Librosa     | ISC                 |
-</div>
+
 </br>
-<div align="center">
+
   The following libraries were used for the calibration executable
   | Library     | License            |
   | ----------- | ------------------ |
   | OpenCV      | Apache Version 2.0 |
   | CGAL        | ...                |
-</div>
+
 
 
 
