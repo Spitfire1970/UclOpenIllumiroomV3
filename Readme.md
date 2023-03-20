@@ -79,16 +79,33 @@ Use the `BLANK_README.md` to get started.
 
 ### Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+The UCL Open-Illumiroom V2 system is primarily built in **Python**, as such the packages are Python based. 
 
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
+The calibration system was implemented in C++ and compiled to an executable and a set of DLLS. 
+
+</br>
+The following Python libraries were used for the main application.
+
+| Library     | License             |
+| ----------- | --------------------|
+| CV2         | BSD                 |
+| Numpy       | BSD                 |
+| MSS         | Zlib                |
+| Py...       | ...                 |
+| Nuitka      | Apache Version 2.0  |
+| Pytesseract | Apache Version 2.0  |
+| Librosa     | ISC                 |
+
+</br>
+
+The following libraries were used for the calibration executable
+| Library     | License            |
+| ----------- | ------------------ |
+| OpenCV      | Apache Version 2.0 |
+| CGAL        | ...                |
+
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -97,18 +114,35 @@ This section should list any major frameworks/libraries used to bootstrap your p
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+To get started on working with UCL Open-Illumiroom V2, please follow the following steps
 
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
 
 ### Installation
+
+
+1. Clone the UCL Open-Illumiroom V2 repo
+   ```sh
+   git clone https://github.com/FabianBindley/IllumiroomGroup33COMP0016.git
+   ```
+2. Install NPM packages
+   ```sh
+   npm install
+   ```
+3. Enter your API in `config.js`
+   ```js
+   const API_KEY = 'ENTER YOUR API';
+   ```
+
+</br>
+
+### Required Libraries
+
+Please download the required libraries using the requirements.txt
+  ```sh
+  pip install -r requirements.txt
+  ```
+
+### Compiling the Main System
 
 _Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
 
@@ -124,18 +158,36 @@ _Below is an example of how you can instruct your audience on installing and set
 4. Enter your API in `config.js`
    ```js
    const API_KEY = 'ENTER YOUR API';
-   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## Usage Examples
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+For examples of usage, check out our videos in our [YouTube Playlist](https://youtube.com/playlist?list=PL4F6J_rGxMlWONsFE6XF6Bffhcyg3ZkSA)
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+They summarise the setup and different projection modes.
+
+
+</br>
+
+### This is UCL Open-Illumiroom V2
+---
+UCL Open-Illumiroom V2's primary advert, briefly showing our coolest projection modes!
+
+[![This is UCL Open-Illumiroom V2](https://img.youtube.com/vi/QwhNlhRxhog/0.jpg)](https://www.youtube.com/watch?v=QwhNlhRxhog)
+
+</br>
+
+### Setup and Projection Modes | UCL Open-Illumiroom V2 Dev Log
+
+---
+In this video, the typical software setup process and the projection modes are shown! 
+
+[![Setup and Projection Modes | UCL Open-Illumiroom V2 Dev Log](https://img.youtube.com/vi/uJ6AWTfBZs8/0.jpg)](https://www.youtube.com/watch?v=uJ6AWTfBZs8)
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -144,45 +196,37 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+- [x] Deploy to Microsoft Store
+- [] Create More Projection Modes:
+   -[] F1 Data visualisation using MultiViewer for F1 App
+- [] Add more Roadmap items
+- [] Update Repo to new repo, new name
 
 
+</br>
 
 <!-- CONTRIBUTING -->
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+If you have a suggestion that would make this better, please fork the repo and create a pull request. 
 Don't forget to give the project a star! Thanks again!
 
 1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+2. Create your Feature Branch (`git checkout -b AmazingFeature`)
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
+4. Push to the Branch (`git push origin AmazingFeature`)
 5. Open a Pull Request
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
+</br>
 
 <!-- LICENSE -->
 ## License
 
 Distributed under the LGPL-3.0 License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
+</br>
 
 
 <!-- CONTACT -->
@@ -193,9 +237,9 @@ Distributed under the LGPL-3.0 License. See `LICENSE.txt` for more information.
 * Damian Ziaber - [@your_twitter](https://twitter.com/your_username) - email@example.com
 * Chan Lee - [@your_twitter](https://twitter.com/your_username) - email@example.com
 
+
 Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -206,7 +250,7 @@ Use this space to list resources you find helpful and would like to give credit 
 
 * [GNU Lesser General Public License v3 (LGPL-3.0)](https://www.tldrlegal.com/license/gnu-lesser-general-public-license-v3-lgpl-3)
 * [Flaticon - Very clean Icons for documentation](https://www.flaticon.com/search?type=icon&search-group=all&word=process&license=&color=&shape=&current_section=&author_id=&pack_id=&family_id=&style_id=&choice=&type=)
-* [ReadMe Template](https://github.com/othneildrew/Best-README-Template)
+* [This ReadMe Template](https://github.com/othneildrew/Best-README-Template)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
