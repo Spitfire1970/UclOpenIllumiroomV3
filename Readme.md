@@ -27,6 +27,7 @@
 
 </div>
 
+</br>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -46,6 +47,8 @@ Our Project websites can be found here:
 * [Expanded Experiences - Showcase Site](https://expandedexperiences.com)
 
 * [Full Project Site](https://students.cs.ucl.ac.uk/2022/group33/) 
+
+</br>
 
 ## Built With
 
@@ -74,9 +77,7 @@ The following Python libraries were used for the main application.
   | OpenCV      | Apache Version 2.0 |
   | CGAL        | ...                |
 
-
-
-
+</br>
 
 <!-- GETTING STARTED -->
 ## Getting Started
