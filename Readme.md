@@ -173,11 +173,10 @@ For examples of usage, check out our videos in our [YouTube Playlist](https://yo
 They summarise the setup and different projection modes.
 
 
-</br>
-
 ### This is UCL Open-Illumiroom V2
 
-UCL Open-Illumiroom V2's primary advert, briefly showing our coolest projection modes!
+UCL Open-Illumiroom V2's primary advert, briefly showing our coolest projection modes! The calibration process is shown first, then the projection modes.
+
 </br>
 <div align="center">
 
@@ -200,6 +199,7 @@ In this video, the typical software setup process and the projection modes are s
 </br>
 
 ## Project Gallery
+
 
 ### Wobble
 
@@ -254,7 +254,7 @@ The low health mode makes the projection area turn red when the player is on low
 </br>
 
 <!-- CONTRIBUTING -->
-## Contribution
+## Contribute to UCL Open-Illumiroom V2
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
