@@ -21,8 +21,8 @@
 
   # UCL Open-Illumiroom V2
 
-  <p align="center">
-    UCL Open-Illumiroom V2 creates real-time, accessible, expanded experiences for TV-based gaming and entertainment by projecting effects with a projector, around a user’s TV.  
+  <h3 align="center">
+    UCL Open-Illumiroom V2 creates real-time, accessible, expanded experiences for TV-based gaming and entertainment by projecting effects with a projector, around a user’s TV.   </h3>
     <br />
 
 </div>
