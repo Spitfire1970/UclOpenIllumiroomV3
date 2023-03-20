@@ -123,24 +123,40 @@ To get started on working with UCL Open-Illumiroom V2, please follow the followi
 1. Clone the UCL Open-Illumiroom V2 repo
    ```sh
    git clone https://github.com/FabianBindley/IllumiroomGroup33COMP0016.git
+
+   cd IllumiroomGroup33COMP0016
    ```
-2. Install NPM packages
+  
+2. Install Python Libraries
    ```sh
-   npm install
+    pip install -r requirements.txt
    ```
-3. Enter your API in `config.js`
+3. Launch UCL Open-Illumiroom V2
+
+    You may either run _app/UCL_Open-Illumiroom_V2.py_  to run the main system directly, or run from the command line.
    ```js
-   const API_KEY = 'ENTER YOUR API';
+    python app/UCL_Open-Illumiroom_V2.py
    ```
+
+3. Launch with arguments
+
+    To open the display selection, or calibration methods run with the following arguments:
+
+    Display Selection
+    ```js
+    python app/UCL_Open-Illumiroom_V2.py display
+    
+    ```
+
+    Calibration
+    ```js
+    python app/UCL_Open-Illumiroom_V2.py calibration
+    
+    ```
+    > More information is provided in _app/UCL_Open-Illumiroom_V2.py_
 
 </br>
 
-### Required Libraries
-
-Please download the required libraries using the requirements.txt
-  ```sh
-  pip install -r requirements.txt
-  ```
 
 ### Compiling the Main System
 
@@ -201,6 +217,7 @@ In this video, the typical software setup process and the projection modes are s
    -[] F1 Data visualisation using MultiViewer for F1 App
 - [] Add more Roadmap items
 - [] Update Repo to new repo, new name
+- [] Error handling needs to be improved
 
 
 </br>
