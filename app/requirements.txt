@@ -3,6 +3,6 @@ keras
 cv2
 numpy
 mss
-PyQt6
+PySide2
 pytesseract
 screeninfo

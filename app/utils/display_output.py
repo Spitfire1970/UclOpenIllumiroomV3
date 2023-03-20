@@ -1,14 +1,17 @@
 import os
 
-from cv2 import resize, INTER_AREA, FileStorage, FILE_STORAGE_READ, remap, INTER_LINEAR
+from cv2 import (
+    resize, INTER_AREA, FileStorage, 
+    FILE_STORAGE_READ, remap, INTER_LINEAR
+)
 import sys
-from PyQt6 import QtWidgets, QtGui
-from PyQt6.QtCore import Qt
+from PySide2 import QtWidgets, QtGui
+from PySide2.QtCore import Qt
 
 
 class DisplayOutput(QtWidgets.QMainWindow):
     def __init__(self, settings_access):
-        # Create PyQt app, only ever needs to be defined once
+        # Create PySide app, only ever needs to be defined once
         self.app = QtWidgets.QApplication(sys.argv)
         super().__init__()
         self.settings_access = settings_access
@@ -36,9 +39,9 @@ class DisplayOutput(QtWidgets.QMainWindow):
         self.icon_path = settings_access.get_assets_path() + '/logo/UCL-ICON-LOGO.ico'
 
         # Key binding to exit the app - set to Key_Escape
-        self.exit_key_binding = Qt.Key.Key_Escape.value
+        self.exit_key_binding = Qt.Key.Key_Escape
 
-        # Set up the PyQT window
+        # Set up the PySide window
         self.label = QtWidgets.QLabel(self)
         self.label.setScaledContents(True)
         self.setCentralWidget(self.label)
@@ -47,7 +50,7 @@ class DisplayOutput(QtWidgets.QMainWindow):
 
         self.monitor_resize_scale_factor = self.projector_bounding_box['width'] / self.primary_bounding_box['width']
 
-        # Move the PyQT window to the position of the projector display, as defined by windows and returned by MSS
+        # Move the PySide window to the position of the projector display, as defined by windows and returned by MSS
         self.move(self.projector_bounding_box['left'], self.projector_bounding_box['top'])
         if self.full_screen:
             self.showFullScreen()
@@ -71,7 +74,7 @@ class DisplayOutput(QtWidgets.QMainWindow):
         height, width = frame.shape[:2]
         bytes_per_line = frame.strides[0]
 
-        # PyQT processing for display
+        # PySide processing for display
         qImg = QtGui.QImage(frame.data, width, height, bytes_per_line, self.qImg_format).rgbSwapped()
         self.label.setPixmap(QtGui.QPixmap(qImg))
         self.app.processEvents()
