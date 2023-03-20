@@ -197,7 +197,7 @@ In this video, the typical software setup process and the projection modes are s
 </div>
 </div>
 
-
+</br>
 
 ## Project Gallery
 
@@ -273,6 +273,7 @@ Don't forget to give the project a star! Thanks again!
 ## License
 
 Distributed under the LGPL-3.0 License. See `LICENSE.txt` for more information.
+
 </br>
 
 <!-- CONTACT -->
@@ -287,7 +288,6 @@ Distributed under the LGPL-3.0 License. See `LICENSE.txt` for more information.
 Repository Link: [https://github.com/FabianBindley/IllumiroomGroup33COMP0016/](https://github.com/FabianBindley/IllumiroomGroup33COMP0016/)
 
 </br> 
-
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
