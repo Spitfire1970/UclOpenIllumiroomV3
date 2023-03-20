@@ -2,6 +2,9 @@ from .mode import Mode
 from cv2 import TERM_CRITERIA_EPS, TERM_CRITERIA_MAX_ITER, KMEANS_RANDOM_CENTERS, kmeans, cvtColor, COLOR_BGR2GRAY, medianBlur, adaptiveThreshold, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, COLOR_GRAY2BGR, addWeighted
 import numpy as np
 
+#Method to get Colour from K means was from:
+# Dominant Colors Extraction with OpenCV- https://www.youtube.com/watch?v=90s4SomOSa0&t=0s
+
 class LowHealth(Mode):
     def __init__(
             self,
@@ -29,11 +32,16 @@ class LowHealth(Mode):
     
         
     def kmeans_get_colour(self, data):
-        #number of colors
+        #Run the Kmeans algorith from CV2 on the frame data to get the dominant colour
+        #The dominant colour is returned in the colour list, since only 1 cluster is used, it is the first element 
         _, _, colour_list = kmeans(data, self.number_clusters, None, self.criteria, 10, self.flags)
         return colour_list[0]
 
     def crop_and_resize_image_to_data(self,frame):
+
+        #Crop the original image to the left and right sides of the screen, forming 
+        #sct_left and sct_right
+        #In games, often the sides of the screen are where blood splatters are shown
         height, width, _ = np.shape(frame)
         x_left = 0
         x_right = int(width*7/8)
@@ -44,7 +52,7 @@ class LowHealth(Mode):
         sct_left = frame[y:y+h, x_left:x_left+w]
         sct_right = frame[y:y+h, x_right:x_right+w]
 
-        #reshape and concatenate data from images
+        #reshape and concatenate data from images into 1 big image, to be passed to kmeans
         height, width, _ = np.shape(sct_left)
         data_left = np.reshape(sct_left, (height * width, 3))
         data_left = np.float32(data_left) 
@@ -57,7 +65,8 @@ class LowHealth(Mode):
         return data
 
     def scale_low_health_to_frames(self, colour):
-
+        #
+        
         b, g, r = colour
         avgBG = (b+g+1)/2
         #print("colour is: ",colour)

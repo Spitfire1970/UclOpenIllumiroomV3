@@ -42,11 +42,6 @@ def main():
     elif sys.argv[1] == "display":
         run_display_capture(settings_access)
 
-    elif sys.argv[1] == "background_capture":
-        run_background_capture(room_image_obj)
-
-    elif sys.argv[1] == "select_tv":
-        run_select_tv(room_image_obj)
     
     elif sys.argv[1] == "calibration":
         calibration = Calibration(settings_access, display_capture)
@@ -61,23 +56,6 @@ def run_display_capture(settings_access):
     # Display the settings menu
     display_selection = DisplaySelection(settings_access)
     display_selection.select_tv_projector()
-
-def run_background_capture(room_image_obj):
-    print("Step 1: Use Microsoft Lens to take a picture of the projected area. Press ESC to exit"
-                  + "the projection. \nStep 2: Select the 4 corners of the projected grey image on Lens "
-                  + "as accurately as you can. \nStep 3: Save the image to 'app\\assets\\room_image'."
-                  + "with the name 'room_img.jpg'. \nIn our next build, we'll introduce "
-                  + "an upload feature!")
-    room_image_obj.take_picture()
-
-
-def run_select_tv(room_image_obj):
-    # print("Step 1: Upload the picture of the projected area.")
-    # self.room_image_obj.save_picture()
-    print("Detect where the TV/ primary monitor is on the image "
-        + "by dragging your cursor to create a rectangle around it. "
-        + "Press 'q' when the green rectangle covers the whole TV.")
-    room_image_obj.detect_primary_display()
 
 
 def run_calibration(calibration):

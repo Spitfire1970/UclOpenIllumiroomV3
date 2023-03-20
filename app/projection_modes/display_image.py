@@ -3,6 +3,20 @@ import cv2
 
 
 class DisplayImage(Mode):
+
+    """
+    The Display image mode projects a simple image to the projection screen. 
+    display_image is useful for simple demonstrations that do not require interaction
+
+    Attributes:
+        img_path: path to the image file
+        img: The image file 
+    Methods:
+        trigger(self):
+            Display the image that was loaded in.
+
+    """
+    
     def __init__(
             self,
             settings_access,
