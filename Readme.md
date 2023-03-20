@@ -177,7 +177,8 @@ They summarise the setup and different projection modes.
 
 ### This is UCL Open-Illumiroom V2
 
->UCL Open-Illumiroom V2's primary advert, briefly showing our coolest projection modes!
+UCL Open-Illumiroom V2's primary advert, briefly showing our coolest projection modes!
+</br>
 <div align="center">
 
   [![This is UCL Open-Illumiroom V2](https://img.youtube.com/vi/QwhNlhRxhog/0.jpg)](https://www.youtube.com/watch?v=QwhNlhRxhog)
@@ -186,9 +187,14 @@ They summarise the setup and different projection modes.
 
 ### Setup and Projection Modes | UCL Open-Illumiroom V2 Dev Log
 
->In this video, the typical software setup process and the projection modes are shown! 
+In this video, the typical software setup process and the projection modes are shown! 
+
+</br>
+
 <div align="center">
-  [![Setup and Projection Modes | UCL Open-Illumiroom V2 Dev Log](https://img.youtube.com/vi/uJ6AWTfBZs8/0.jpg)](https://www.youtube.com/watch?v=uJ6AWTfBZs8)
+
+   [![Setup and Projection Modes | UCL Open-Illumiroom V2 Dev Log](https://img.youtube.com/vi/uJ6AWTfBZs8/0.jpg)](https://www.youtube.com/watch?v=uJ6AWTfBZs8)
+</div>
 </div>
 
 
