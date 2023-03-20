@@ -23,32 +23,31 @@ class DisplayOutput(QtWidgets.QMainWindow):
             self.calibration_map2 = fs.getNode("map2").mat()
             fs.release()
         if self.calibration_map1 is None or self.calibration_map2 is None:
-            self.use_calibration=False
+            self.use_calibration = False
         self.selected_displays = self.settings_access.read_general_settings("selected_displays")
         self.primary_bounding_box = self.selected_displays["primary_display"]
         self.projector_bounding_box = self.selected_displays["projector_display"]
 
         self.selected_mode = self.settings_access.read_general_settings("selected_mode")
-        
+
         self.format_string = settings_access.read_mode_settings(self.selected_mode, "qImg_format")
         self.qImg_format = eval(self.format_string)
 
-        self.icon_path = settings_access.get_assets_path()+'/logo/UCL-ICON-LOGO.ico'
+        self.icon_path = settings_access.get_assets_path() + '/logo/UCL-ICON-LOGO.ico'
 
-        #Key binding to exit the app - set to Key_Escape
+        # Key binding to exit the app - set to Key_Escape
         self.exit_key_binding = Qt.Key.Key_Escape.value
 
-        #Set up the PyQT window
+        # Set up the PyQT window
         self.label = QtWidgets.QLabel(self)
         self.label.setScaledContents(True)
         self.setCentralWidget(self.label)
         self.setWindowTitle("UCL Open-Illumiroom V2")
         self.setWindowIcon(QtGui.QIcon(self.icon_path))
 
-        self.monitor_resize_scale_factor = self.projector_bounding_box['width']/self.primary_bounding_box['width']
+        self.monitor_resize_scale_factor = self.projector_bounding_box['width'] / self.primary_bounding_box['width']
 
-
-        #Move the PyQT window to the position of the projector display, as defined by windows and returned by MSS
+        # Move the PyQT window to the position of the projector display, as defined by windows and returned by MSS
         self.move(self.projector_bounding_box['left'], self.projector_bounding_box['top'])
         if self.full_screen:
             self.showFullScreen()
@@ -57,54 +56,42 @@ class DisplayOutput(QtWidgets.QMainWindow):
         print("-------------------------------------------------------------")
         print("Window Opened, press Escape in the illumiroom window to exit")
         print("If you have an issue with the image fitting, please ensure that your projector is at 100% scaling")
-        
+
         self.stopped = False
-        return 
+        return
 
     def display_frame(self, frame):
-
-        #Display the supplied frame on the projecot, resizing if necessary
+        """
+        Display image on the projector, resizing to fit
+        :param frame: Frame to display
+        """
         frame = self.frame_projector_resize(frame)
         if self.use_calibration:
             frame = remap(frame, self.calibration_map1, self.calibration_map2, INTER_LINEAR)
         height, width = frame.shape[:2]
         bytes_per_line = frame.strides[0]
 
-        #PyQT processing for display
+        # PyQT processing for display
         qImg = QtGui.QImage(frame.data, width, height, bytes_per_line, self.qImg_format).rgbSwapped()
         self.label.setPixmap(QtGui.QPixmap(qImg))
         self.app.processEvents()
-    
-    #Define key press events
+
+    # Define key press events
     def keyPressEvent(self, event):
 
-        #Exit binding
+        # Exit binding
         if event.key() == self.exit_key_binding:
             self.stopped = True
             self.close()
 
-
-
-
     def frame_projector_resize(self, frame):
-        #Check if the resolution of the primary monitor and TV differ (ratio not 1), if do not 
-        #resizing not required
-        height, width, channels = frame.shape
-        resize_factor = self.projector_bounding_box['width']/width
-        if (resize_factor) > 1.05 or (resize_factor) < 0.95 :
-            frame = self.resize_image_fit_projector(frame, resize_factor)
+        """
+        Resize the frame to projector size
+        :param frame: Frame to be resized
+        :return: Resized frame, or unchanged frame if resizing isn't needed
+        """
+        height, width = frame.shape[:2]
+        resize_factor = self.projector_bounding_box['width'] / width
+        if resize_factor > 1.05 or resize_factor < 0.95:
+            return resize(frame, (self.projector_bounding_box['width'], int(height * resize_factor)), interpolation=INTER_AREA)
         return frame
-
-    def resize_image_fit_projector(self,frame, resize_factor):
-        #If the projector and the tv have different resolutions, quite possible if a 4k tv is being used 
-        # The image from the tv needs to be resized to fit onto the projector, otherwise full size image will be shown
-
-        #Function copied across from display capture.
-        height = frame.shape[0]
-        width = frame.shape[1]
-
-        width = int(width * resize_factor)
-        height = int(height * resize_factor)
-        dim = (width, height)
-        # resize image
-        return resize(frame, dim, interpolation = INTER_AREA)
