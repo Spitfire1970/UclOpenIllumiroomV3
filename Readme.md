@@ -166,12 +166,12 @@ UCL_Open-Illumiroom_V2.exe will be generated and will be included in this folder
 
 All required libraries are statically linked in the distributable.
 
-* To compile an app, run the following bash command in a bash shell:
-   ```sh
-   python -m nuitka --standalone --enable-plugin=tk-inter  --enable-plugin=pyside2  --output-dir=release --remove-output --disable-console  app/UCL_Open-Illumiroom_V2.py; cp -r app/settings release/UCL_Open-Illumiroom_V2.dist; cp -r app/assets release/UCL_Open-Illumiroom_V2.dist
-   ```
+To compile the app, run the following bash command in a bash shell:
+```sh
+python -m nuitka --standalone --enable-plugin=tk-inter  --enable-plugin=pyside2  --output-dir=release --remove-output --disable-console  app/UCL_Open-Illumiroom_V2.py; cp -r app/settings release/UCL_Open-Illumiroom_V2.dist; cp -r app/assets release/UCL_Open-Illumiroom_V2.dist
+```
 
-* If you wish to create a distributable with a console output, please do not  include the '_--remove-output_' flag. 
+If you wish to create a distributable with a console output, please do not  include the '_--remove-output_' flag. 
 
   > A build with a console output should not be deployed, only used for debugging purposes
 
