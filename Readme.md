@@ -292,7 +292,7 @@ Repository Link: [https://github.com/FabianBindley/IllumiroomGroup33COMP0016/](h
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
+Thank you very much to those who created the following resources:
 
 * [GNU Lesser General Public License v3 (LGPL-3.0)](https://www.tldrlegal.com/license/gnu-lesser-general-public-license-v3-lgpl-3)
 * [Flaticon - Icons for documentation](https://www.flaticon.com/search?type=icon&search-group=all&word=process&license=&color=&shape=&current_section=&author_id=&pack_id=&family_id=&style_id=&choice=&type=)
