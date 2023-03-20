@@ -1,19 +1,17 @@
 from .settings_access import SettingsAccess
 from .display_capture import DisplayCapture
 
-from .display_output import DisplayOutput
-
 from .tv_detection import TVDetection
 import os
 
 import numpy as np
-from cv2 import (namedWindow, setWindowProperty, moveWindow, imshow, waitKey, destroyAllWindows,
-    imread, imwrite, resize, rectangle, WND_PROP_FULLSCREEN, WINDOW_FULLSCREEN, INTER_AREA
+from cv2 import (
+    namedWindow, setWindowProperty, 
+    moveWindow, imshow, waitKey, destroyAllWindows,
+    imread, imwrite, resize, rectangle, WND_PROP_FULLSCREEN, 
+    WINDOW_FULLSCREEN, INTER_AREA
 )
-from PyQt6.QtWidgets import QApplication, QFileDialog, QPushButton, QApplication
-from PyQt6.QtCore import pyqtSlot
 
-import sys
 
 class RoomImage:
 
@@ -64,48 +62,6 @@ class RoomImage:
             if k==27:    # Esc key to stop
                 break
         destroyAllWindows()
-
-
-    def upload_picture(self):
-        app = QApplication(sys.argv)
-        upload_pic_window = DisplayOutput(self.primary_bounding_box, self.projector_bounding_box, full_screen=False)
-
-        @pyqtSlot()
-        def open_dialog():
-            self.image_path = QFileDialog.getOpenFileName(
-                parent=upload_pic_window,
-                caption="Select an image",
-                directory="${HOME}",
-                filter="Images (*.jpeg *.png *.jpg)",
-            )[0]
-            if len(self.image_path) != 0:
-                btn.setText("Uploaded!")
-                btn.setEnabled(False)
-            # upload_pic_window.close()
-            # sys.exit(app.exec())
-
-
-        btn = QPushButton('Upload image of projected area')
-        # btn.setText("Open file dialog")
-        upload_pic_window.setCentralWidget(btn)
-        btn.clicked.connect(open_dialog)
-
-        while self.image_path is None or not upload_pic_window.stopped:
-            app.processEvents()
-        # sys.exit(app.exec())
-        # upload_pic_window.close()
-
-
-    def save_picture(self):
-        self.upload_picture()
-        # print(len(self.image_path))
-        # self.image_name = self.image_path
-        self.image_name = os.path.basename(self.image_path) #+ ".jpeg"
-        img = imread(self.image_path)
-        self.image_path = self.settings_access.room_img_path + self.image_name
-        imwrite(self.image_path, img)
-        # settings_JSON = self.settings_access.read_settings("general_settings.json")
-        # self.settings_access.write_settings("general_settings.json", settings_JSON)
 
 
     def process_image(self, image_path):
