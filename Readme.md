@@ -139,7 +139,7 @@ To compile the app, run the following bash command in a bash shell:
 ```sh
 python -m nuitka --standalone --enable-plugin=tk-inter  --enable-plugin=pyside2  --output-dir=release --remove-output --disable-console  app/UCL_Open-Illumiroom_V2.py; cp -r app/settings release/UCL_Open-Illumiroom_V2.dist; cp -r app/assets release/UCL_Open-Illumiroom_V2.dist
 ``` 
-
+</br>
 
 If you wish to create a distributable with a console output, please do not  include the '_--remove-output_' flag. 
 
@@ -152,7 +152,7 @@ If you wish to create a distributable with a console output, please do not  incl
 UCL Open-Illumiroom V2 makes use of a MFC based launcher to change settings in compiled builds.
 
 <div align="center">
-  <img src="Documentation/MFC Diagram.png" alt="Logo" width="500">
+  <img src="Documentation/MFC_Diagram.png" alt="MFC Launcher" width="500">
 </div>
 
 
