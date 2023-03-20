@@ -24,38 +24,8 @@
   <p align="center">
     UCL Open-Illumiroom V2 creates real-time, accessible, expanded experiences for TV-based gaming and entertainment by projecting effects with a projector, around a user’s TV.  
     <br />
-    <br />
 
 </div>
-
-<!-- TABLE OF CONTENTS -->
-<!--
-
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
--->
 
 
 <!-- ABOUT THE PROJECT -->
@@ -76,7 +46,6 @@ Our Project websites can be found here:
 * [Expanded Experiences - Showcase Site](https://expandedexperiences.com)
 
 * [Full Project Site](https://students.cs.ucl.ac.uk/2022/group33/) 
-</br>
 
 ## Built With
 
@@ -84,9 +53,8 @@ The UCL Open-Illumiroom V2 system is primarily built in **Python**, as such the 
 
 The calibration system was implemented in C++ and compiled to an executable and a set of DLLS. 
 
-</br>
 The following Python libraries were used for the main application.
-
+</br>
 
   | Library     | License             |
   | ----------- | --------------------|
@@ -167,9 +135,11 @@ UCL_Open-Illumiroom_V2.exe will be generated and will be included in this folder
 All required libraries are statically linked in the distributable.
 
 To compile the app, run the following bash command in a bash shell:
+
 ```sh
 python -m nuitka --standalone --enable-plugin=tk-inter  --enable-plugin=pyside2  --output-dir=release --remove-output --disable-console  app/UCL_Open-Illumiroom_V2.py; cp -r app/settings release/UCL_Open-Illumiroom_V2.dist; cp -r app/assets release/UCL_Open-Illumiroom_V2.dist
-```
+``` 
+
 
 If you wish to create a distributable with a console output, please do not  include the '_--remove-output_' flag. 
 
