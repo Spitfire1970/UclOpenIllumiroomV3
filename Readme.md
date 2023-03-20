@@ -27,7 +27,6 @@
 
 </div>
 
-</br>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
