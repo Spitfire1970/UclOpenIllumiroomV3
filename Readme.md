@@ -111,9 +111,6 @@ The following libraries were used for the calibration executable
 
 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -225,8 +222,6 @@ They summarise the setup and different projection modes.
 [![Setup and Projection Modes | UCL Open-Illumiroom V2 Dev Log](https://img.youtube.com/vi/uJ6AWTfBZs8/0.jpg)](https://www.youtube.com/watch?v=uJ6AWTfBZs8)
 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 ## Project Gallery
@@ -283,7 +278,7 @@ The low health mode makes the projection area turn red when the player is on low
 </br>
 
 <!-- CONTRIBUTING -->
-## ContributiON
+## Contribution
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
@@ -329,7 +324,7 @@ Use this space to list resources you find helpful and would like to give credit 
 * [Flaticon - Very clean Icons for documentation](https://www.flaticon.com/search?type=icon&search-group=all&word=process&license=&color=&shape=&current_section=&author_id=&pack_id=&family_id=&style_id=&choice=&type=)
 * [This ReadMe Template](https://github.com/othneildrew/Best-README-Template)
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 
 
 
