@@ -78,8 +78,6 @@ Our Project websites can be found here:
 
 * [Full Project Site](https://students.cs.ucl.ac.uk/2022/group33/) 
 </br>
-</br>
-
 
 ## Built With
 
@@ -90,24 +88,25 @@ The calibration system was implemented in C++ and compiled to an executable and 
 </br>
 The following Python libraries were used for the main application.
 
-| Library     | License             |
-| ----------- | --------------------|
-| CV2         | BSD                 |
-| Numpy       | BSD                 |
-| MSS         | Zlib                |
-| Py...       | ...                 |
-| Nuitka      | Apache Version 2.0  |
-| Pytesseract | Apache Version 2.0  |
-| Librosa     | ISC                 |
-
+<div align="center">
+  | Library     | License             |
+  | ----------- | --------------------|
+  | CV2         | BSD                 |
+  | Numpy       | BSD                 |
+  | MSS         | Zlib                |
+  | Py...       | ...                 |
+  | Nuitka      | Apache Version 2.0  |
+  | Pytesseract | Apache Version 2.0  |
+  | Librosa     | ISC                 |
+</div>
 </br>
-
-The following libraries were used for the calibration executable
-| Library     | License            |
-| ----------- | ------------------ |
-| OpenCV      | Apache Version 2.0 |
-| CGAL        | ...                |
-
+<div align="center">
+  The following libraries were used for the calibration executable
+  | Library     | License            |
+  | ----------- | ------------------ |
+  | OpenCV      | Apache Version 2.0 |
+  | CGAL        | ...                |
+</div>
 
 
 
