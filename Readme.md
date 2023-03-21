@@ -297,5 +297,6 @@ Thank you very much to those who created the following resources:
 * [GNU Lesser General Public License v3 (LGPL-3.0)](https://www.tldrlegal.com/license/gnu-lesser-general-public-license-v3-lgpl-3)
 * [Flaticon - Icons for documentation](https://www.flaticon.com/search?type=icon&search-group=all&word=process&license=&color=&shape=&current_section=&author_id=&pack_id=&family_id=&style_id=&choice=&type=)
 * [This ReadMe Template](https://github.com/othneildrew/Best-README-Template)
+* [ChatGPT was very useful for drafting code DocStrings for documentation](https://chat.openai.com/chat)
 
 
