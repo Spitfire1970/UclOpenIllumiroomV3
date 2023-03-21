@@ -11,11 +11,6 @@ class LowHealth(Mode):
 
         This mode tracks the health of the player and displays a red effect on the screen when the player is low on health.
 
-        Attributes:
-            settings_access (object): An object used to access the settings of the game.
-            background_img (numpy.ndarray): An image of the game's background.
-            display_capture (object): An object used to capture the game's display.
-            audio_capture (object): An object used to capture the game's audio (optional).
 
         Methods:
             kmeans_get_colour(data):
