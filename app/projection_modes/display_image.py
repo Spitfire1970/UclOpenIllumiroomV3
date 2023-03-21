@@ -3,9 +3,8 @@ import cv2
 
 
 class DisplayImage(Mode):
-
     """
-    The Display image mode projects a simple image to the projection screen. 
+    The Display image mode projects a single image to the projection screen. 
     display_image is useful for simple demonstrations that do not require interaction
 
     Attributes:
@@ -29,5 +28,11 @@ class DisplayImage(Mode):
         self.img = cv2.imread(self.img_path)
 
     def trigger(self):        
+        """
+        Triggers the display image mode and returns the captured frames.
+
+        Returns:
+            frames (list): A list of captured frames, which contains only display image
+        """    
         frames = [self.img]
         return frames

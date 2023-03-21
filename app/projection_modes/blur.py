@@ -36,10 +36,24 @@ class Blur(Mode):
 
     def apply_mode_to_frame(self,frame):
 
+        """
+            Applies blurring to the given frame according to the blur tuple stored in the object attribute
+
+            Prameters:
+                frame : The frame to which the blurring is to be applied.
+
+            Returns:
+                 The frame after applying the blurring.
+        """
         return blur(frame, self.blur_tuple ,0)
 
     def trigger(self):
-        #Once triggered, screen record a frame, apply the blurring, then return the frame
+        """
+            Triggers the object to capture the current screen display, apply the blurring, and return the resulting frame.
+
+            Returns:
+                A list containing the single blurred frame.
+        """
         frame = self.display_capture.capture_frame()
         frame = self.apply_mode_to_frame(frame)
         return [frame]

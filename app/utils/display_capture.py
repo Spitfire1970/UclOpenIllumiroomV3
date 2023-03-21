@@ -13,7 +13,11 @@ class DisplayCapture:
         self.projector_bounding_box = self.selected_displays["projector_display"]
         self.projector_resize_scale_factor = self.projector_bounding_box['width'] / self.primary_bounding_box['width']
 
+        
         """
+        A capture card can be used instead of the primary display, however the frame rate when tested was very low.
+        Perhaps trying again with the elgato capture card would be better.
+
         self.capture_card_settings = settings_access.read_general_settings("capture_card")
         self.use_capture_card = self.capture_card_settings["use_capture_card"]
         self.capture_card_num = self.capture_card_settings["capture_card_num"]

@@ -1,6 +1,26 @@
-# 1) User runs main
-# 2) Menu is opened for the user, can update settings eg: their primary and 
-# projector displays and other settings
+"""
+UCL_Open-Illumiroom_V2.py
+
+This file contains the main function and supporting functions to run the UCL Open-Illumiroom V2 System.
+When compiled, the program will be compiled as UCL_Open-Illumiroom_V2.exe and this file will act as the primary entry point of the program.
+
+This script may be run during development to run the main loop of the app, the display capture system, or to run the calibration system.
+To run the:
+- main loop of the app, run the following command: python UCL_Open-Illumiroom_V2.py run
+- display selection, run the following command: python UCL_Open-Illumiroom_V2.py display
+- the calibration, run the following command: python UCL_Open-Illumiroom_V2.py calibration
+
+The following global variables are defined:
+- app_root_path: str - the root path of the project in user's file system
+
+The following functions are defined:
+- main(): void - the main function that runs the UCL Open-Illumiroom V2 system
+- run_display_selection(settings_access): void - displays the menu that allows the user to select their primary display/TV and their projector
+- run_calibration(calibration): void - runs the calibration system to calibrate the projector for the user's background area
+- main_loop(settings_access, mode_factory, fps): void - the main loop of the app that displays the frames from the projection modes on the projector
+
+"""
+
 import sys
 
 from utils.settings_access import SettingsAccess
@@ -21,7 +41,10 @@ from projection_modes.modes_factory import ModesFactory
 app_root_path = __file__[:__file__.index("UCL_Open-Illumiroom_V2.py")]
 
 def main():
-    print("run main")
+    """
+    Entry point of the program.
+    """
+
     #Instantiate required objects to be passed to main loop or display setup/calibration 
     settings_access = SettingsAccess(app_root_path)
 
@@ -39,10 +62,11 @@ def main():
         mode_factory = ModesFactory(room_image, display_capture, audio_capture, settings_access)
         main_loop(settings_access,  mode_factory, fps)
 
+    #Argument is display - run display selection
     elif sys.argv[1] == "display":
-        run_display_capture(settings_access)
+        run_display_selection(settings_access)
 
-    
+    #Argument is calibration - run calibration
     elif sys.argv[1] == "calibration":
         calibration = Calibration(settings_access, display_capture)
         run_calibration(calibration)
@@ -50,22 +74,29 @@ def main():
     else:
         raise ValueError("Error: Incorrect Arguments")
 
-def run_display_capture(settings_access):
+def run_display_selection(settings_access):
+    """
+    Displays the settings menu for selecting between your primary display/TV and projector.
+    Opens a TKinter window.
+    """
 
-
-    # Display the settings menu
     display_selection = DisplaySelection(settings_access)
     display_selection.select_tv_projector()
 
 
 def run_calibration(calibration):
-    #Run the calibration system, calibrating the projector to the TV.
+    """
+    Runs the calibration system to calibrate the projector to the TV.
+    """
     calibration.capture()
 
 
 
-
 def main_loop(settings_access, mode_factory, fps):
+        """
+        The main loop of the program. While the user has not pressed ESC, get frames from the 
+        mode object and display them on the projector.
+        """
         
         display_output = DisplayOutput(settings_access)
 

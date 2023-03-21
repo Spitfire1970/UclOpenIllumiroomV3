@@ -9,6 +9,37 @@ from time import time, sleep
 import pytesseract
 
 class SpeedBlur(Mode):
+
+    """
+    A class for applying a speed blur effect to a captured display from a racing game, such as Forza Horizon 4.
+
+    Key Attributes:
+        display_capture: An instance of the `DisplayCapture` class.
+        speedometer_box_ratios: A dictionary containing the ratios for the speedometer bounding box.
+        
+        primary_bounding_box: A dictionary containing the primary bounding box values.
+        speedometer_bounding_box: A dictionary containing the values for the speedometer bounding box.
+
+        tesseract_config: The configuration settings for the tesseract OCR.
+        median_speeds_queue: A list containing the most recent speed values.
+
+        current_blur: The current blur value.
+        blur_division_factor: The division factor for the blur value.
+        show_blur_amount: A boolean indicating whether or not to show the blur amount.
+
+    Methods:
+        trigger(): Captures a frame and applies the speed blur effect.
+        apply_mode_to_frame(frame, blur_amount): Applies the speed blur effect to a given frame.
+        get_speedometer_bounding_box(): Returns a dictionary containing the values for the speedometer bounding box.
+        speedometer_cut_out(frame): Cuts out the speedometer area from a given frame.
+        get_blur_amount(frame_speedometer): Gets the blur amount based on the speed value.
+        preprocess_speed(img): Preprocesses the given image to be used for OCR.
+        get_speed(tesseract_config, image): Returns the speed value obtained from OCR.
+        add_median_speed(new_speed): Adds a new speed value to the median speeds queue.
+        get_median_speed(): Returns the median speed value from the median speeds queue.
+        add_speed_to_image(img, speed): Adds the speed value text to the given image.
+    """
+
     def __init__(
             self,
             settings_access,
@@ -35,10 +66,13 @@ class SpeedBlur(Mode):
         self.show_blur_amount = settings_access.read_mode_settings("speed_blur", "show_blur_amount")
 
     def trigger(self):
-        #Once triggered, screen record a frame, apply the blurring, then return the frame
-        
+        """
+        Once triggered, screen record a frame, apply the blurring, then return the frame.
+        Returns:
+            list of numpy.ndarray: List containing the single appropriately blurred frame.
+        """
+
         frames = [None]
-        #frame= self.display_capture.capture_frame_projector_resize()
         frame = self.display_capture.capture_frame()
         
         frame_speedometer = self.speedometer_cut_out(frame)
@@ -48,6 +82,14 @@ class SpeedBlur(Mode):
     
 
     def apply_mode_to_frame(self,frame, blur_amount):
+        """
+        Apply blurring to the input frame using the specified blur_amount.
+        Parameters:
+            frame (numpy.ndarray): Input frame to be blurred.
+            blur_amount (int): Amount of blurring to be applied to the frame.
+        Returns:
+            numpy.ndarray: Blurred frame.
+        """
 
         frame = cv2.blur(frame, (blur_amount, blur_amount) ,0)
 
@@ -58,6 +100,11 @@ class SpeedBlur(Mode):
 
 
     def get_speedometer_bounding_box(self):
+        """
+        Get the bounding box coordinates for the speedometer area in the primary display bounding box.
+        Returns:
+            dict: Dictionary containing the top, left, width, and height of the speedometer bounding box.
+        """
      
         top_prim = self.primary_bounding_box['top']
         left_prim = self.primary_bounding_box['left']
@@ -69,6 +116,14 @@ class SpeedBlur(Mode):
 
     
     def speedometer_cut_out(self,frame):
+        """
+        Extract the speedometer region from the input frame using the bounding box coordinates.
+        Parameters:
+            frame (numpy.ndarray): Input frame to extract the speedometer region from.
+        Returns:
+            numpy.ndarray: Cropped speedometer region from the input frame.
+        """
+        
         top = self.speedometer_bounding_box["top"]
         left = self.speedometer_bounding_box["left"]
         width = self.speedometer_bounding_box["width"]
@@ -78,21 +133,40 @@ class SpeedBlur(Mode):
 
     
     def get_blur_amount(self, frame_speedometer):
-
+        """
+        Get the blur amount to be applied to the frame using the speedometer region.
+        Parameters:
+            frame_speedometer (numpy.ndarray): Cropped speedometer region from the input frame.
+        Returns:
+            int: Amount of blurring to be applied to the frame.
+        """
         
         speed = self.get_speed(self.tesseract_config, frame_speedometer)
         return speed
 
 
     def preprocess_speed(self,img):
-        #inverse image colour
+        """
+        Preprocess the input image by removing the Alpha channel and inverting its color.
+        Args:
+            img (numpy.ndarray): Input image to be preprocessed.
+        Returns:
+            numpy.ndarray: Preprocessed image.
+        """
                
-        img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
         img = 255 - img
         
         return img
 
     def get_speed(self,tesseract_config,image):
+        """
+        Get the speed from the input image using Tesseract OCR.
+        Args:
+            tesseract_config (str): Tesseract configuration settings.
+            image (numpy.ndarray): Input image to extract the speed from.
+        Returns:
+            int: The median speed extracted from the 5 previous input images
+        """
         
         prep_proc = self.preprocess_speed(image)
         #cv2.imshow("speed", prep_proc)
@@ -112,16 +186,32 @@ class SpeedBlur(Mode):
         return self.get_median_speed()
     
     def add_median_speed(self, new_speed):
+        """
+        Add a new speed value to the median speeds queue and remove the oldest value.
+        Args:
+            new_speed (int): New speed value to be added to the queue.
+        """
         self.median_speeds_queue.pop(0)
         self.median_speeds_queue.append(new_speed)
 
     def get_median_speed(self):
+        """
+        Get the median speed from the median speeds queue.
+        Returns:
+            int: The median speed value.
+        """
         median_sort = self.median_speeds_queue.copy()
         median_sort.sort()
         return median_sort[2]
 
     
     def add_speed_to_image(self, img, speed):
+        """
+        Add the speed value text to the input image.
+        Args:
+            img (numpy.ndarray): Input image to add the speed to.
+            speed (str): Speed value to be added to the input image.
+        """
         font                   = cv2.FONT_HERSHEY_SIMPLEX
         textLocation           = (30,100)
         fontScale              = 0.8
