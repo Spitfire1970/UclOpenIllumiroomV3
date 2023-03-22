@@ -1,5 +1,5 @@
 from .mode import Mode
-from cv2 import cvtColor, COLOR_RGB2HLS, COLOR_HLS2RGB, circle, addWeighted
+import cv2
 import numpy as np
 import random
 
@@ -13,6 +13,10 @@ class Snow(Mode):
         background_img=None, 
         audio_capture=None
     ):
+        """
+        Initializes the Snow mode object.
+
+        """
         self.settings = settings_access
         self.img = background_img
         self.height, self.width = self.img.shape[:2]
@@ -32,8 +36,17 @@ class Snow(Mode):
 
 
     def add_settling_snow(self, image):
+        """
+        Adds settling snow to an image.
+
+        Args:
+            image (numpy.ndarray): The image to add settling snow to.
+
+        Returns:
+            numpy.ndarray: The image with settling snow added to it.
+        """
         # Conversion to HLS
-        image_HLS = cvtColor(image,COLOR_RGB2HLS)
+        image_HLS = cv2.cvtColor(image,cv2.COLOR_RGB2HLS)
         image_HLS = np.array(image_HLS, dtype = np.float64)
         brightness_coefficient = 2.5
 
@@ -46,7 +59,7 @@ class Snow(Mode):
 
         # Convert to RGB
         image_HLS = np.array(image_HLS, dtype = np.uint8)    
-        image_RGB = cvtColor(image_HLS,COLOR_HLS2RGB)
+        image_RGB = cv2.cvtColor(image_HLS,cv2.COLOR_HLS2RGB)
         # Change contrast, brightness
         # cv2.convertScaleAbs(image_RGB, alpha=1, beta=0)
  
@@ -54,6 +67,12 @@ class Snow(Mode):
 
 
     def add_to_top(self, radius):
+        """
+        Adds new snowflakes to the top of the image.
+
+        Args:
+            radius (int): The maximum radius of the snowflakes.
+        """
         if len(self.snowflakes) == 0:
         # Add new snowflakes to the top of the image
             for i in range(self.num_snowflakes):
@@ -62,8 +81,16 @@ class Snow(Mode):
                 r = random.randint(3, radius)
                 self.snowflakes.append([x, y, r])
 
-
     def create_falling_snow(self, max_radius, radius_factor):
+        """
+        Move snowflakes down by falling speed and wind, and update their properties. 
+        Keep snowflakes within the desired radius and the background image.
+        
+        Args:
+            max_radius (int): The maximum radius of a snowflake.
+            radius_factor (float): How much the radius of a snowflake will change as it falls.
+        
+        """
         # Move snowflakes down by falling speed and wind
         for i in range(len(self.snowflakes)):
             snowflake = self.snowflakes[i]
@@ -79,7 +106,7 @@ class Snow(Mode):
             elif snowflake[2] > max_radius:
                 snowflake[2] = max_radius
 
-            circle(
+            cv2.circle(
                 self.snow, (snowflake[0], snowflake[1]), 
                 int(snowflake[2]), (255, 255, 255), -1
             )
@@ -92,7 +119,7 @@ class Snow(Mode):
 
 
     def add_snow_to_image(self):
-        return addWeighted(self.img, 0.8, self.snow, 0.3, 0)
+        return cv2.addWeighted(self.img, 0.8, self.snow, 0.3, 0)
 
 
     def trigger(self):
