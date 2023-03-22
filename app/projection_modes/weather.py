@@ -1,3 +1,17 @@
+"""
+The Weather mode displays visual effects based on the current weather detected by a machine learning model.
+
+This mode creates and manages the Snow and Rain modes. If the current weather is detected as "snow", the Snow mode is activated.
+If the current weather is detected as "rain" or "sandstorm", the Rain mode is activated. Otherwise, no visual effects are displayed.
+
+Parameters:
+    settings_access (object): An object that provides access to application settings.
+    display_capture (object): An object that captures and provides display frames.
+    background_img (str): The path to the background image used in the visual effects.
+    audio_capture (object, optional): An object that captures and provides audio frames. Defaults to None.
+
+"""
+
 from .mode import Mode
 import time
 from utils.weather_detection import weatherdetection
@@ -33,6 +47,12 @@ class Weather(Mode):
 
 
     def trigger(self):
+        """
+        Triggers the visual effects based on the current weather detected by the machine learning model.
+
+        Returns:
+            list: A list of visual effect objects to be displayed on the screen.
+        """
         # if time.time() > self.timer + self.time_interval: 
         #     self.screenshot = self.display_capture.capture_frame()
         #     self.weather = self.detector.predict_weather(self.screenshot)
