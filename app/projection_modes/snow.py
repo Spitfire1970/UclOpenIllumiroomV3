@@ -16,6 +16,11 @@ class Snow(Mode):
         """
         Initializes the Snow mode object.
 
+        Args:
+            settings_access (object): An object that provides access to mode-specific settings.
+            display_capture (object): The object that captures the display.
+            background_img (numpy.ndarray, optional): The background image to add snow to. Defaults to None.
+            audio_capture (object, optional): The object that captures audio. Defaults to None.
         """
         self.settings = settings_access
         self.img = background_img
