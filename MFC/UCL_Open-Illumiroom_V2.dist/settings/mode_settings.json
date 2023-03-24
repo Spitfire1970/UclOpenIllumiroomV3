@@ -1,7 +1,7 @@
 {
     "blur": {
         ".compatible_with": [],
-        "blur_amount": 64,
+        "blur_amount": 55,
         "bytes_per_line_factor": 4,
         "edge_rect_colour": [
             0,
@@ -22,7 +22,7 @@
         "trigger_frequency": "once"
     },
     "display_image": {
-        "display_image_file": "room_img_noTV.jpg",
+        "display_image_file": "example.jpg",
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
         "trigger_frequency": "every_frame"
     },
@@ -167,23 +167,27 @@
             "weather_snow"
         ],
         "bytes_per_line_factor": 3,
-        "fractal_amplitude": 3,
-        "initial_amplitude": 30,
-        "initial_frequency": 0.07,
-        "num_frames": 20,
+        "data": {
+            "fractal_amplitude": 3,
+            "initial_amplitude": 30,
+            "initial_frequency": 0.1,
+            "num_frames": 20
+        },
         "qImg_format": "QtGui.QImage.Format.Format_RGB888",
-        "sound_analysis_type": "explosive_sound",
-        "sound_threshold": 0.031099999323487282,
+        "sound_analysis_type": "loud_sound",
+        "sound_threshold": 0.009999999776482582,
         "trigger_frequency": "every_frame",
-        "tv_bottom_right": [
-            2241,
-            1179
-        ],
-        "tv_center_x": 1324,
-        "tv_center_y": 676,
-        "tv_top_left": [
-            408,
-            173
-        ]
+        "tv_data": {
+            "tv_bottom_right": [
+                1532,
+                802
+            ],
+            "tv_center_x": 1142,
+            "tv_center_y": 566,
+            "tv_top_left": [
+                753,
+                330
+            ]
+        }
     }
 }
