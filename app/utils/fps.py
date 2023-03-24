@@ -3,6 +3,9 @@ from cv2 import putText, FONT_HERSHEY_SIMPLEX
 
 
 class FPS:
+    """
+    FPS is a class used for calculating and displaying current frames per second
+    """
     def __init__(self):
         self.curr_time = time()
 

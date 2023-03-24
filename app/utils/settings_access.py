@@ -2,6 +2,10 @@ import json
 
 
 class SettingsAccess:
+    """
+    SettingsAccess class allows for easy read and write access into
+    the config saved in general_settings.json and mode_settings.json files
+    """
     def __init__(self, app_root_path):
 
         self.app_root_path = app_root_path

@@ -14,6 +14,11 @@ confirm_img_text_2 = "If it is not, especially if a black screen is shown, press
 
 
 class Calibration:
+    """
+    Calibration class is used to walk the user through a calibration process,
+    It shows step-by-step instructions and executes an external executable file
+    to capture and store GrayCode Patterns as well as run calibration algorithm on them.
+    """
     def __init__(self, settings_access, display_capture):
         print("Calibration init")
         self.data_folder = os.path.join(settings_access.assets_path, "calibration\\grey_code_photos\\grey_code\\")

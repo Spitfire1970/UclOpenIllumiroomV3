@@ -10,6 +10,9 @@ from PySide2.QtCore import Qt
 
 
 class DisplayOutput(QtWidgets.QMainWindow):
+    """
+    DisplayOutput is a class used for displaying and resizing frames for use with the projector and main display
+    """
     def __init__(self, settings_access):
         # Create PySide app, only ever needs to be defined once
         self.app = QtWidgets.QApplication(sys.argv)

@@ -4,6 +4,9 @@ from cv2 import resize, INTER_AREA
 
 
 class DisplayCapture:
+    """
+    Display capture is a class used for capturing the screen content of a projector and primary display
+    """
 
     def __init__(self, settings_access):
         self.sct = mss()
