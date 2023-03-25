@@ -1,3 +1,126 @@
+
+import numpy as np
+import pyaudio
+# import soundcard as sc
+# import soundfile as sf
+# import os
+# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+from keras.models import load_model
+# import librosa
+
+
+class AudioCapture():
+
+    """
+    Class for capturing audio input and detecting loud sound events.
+
+    Attributes:
+    -----------
+    threshold: float
+        A value representing the threshold RMS value for detecting loud sound events.
+    buffer_size: int
+        An integer value representing the buffer size for the PyAudio stream.
+    sample_rate: int
+        An integer value representing the sample rate of the audio input.
+    channels: int
+        An integer value representing the number of channels in the audio input.
+    settings_access: object
+        An object of type SettingsAccess used to access settings.
+    window_size: int
+        An integer value representing the window size for the moving average filter.
+    buffer: numpy.ndarray
+        A numpy array of size window_size representing the buffer for the moving average filter.
+
+    Methods:
+    --------
+    set_threshold(value: float) -> None:
+        Sets the threshold RMS value for detecting loud sound events.
+
+    detect_loud_sound() -> bool:
+        Captures audio input and returns True if the RMS value of the input is greater than the threshold
+        value; otherwise, returns False.
+
+    is_loud(data: bytes) -> bool:
+        Calculates the RMS value of the given audio input and returns True if the RMS value is greater than
+        the threshold value; otherwise, returns False.
+    """
+
+    def __init__(self, settings_access, threshold=None) -> None:
+        self.threshold = settings_access.read_mode_settings("wobble", "sound_threshold")
+        self.buffer_size = 8096
+        self.sample_rate = 16000
+        self.channels = 1
+        self.settings_access = settings_access
+
+        # For moving average
+        self.window_size = 5
+        self.buffer = np.zeros(self.window_size)
+
+
+    def set_threshold(self, value):
+         self.threshold = value
+
+    def detect_loud_sound(self):
+        """
+        Captures audio input and returns True if the RMS value of the input is greater than the threshold
+        value; otherwise, returns False.
+
+        Returns:
+        --------
+        bool:
+            True if the RMS value of the input is greater than the threshold value; otherwise, False.
+        """
+         
+        p = pyaudio.PyAudio()
+        # Open a stream
+        stream = p.open(
+                        format=pyaudio.paFloat32, channels=self.channels, 
+                        rate=self.sample_rate, input=True, 
+                        frames_per_buffer=self.buffer_size
+                        )
+        # Read audio
+        data = stream.read(self.buffer_size)
+        # Close the stream
+        stream.stop_stream()
+        stream.close()
+        p.terminate()
+
+        return self.is_loud(data)
+
+
+    def is_loud(self, data):
+        """
+        Calculates the RMS value of the given audio input and returns True if the RMS value is greater than
+        the threshold value; otherwise, returns False.
+
+        Parameters:
+        -----------
+        data: bytes
+            A bytes object containing the audio input data.
+
+        Returns:
+        --------
+        bool:
+            True if the RMS value of the input is greater than the threshold value; otherwise, False.
+        """
+        # Calculate RMS of the audio
+        rms = np.sqrt(np.mean(np.frombuffer(data, np.float32)**2))
+        # Add RMS to the buffer
+        self.buffer[:-1] = self.buffer[1:]
+        self.buffer[-1] = rms
+
+        #moving_average = np.mean(self.buffer)
+        print("rms = ", rms)
+
+        if rms > self.threshold:
+            return True
+        else:
+            return False
+        
+
+
+#This is code which we could not include in the compiled version due to incompatibility wiht Nuitka, We leave it 
+#So that in futuree when Nuitka can compile soundcard and Librosa we can use it again.
 """
 #using old version of audio capture and wobble to allow to compile
 import numpy as np
@@ -244,61 +367,3 @@ class AudioCapture():
 #     #             sf.write(file=self.output_file_name, data=data[:, 0], samplerate=sample_rate)
 #     #         except TypeError:
 #     #             raise TypeError
-import numpy as np
-import pyaudio
-# import soundcard as sc
-# import soundfile as sf
-# import os
-# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-from keras.models import load_model
-# import librosa
-
-
-class AudioCapture():
-    def __init__(self, settings_access, threshold=None) -> None:
-        self.threshold = settings_access.read_mode_settings("wobble", "sound_threshold")
-        self.buffer_size = 8096
-        self.sample_rate = 16000
-        self.channels = 1
-        self.settings_access = settings_access
-
-        # For moving average
-        self.window_size = 5
-        self.buffer = np.zeros(self.window_size)
-
-
-    def set_threshold(self, value):
-         self.threshold = value
-
-    def detect_loud_sound(self):
-        p = pyaudio.PyAudio()
-        # Open a stream
-        stream = p.open(
-                        format=pyaudio.paFloat32, channels=self.channels, 
-                        rate=self.sample_rate, input=True, 
-                        frames_per_buffer=self.buffer_size
-                        )
-        # Read audio
-        data = stream.read(self.buffer_size)
-        # Close the stream
-        stream.stop_stream()
-        stream.close()
-        p.terminate()
-
-        return self.is_loud(data)
-
-
-    def is_loud(self, data):
-        # Calculate RMS of the audio
-        rms = np.sqrt(np.mean(np.frombuffer(data, np.float32)**2))
-        # Add RMS to the buffer
-        self.buffer[:-1] = self.buffer[1:]
-        self.buffer[-1] = rms
-
-        #moving_average = np.mean(self.buffer)
-        print("rms = ", rms)
-
-        if rms > self.threshold:
-            return True
-        else:
-            return False

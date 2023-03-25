@@ -9,6 +9,35 @@ from cv2 import (resize, vconcat, hconcat, split,
 
 class DisplaySelection:
 
+    """A class to select and set the primary display and projector for the system.
+
+    This class provides a graphical user interface (GUI) to the user to select the
+    primary display and projector, and then returns the settings for those displays.
+
+    Attributes:
+    -----------
+    settings_access : dict
+        A dictionary with settings for the displays on the system.
+
+    monitors_selected : bool
+        A flag that indicates if the monitors have been selected.
+
+    monitor_num_prim : int or None
+        The monitor number for the primary display.
+
+    monitor_num_proj : int or None
+        The monitor number for the projector.
+
+    win : tkinter.Tk
+        The main window for the GUI.
+
+    monitor_num_tk_prim : tkinter.IntVar
+        The tkinter IntVar for the monitor number of the primary display.
+
+    monitor_num_tk_proj : tkinter.IntVar
+        The tkinter IntVar for the monitor number of the projector.
+    """
+
     def __init__(self, settings_access):
         self.settings_access = settings_access
         self.monitors_selected = False
@@ -19,6 +48,24 @@ class DisplaySelection:
         self.monitor_num_tk_proj = IntVar()
 
     def getImageForTkinter(self,sct,mons):
+
+        """Take screenshots of connected monitors and resize them to fit in the tkinter window.
+
+        Parameters:
+        -----------
+        sct : mss.mss
+            The mss object to capture the screen.
+
+        mons : list of dicts
+            A list of dictionaries that define the coordinates of each connected monitor.
+
+        Returns:
+        --------
+        disp_image : numpy.ndarray
+            An array with the resized and concatenated screenshots of all connected monitors.
+        """
+
+
         disp_image = None
 
         #Iterate over connected displays
@@ -75,6 +122,18 @@ class DisplaySelection:
         return disp_image
 
     def getMonitorNumWithTkinter(self,disp_image):
+
+        """Display the tkinter window and wait for the user to enter the monitor numbers.
+
+        Parameters:
+        -----------
+        disp_image : numpy.ndarray
+            An array with the resized and concatenated screenshots of all connected monitors.
+
+        Returns:
+        --------
+        None
+        """
           
         #Display the tkinter window until the monitor nums have been entered
         while (not(self.monitors_selected)):
@@ -119,6 +178,19 @@ class DisplaySelection:
             self.win.mainloop()
 
     def select_tv_projector(self):
+
+        """Select the primary display and projector and return their settings.
+
+        This method takes screenshots of all connected monitors and displays them in a tkinter
+        window. It waits for the user to enter the monitor numbers for the primary display and
+        projector, and then returns their settings as a dictionary.
+
+        Returns:
+        --------
+        displays : dict
+            A dictionary with the settings for the primary display and projector.
+        """
+        
         sct = mss()
 
         #Take a screenshot of all monitors 

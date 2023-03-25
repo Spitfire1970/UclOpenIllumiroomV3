@@ -1,3 +1,5 @@
+#
+
 from cv2 import (rectangle, imshow, namedWindow, setMouseCallback,
 waitKey, destroyAllWindows, EVENT_LBUTTONDOWN, EVENT_LBUTTONUP
 )
