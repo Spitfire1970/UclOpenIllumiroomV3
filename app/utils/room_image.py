@@ -1,3 +1,4 @@
+#Class mostly deprecated, need to be removed
 from .settings_access import SettingsAccess
 from .display_capture import DisplayCapture
 

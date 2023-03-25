@@ -1,5 +1,4 @@
-#
-
+#Deprecated class, should be removed in the future
 from cv2 import (rectangle, imshow, namedWindow, setMouseCallback,
 waitKey, destroyAllWindows, EVENT_LBUTTONDOWN, EVENT_LBUTTONUP
 )
