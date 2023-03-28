@@ -1,6 +1,6 @@
 from mss import mss
 from PIL import Image, ImageTk
-from tkinter import Tk, Label, Button, Entry, IntVar
+from tkinter import Tk, Label, Button, Entry, IntVar, TclError
 import numpy as np
 from cv2 import (resize, vconcat, hconcat, split, 
     merge, putText, INTER_AREA, FONT_HERSHEY_SIMPLEX
@@ -47,8 +47,8 @@ class DisplaySelection:
         self.monitor_num_tk_prim = IntVar()
         self.monitor_num_tk_proj = IntVar()
 
-    def getImageForTkinter(self,sct,mons):
 
+    def get_monitor_screenshots(self,sct,mons):
         """Take screenshots of connected monitors and resize them to fit in the tkinter window.
 
         Parameters:
@@ -65,7 +65,6 @@ class DisplaySelection:
             An array with the resized and concatenated screenshots of all connected monitors.
         """
 
-
         disp_image = None
 
         #Iterate over connected displays
@@ -73,7 +72,7 @@ class DisplaySelection:
 
             #Take a screenshot from each monitor to display in the tkinter window
             sct_img_whole = np.array(sct.grab(monitor))
-            scale_percent = 25 # percent of original size
+            scale_percent = 20 # percent of original size
 
             heightSCT, widthSCT, channelsSCT = sct_img_whole.shape
             width = int(widthSCT * scale_percent / 100)
@@ -121,8 +120,8 @@ class DisplaySelection:
 
         return disp_image
 
-    def getMonitorNumWithTkinter(self,disp_image):
 
+    def get_monitor_nums(self, disp_image):
         """Display the tkinter window and wait for the user to enter the monitor numbers.
 
         Parameters:
@@ -134,51 +133,85 @@ class DisplaySelection:
         --------
         None
         """
-          
-        #Display the tkinter window until the monitor nums have been entered
-        while (not(self.monitors_selected)):
-            
-           
 
-            #Updated the values on button click
-            def get_value():
-                self.monitor_num_tk_prim.set(entryPrim.get())
-                self.monitor_num_tk_proj.set(entryProj.get())
+        width, height, channels = disp_image.shape
+        geometry_string="%sx%s" % (int(width*2), height)
+        self.win.title('Select Display')
+        self.win.geometry(geometry_string)
+        # self.win.attributes('-topmost',1)
 
-                self.monitor_num_prim = self.monitor_num_tk_prim.get()
-                self.monitor_num_proj = self.monitor_num_tk_proj.get()
-                self.monitors_selected = True
-                self.win.destroy()
+        # Rearrange colors
+        blue, green, red, alpha = split(disp_image)
+        img = merge((red, green, blue))
+        im = Image.fromarray(img)
+        imgtk = ImageTk.PhotoImage(image=im)
+        Label(self.win, image=imgtk).pack()
 
-                
-            width, height, channels = disp_image.shape
-            geometry_string="%sx%s" % (int(width*2), height)
+        # TKinter boxes for monitor number entry
+        Label(self.win, text="Please chose your primary monitor by entering the appropriate number.").pack()
+        Label(self.win, text="If the window reopens, then you have entered an invalid " 
+            + "monitor number or closed the window too soon.").pack()
+       
+        vcmd = (self.win.register(self.validate_user_input), '%P')
+        entryPrim = Entry(self.win, font=('Century 12'), width=40, validate='key', validatecommand=vcmd)
+        entryPrim.pack(pady=10)
+        Label(self.win, text="Please also chose your projector.").pack()
+        
+        entryProj = Entry(self.win, font=('Century 12'), width=40, validate='key', validatecommand=vcmd)
+        entryProj.pack(pady=10)
+        Button(self.win, text="Enter", command=lambda: self.update_monitor_numbers(entryPrim, entryProj)).pack()
 
-            self.win.geometry(geometry_string)
-            self.win.title('Select Display')
-            self.win.attributes('-topmost',1)
-            #Load the image
+        self.win.mainloop()
 
-            #Rearrange colors
-            blue,green,red,alpha = split(disp_image)
-            img = merge((red,green,blue))
-            im = Image.fromarray(img)
-            imgtk = ImageTk.PhotoImage(image=im)
-            Label(self.win, image= imgtk).pack()
+    
+    def validate_user_input(self, value):
+        """Validate the user's inputs for when they 
+        enter the primary and project display numbers.
 
-            #TKinter boxes for monitor number entry
-            Label(self.win, text="Please chose your primary monitor by entering the appropriate number.").pack()
-            Label(self.win, text="If the window reopens, then you have entered the incorrect monitor number.").pack()
-            entryPrim = Entry(self.win,font=('Century 12'),width=40)
-            entryPrim.pack(pady= 10)
-            Label(self.win, text="Please also chose your projector.").pack()
-            entryProj = Entry(self.win,font=('Century 12'),width=40)
-            entryProj.pack(pady= 10)
-            Button(self.win, text="Enter", command= get_value).pack()
-            self.win.mainloop()
+        Parameters:
+        -----------
+        value : str
+            The user input to be validated.
+
+        Returns:
+        --------
+        bool
+            True if the input is valid (empty or numeric), False otherwise.
+        """
+        return value =="" or value.isnumeric()
+
+
+    def update_monitor_numbers(self, entryPrim, entryProj):
+        """Updates the indicies for the primary and projector monitors 
+        based on the user's input in the tkinter window when the Enter button
+        is clicked.
+
+        Parameters:
+        -----------
+        entryPrim : Entry widget
+            A tkinter Entry widget for the user's input for primary display.
+        entryProj : Entry widget
+            A tkinter Entry widget for the user's input for projector display.
+
+        Returns:
+        --------
+        None
+        """
+
+        self.monitor_num_tk_prim.set(entryPrim.get())
+        self.monitor_num_tk_proj.set(entryProj.get())
+
+        try:
+            self.monitor_num_prim = self.monitor_num_tk_prim.get()
+            self.monitor_num_proj = self.monitor_num_tk_proj.get()
+            # self.monitors_selected = True
+            self.win.destroy()
+        except TclError as e:
+            if 'expected floating-point number but got ""' in str(e):
+                pass
+
 
     def select_tv_projector(self):
-
         """Select the primary display and projector and return their settings.
 
         This method takes screenshots of all connected monitors and displays them in a tkinter
@@ -195,13 +228,19 @@ class DisplaySelection:
 
         #Take a screenshot of all monitors 
         mons = sct.monitors[1:]
-        disp_image = self.getImageForTkinter(sct,mons)
+        disp_image = self.get_monitor_screenshots(sct,mons)
 
         while(not(self.monitors_selected)):
             #Get the monitor number from the TKinter window, and set the displays 
             #to the apprpriate mss
-            self.getMonitorNumWithTkinter(disp_image)
-            if self.monitor_num_prim > 0 and self.monitor_num_proj > 0 and self.monitor_num_prim <=len(mons) and self.monitor_num_proj <=len(mons):
+            self.get_monitor_nums(disp_image)
+            if (self.monitor_num_prim is not None and self.monitor_num_proj is not None
+                and self.monitor_num_prim > 0 and self.monitor_num_proj > 0
+                and self.monitor_num_prim <=len(mons) 
+                and self.monitor_num_proj <=len(mons)
+                # for when there's only 1 display
+                and (self.monitor_num_prim == 1 or (self.monitor_num_prim != self.monitor_num_proj))):
+                
                 #Valid monitor numbers entered
                 self.monitors_selected = True
                 
