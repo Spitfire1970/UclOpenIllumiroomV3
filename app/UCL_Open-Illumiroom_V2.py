@@ -88,8 +88,7 @@ def run_calibration(calibration):
     """
     Runs the calibration system to calibrate the projector to the TV.
     """
-    calibration.capture()
-
+    calibration.setup_system()
 
 
 def main_loop(settings_access, mode_factory, fps):

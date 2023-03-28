@@ -26,34 +26,29 @@ class Calibration:
         self.room_image_path = os.path.join(settings_access.assets_path, "room_image/")
         self.display_capture = display_capture
         self.settings_access = settings_access
+        self.calibration_state = settings_access.read_general_settings("calibration_state")
         self.cam_port = settings_access.read_general_settings("camera_nr")
         self.primary_bounding_box = self.display_capture.get_primary_bounding_box()
         self.projector_bounding_box = self.display_capture.get_projector_bounding_box()
         instruction_image_names = ["place_webcam.jpg", "camera_select.jpg", "grey_code_capture.jpg",
-                                   "software_calibration.jpg", "calibration_complete.jpg"]
+                                   "software_calibration.jpg", "calibration_complete.jpg", "calibration_unsuccessful.jpg"]
         self.instruction_images = [
             self.display_capture.frame_primary_resize(cv2.imread(settings_access.assets_path
                                                                  + "calibration/instructions/" + img_name))
             for img_name in instruction_image_names]
 
-    def capture(self):
-        """
-        Capture gray code pattern frames
-        """
-        # Setup displays and start camera
-        print("Starting webcam")
-        camera = ThreadedVideoCapture(self.cam_port)
-        # camera = cv2.VideoCapture(self.cam_port, cv2.CAP_DSHOW)
-        tv_monitor = Monitor("Instructions",
-                             (self.primary_bounding_box["left"], self.primary_bounding_box["top"]),
-                             (self.primary_bounding_box["width"], self.primary_bounding_box["height"]))
-        tv_monitor.open_fullscreen()
 
-        # Show first instruction slide
+    def hardware_setup(self, tv_monitor):
+        # Show first instruction - webcam, projector setup
         tv_monitor.display_image(self.instruction_images[0])
         while cv2.waitKey(1) != 32:
             pass
 
+        # Start camera
+        print("Starting webcam")
+        camera = ThreadedVideoCapture(self.cam_port)
+
+        # Verify if correct camera has been chosen in MFC
         test_img = camera.read()
         camera.close()
         resized_image = self.display_capture.frame_primary_resize(test_img)
@@ -70,10 +65,67 @@ class Calibration:
                     pass
                 cv2.destroyAllWindows()
                 exit()
-
+        
+        # Capture projected gray code pattern frames
         tv_monitor.display_image(self.instruction_images[2])
         cv2.waitKey(100)
+        self.capture()
 
+
+    def software_setup(self, tv_monitor):
+        tv_monitor.display_image(self.instruction_images[3])
+
+        if self.select_projection_area_and_tv(Monitor("Projector",
+                (self.projector_bounding_box["left"],
+                self.projector_bounding_box["top"]),
+                (self.projector_bounding_box["width"],
+                self.projector_bounding_box["height"]))
+            ):
+            if self.calibrate():
+                # Calibration complete
+                tv_monitor.display_image(self.instruction_images[4])
+                self.calibration_state = "hardware"
+            else:
+                # Calibration unsuccessful - try again
+                tv_monitor.display_image(self.instruction_images[5])
+                self.calibration_state = "software"
+        else:
+            # Calibration unsuccessful - try again
+            tv_monitor.display_image(self.instruction_images[5])
+            self.calibration_state = "software"
+
+        while cv2.waitKey(1) != 32:
+            pass
+        tv_monitor.close()
+        cv2.destroyAllWindows()
+
+
+    def setup_system(self):
+        """
+        """
+        tv_monitor = Monitor("Instructions",
+                             (self.primary_bounding_box["left"], self.primary_bounding_box["top"]),
+                             (self.primary_bounding_box["width"], self.primary_bounding_box["height"]))
+        tv_monitor.open_fullscreen()
+
+        # Store the state of the calibration so that the
+        # user doesn't have to re-do gray code capture etc.
+        # when they perform an invalid input for software calibration
+        if self.calibration_state == "hardware":
+            self.hardware_setup(tv_monitor)
+            self.calibration_state = "software"
+        if self.calibration_state == "software":
+            self.software_setup(tv_monitor)
+        
+        general_settings_json = self.settings_access.read_settings("general_settings.json")
+        general_settings_json["calibration_state"] = self.calibration_state
+        self.settings_access.write_settings("general_settings.json", general_settings_json)
+
+
+    def capture(self):
+        """
+        Capture gray code pattern frames
+        """
         subprocess.run([self.exe_path,
                         "capture",
                         self.data_folder,
@@ -83,31 +135,20 @@ class Calibration:
                         str(self.projector_bounding_box["left"]),
                         str(self.projector_bounding_box["top"])], capture_output=False)
 
-        tv_monitor.display_image(self.instruction_images[3])
-
-        self.calibrate()
-
-        # Take extra image for room image (maximum resolution),
-        # locate projection and TV areas
-
-        tv_monitor.display_image(self.instruction_images[4])
-        while cv2.waitKey(1) != 32:
-            pass
-        tv_monitor.close()
-        cv2.destroyAllWindows()
 
     def calibrate(self):
         """
         Run the calibration script on this classes data folder
         """
+        win_name = "Select Adjusted Display Contour"
+        r = cv2.selectROI(win_name, self.add_text_to_image(cv2.imread(os.path.join(self.data_folder, "blackFrame.png")),
+                                                                                    "Select desired projection area."))
+        # Check if ROI has been selected and if selection is cancelled
+        if cv2.waitKey(1) == ord('c') or r == (0, 0, 0, 0):
+            cv2.destroyWindow(win_name)
+            return False
+        cv2.destroyWindow(win_name)
 
-        self.select_projection_area_and_tv(Monitor("Projector",
-                                                   (self.projector_bounding_box["left"],
-                                                    self.projector_bounding_box["top"]),
-                                                   (self.projector_bounding_box["width"],
-                                                    self.projector_bounding_box["height"])))
-        r = cv2.selectROI("Select adjusted display contour", self.add_text_to_image(cv2.imread(os.path.join(self.data_folder, "blackFrame.png")),
-                                                                                                  "Select final projection area"))
         contour = (r[0], r[1], r[0] + r[2], r[1], r[0] + r[2], r[1] + r[3], r[0], r[1] + r[3])
         exe_data = [self.exe_path,
                     "calibrate",
@@ -116,6 +157,8 @@ class Calibration:
                     str(self.projector_bounding_box["height"])] + \
                    [str(i) for i in contour] + ["2", "7"]
         subprocess.run(exe_data, capture_output=False)
+        return True
+
 
     def select_projection_area_and_tv(self, monitor):
         room_image_camera = cv2.VideoCapture(self.cam_port, cv2.CAP_DSHOW)
@@ -131,37 +174,46 @@ class Calibration:
         cv2.waitKey(1000)
         monitor.close()
 
-        # img = projection_area
+        # Select projection area
         projection_area_roi = self.add_text_to_image(projection_area.copy(),
-                                                     "Select the 4 corners of the projection area, then press 'Space'. Right click to reselect.")
+                                "Select the 4 corners of the projection area, then "
+                                + "press 'Space'. Right click to reselect.")
         img_height, img_width, _ = projection_area_roi.shape
-        img = cv2.resize(projection_area_roi, (img_width // 2, img_height // 2))  # double-check resizing
+        img = cv2.resize(projection_area_roi, (img_width // 2, img_height // 2))
         corners = self.get_projection_corners(img=img)
-        corners = self.order_corners(crns=corners)
-        homography, transformed_proj_roi = self.perspective_transform(img, corners)
-        # Resize the image to projector resolution
-        transformed_proj_roi = self.display_capture.resize_image_fit_projector_each_frame(transformed_proj_roi)
+        if corners is not None:
+            corners = self.order_corners(crns=corners)
+            homography, transformed_proj_roi = self.perspective_transform(img, corners)
+            # Resize the image to projector resolution
+            transformed_proj_roi = self.display_capture.resize_image_fit_projector_each_frame(transformed_proj_roi)
 
-        # projection_area_roi = self.add_text_to_image(projection_area.copy(), "Please draw a box around the projection area, then press 'space'")
-        # area = cv2.selectROI("Select Projection Area", projection_area_roi)
-        # cv2.destroyAllWindows()
-        # projection_area = projection_area[int(area[1]):int(area[1]+area[3]), int(area[0]):int(area[0]+area[2])]
-        # cv2.imwrite(self.room_image_path+"room_img.jpg", projection_area)
+            # Select TV area
+            self.select_tv_area(transformed_proj_roi)
+            return True
+        return False
 
-        tv_area = transformed_proj_roi.copy()
+
+    def select_tv_area(self, projector_roi):
+        tv_area = projector_roi.copy()
         tv_area_roi = self.add_text_to_image(tv_area.copy(),
-                                             "Please draw a box around the TV, then press 'Space'")
-        area = cv2.selectROI("Select TV", tv_area_roi)
-        cv2.destroyAllWindows()
-        tv_area[int(area[1]):int(area[1] + area[3]), int(area[0]):int(area[0] + area[2])] = 0
-        tv_x = (area[0] - (area[2] / 2), area[0] + (3 * area[2] / 2))
-        tv_y = (area[1] - (area[3] / 2), area[1] + (3 * area[3] / 2))
-        pnts = ((tv_x[0], tv_y[0]), (tv_x[1], tv_y[0]), (tv_x[1], tv_y[1]), (tv_x[0], tv_y[1]))
+                        "Please draw a box around the TV, then press 'Space'. "
+                        + "Press 'c' to cancel selection.")
 
-        # tv_area = self.display_capture.resize_image_fit_projector_each_frame(tv_area)
+        cv2.imshow("Select TV", tv_area_roi)
+        area = cv2.selectROI("Select TV", tv_area_roi)
+        # Check if TV has been selected before exiting window
+        # or if selection has been cancelled
+        if cv2.waitKey(1) == ord('c') or area == (0, 0, 0, 0):
+            cv2.destroyWindow("Select TV")
+            return False
+        cv2.destroyWindow("Select TV")
+
+        # Set TV area to be black
+        tv_area[int(area[1]):int(area[1] + area[3]), int(area[0]):int(area[0] + area[2])] = 0
         cv2.imwrite(self.room_image_path + "room_img_noTV.jpg", tv_area)
 
         self.save_tv_coords(area)
+
 
     def read_maps(self):
         """
@@ -253,14 +305,26 @@ class Calibration:
         data['points'] = []
         data['max_points'] = max_points
 
-        cv2.imshow("Select Projection Area", img)
-        while len(data['points']) != max_points:
-            print("Please select all 4 corners to proceed.")
-            # Set callback function for any mouse event
-            cv2.setMouseCallback("Select Projection Area", self.mouse_handler, data)
-            cv2.waitKey(0)
-            cv2.setMouseCallback("Select Projection Area", lambda *args: None)
-        cv2.destroyWindow("Select Projection Area")
+        try:
+            cv2.imshow("Select Projection Area", img)
+            while ((len(data['points']) != max_points)):
+                # key = cv2.waitKey(1)
+                if cv2.getWindowProperty("Select Projection Area", cv2.WND_PROP_VISIBLE) < 1:
+                    print("WINDOW CLOSED")
+                    # cv2.destroyAllWindows()
+                    break
+                else:
+                    print("Please select all 4 corners to proceed.")
+                    # Set callback function for any mouse event
+                    cv2.setMouseCallback("Select Projection Area", self.mouse_handler, data)
+                    cv2.waitKey(0)
+                    cv2.setMouseCallback("Select Projection Area", lambda *args: None)
+            cv2.destroyWindow("Select Projection Area")
+        except cv2.error as e:
+            # For when the user Xs the window
+            if "NULL window: 'Select Projection Area'" in str(e):
+                return None
+
 
         # Convert array to np.array
         points = np.array(data['points'], dtype="float32")
