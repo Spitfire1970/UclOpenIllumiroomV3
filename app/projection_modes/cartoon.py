@@ -12,7 +12,7 @@ class Cartoon(Mode):
             audio_capture: object = None  # An optional audio capture object.
         ):
         """
-        Initialize a Cartoon object.
+        Initialize a Cartoon object. Generate and save the cartoon view of the image.
 
         settings_access (object): An object that provides access to the settings of the application.
         display_capture (object): A display capture object.
@@ -21,6 +21,11 @@ class Cartoon(Mode):
         """
         self.settings_access = settings_access
         self.img = background_img
+
+        cartoon_img_name = self.settings_access.assets_path + "generated\cartoon_view.jpeg"
+        self.cartoonify()
+        cv2.imwrite(cartoon_img_name, self.img)
+
 
     def cartoonify(self):
         """
@@ -45,22 +50,10 @@ class Cartoon(Mode):
 
     def trigger(self):
         """
-        Generate and return a cartoon view of the background image.
+        Return a cartoon view of the background image.
 
         Returns:
         list: A list containing the cartoon view of the background image.
         """
-        # Save image
-        # cartoon_img_name = (__file__[:__file__.index("app")
-        #     + len("app")]+"/assets/generated/cartoon_view.jpeg")
-        #All images are stored in the assets folder
-        cartoon_img_name = self.settings_access.assets_path + "generated\cartoon_view.jpeg"
-        cartoon_img = Path(cartoon_img_name)
-        if cartoon_img.is_file():
-            self.img = cv2.imread(cartoon_img_name)
-        else: 
-            self.cartoonify()
-            cv2.imwrite(cartoon_img_name, self.img)
-
         frames = [self.img]
         return frames
