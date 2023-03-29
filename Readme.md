@@ -285,7 +285,7 @@ Distributed under the LGPL-3.0 License. See `LICENSE.txt` for more information.
 * Chan Lee -  chan.lee.21@ucl.ac.uk
 
 
-Repository Link: [https://github.com/FabianBindley/IllumiroomGroup33COMP0016/](https://github.com/FabianBindley/IllumiroomGroup33COMP0016/)
+Repository Link: [https://github.com/FabianBindley/UCL-Open-Illumiroom-V2](https://github.com/FabianBindley/UCL-Open-Illumiroom-V2)
 
 </br> 
 
