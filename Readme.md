@@ -280,9 +280,9 @@ Distributed under the LGPL-3.0 License. See `LICENSE.txt` for more information.
 ## Contact
 
 * Fabian Bindley - [LinkedIn](https://www.linkedin.com/in/fabian-bindley-741827221/) - fabian.bindley.21@ucl.ac.uk
-* Aishwarya Bandaru - email@example.com
-* Damian Ziaber - email@example.com
-* Chan Lee -  email@example.com
+* Aishwarya Bandaru - aishwarya.bandaru.21@ucl.ac.uk
+* Damian Ziaber - damian.ziaber.21@ucl.ac.uk
+* Chan Lee -  chan.lee.21@ucl.ac.uk
 
 
 Repository Link: [https://github.com/FabianBindley/IllumiroomGroup33COMP0016/](https://github.com/FabianBindley/IllumiroomGroup33COMP0016/)
