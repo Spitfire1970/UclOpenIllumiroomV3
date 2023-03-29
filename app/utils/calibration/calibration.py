@@ -17,7 +17,7 @@ class Calibration:
     """
     Calibration class is used to walk the user through a calibration process,
     It shows step-by-step instructions and executes an external executable file
-    to capture and store GrayCode Patterns as well as run calibration algorithm on them.
+    to capture and store Gray-Code Patterns as well as run calibration algorithm on them.
     """
     def __init__(self, settings_access, display_capture):
         print("Calibration init")
@@ -39,6 +39,22 @@ class Calibration:
 
 
     def hardware_setup(self, tv_monitor):
+        """Displays instructions for webcam and projector setup on the
+        TV monitor, starts the webcam camera and verifies if the correct camera
+        has been chosen in the MFC settings. Then, it captures the projected 
+        gray-code pattern frames.
+
+        Parameters:
+        -----------
+        tv_monitor : Monitor
+            A Monitor object representing the TV monitor to be used for 
+            displaying the system setup instructions and for confirming 
+            the chosen webcam.
+
+        Returns:
+        --------
+        None
+        """
         # Show first instruction - webcam, projector setup
         tv_monitor.display_image(self.instruction_images[0])
         while cv2.waitKey(1) != 32:
@@ -66,13 +82,32 @@ class Calibration:
                 cv2.destroyAllWindows()
                 exit()
         
-        # Capture projected gray code pattern frames
+        # Capture projected gray-code pattern frames
         tv_monitor.display_image(self.instruction_images[2])
         cv2.waitKey(100)
         self.capture()
 
 
     def software_setup(self, tv_monitor):
+        """Displays instructions for software setup on the TV monitor, 
+        opens windows to select the projection area, TV and the final
+        projection area. If successful, the projector-camera calibration, 
+        using the gray-code patterns, begins. If at any stage, invalid inputs
+        have been received, calibration is unsuccessful and the user is
+        asked to try again. The calibration state is saved. When unsuccessful,
+        the calibration state is set to 'software' to start the setup from the
+        software part directly (skipping the gray-code capture etc.).
+
+        Parameters:
+        -----------
+        tv_monitor : Monitor
+            A Monitor object representing the TV monitor to be used for 
+            displaying the instructions.
+
+        Returns:
+        --------
+        None
+        """
         tv_monitor.display_image(self.instruction_images[3])
 
         if self.select_projection_area_and_tv(Monitor("Projector",
@@ -96,12 +131,27 @@ class Calibration:
 
         while cv2.waitKey(1) != 32:
             pass
+        # All instructions have been shown 
+        # so close monitor
         tv_monitor.close()
         cv2.destroyAllWindows()
 
 
     def setup_system(self):
-        """
+        def setup_system(self):
+        """Sets up the system by instantiating a Monitor object for 
+        the TV to display instructions. Checks whether to start the 
+        setup procedure from the hardware or software setup based on the 
+        calibration state. After completing calibration, the updated
+        calibration state is saved to the system settings.
+
+        Parameters:
+        -----------
+        None
+
+        Returns:
+        --------
+        None
         """
         tv_monitor = Monitor("Instructions",
                              (self.primary_bounding_box["left"], self.primary_bounding_box["top"]),
@@ -123,8 +173,15 @@ class Calibration:
 
 
     def capture(self):
-        """
-        Capture gray code pattern frames
+        """Captures gray-code pattern frames.
+
+        Parameters:
+        -----------
+        None
+
+        Returns:
+        --------
+        None
         """
         subprocess.run([self.exe_path,
                         "capture",
@@ -137,13 +194,22 @@ class Calibration:
 
 
     def calibrate(self):
-        """
-        Run the calibration script on this classes data folder
+        """Runs the calibration script on this class'
+        data folder after selecting the adjusted display contour ROI.
+
+        Parameters:
+        -----------
+        None
+
+        Returns:
+        --------
+        bool
+            False if ROI is not selected or selection is cancelled, True otherwise.
         """
         win_name = "Select Adjusted Display Contour"
         r = cv2.selectROI(win_name, self.add_text_to_image(cv2.imread(os.path.join(self.data_folder, "blackFrame.png")),
                                                                                     "Select desired projection area."))
-        # Check if ROI has been selected and if selection is cancelled
+        # Check if ROI has not been selected and if selection is cancelled
         if cv2.waitKey(1) == ord('c') or r == (0, 0, 0, 0):
             cv2.destroyWindow(win_name)
             return False
@@ -161,6 +227,22 @@ class Calibration:
 
 
     def select_projection_area_and_tv(self, monitor):
+        """Capture an image of the room while a plain grey frame is 
+        projected. Displays an OpenCV window to select the projection area
+        in the image. If successfully, selected, displays an OpenCV window to
+        select the TV in the image.
+
+        Parameters:
+        -----------
+        monitor : Monitor
+            A Monitor object represeting the projector display for projecting
+            a grey frame.
+
+        Returns:
+        --------
+        bool
+            True if the selection process is successful, False otherwise.
+        """
         room_image_camera = cv2.VideoCapture(self.cam_port, cv2.CAP_DSHOW)
         room_image_camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
         room_image_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
@@ -194,6 +276,23 @@ class Calibration:
 
 
     def select_tv_area(self, projector_roi):
+        """Displays an OpenCV window for selecting the region of 
+        the perspective transformed projection area image that 
+        corresponds to the TV screen. Save an image with a black
+        mask where TV is to assets\\room_image and the coordinates 
+        for the TV to the Wobble mode settings (as it's the only mode
+        which uses the TV coords presently).
+
+        Parameters:
+        -----------
+        projector_roi : numpy.ndarray
+            The image of the perspective transformed projection area image.
+
+        Returns:
+        --------
+        bool: True if the TV region was successfully selected, False otherwise.
+        
+        """
         tv_area = projector_roi.copy()
         tv_area_roi = self.add_text_to_image(tv_area.copy(),
                         "Please draw a box around the TV, then press 'Space'. "
@@ -201,7 +300,7 @@ class Calibration:
 
         cv2.imshow("Select TV", tv_area_roi)
         area = cv2.selectROI("Select TV", tv_area_roi)
-        # Check if TV has been selected before exiting window
+        # Check if TV has not been selected before exiting window
         # or if selection has been cancelled
         if cv2.waitKey(1) == ord('c') or area == (0, 0, 0, 0):
             cv2.destroyWindow("Select TV")
@@ -217,8 +316,16 @@ class Calibration:
 
     def read_maps(self):
         """
-        Get remap maps from the data folder
-        :return:
+        Get remap maps from the data folder.
+
+        Parameters:
+        -----------
+        None
+        
+        Returns:
+        --------
+        tuple(numpy.ndarray, numpy.ndarray)
+            Returns a tuple of two numpy arrays that contain remap maps.
         """
         fs = cv2.FileStorage(os.path.join(self.data_folder, "map.ext"), cv2.FILE_STORAGE_READ)
         map1 = fs.getNode("map1").mat()
@@ -226,7 +333,10 @@ class Calibration:
         fs.release()
         return map1, map2
 
+
     def add_confirm_text_to_image(self, img):
+        # Used when verifying the correct webcam has
+        # been chosen
         img_copy = img.copy()
         font = cv2.FONT_HERSHEY_SIMPLEX
         textLocation1 = (50, 50)
@@ -254,7 +364,10 @@ class Calibration:
 
         return img_copy
 
+
     def add_text_to_image(self, img, text):
+        # Used to add text onto an image
+        # displayed using an OpenCV window
         font = cv2.FONT_HERSHEY_SIMPLEX
         textLocation1 = (50, 50)
         fontScale = 1.2
@@ -272,7 +385,19 @@ class Calibration:
 
         return img
 
+
     def take_picture_background(self, monitor):
+        """Project a grey frame on the projector display.
+
+        Parameters:
+        -----------
+        monitor : Monitor
+            A Monitor object representing the projector display.
+
+        Returns:
+        --------
+        None
+        """
         height = self.projector_bounding_box['height']
         width = self.projector_bounding_box['width']
         image = np.zeros((height, width, 3), np.uint8)
@@ -283,7 +408,35 @@ class Calibration:
 
         monitor.display_image(image)
 
+
     def mouse_handler(self, event, x, y, flags, data):
+        """Handle mouse events for selecting points in an image.
+        Points can be selected upto the max number of points. 
+        If right click is pressed, remove all the points selected 
+        so far and reset the image that's displayed to the original 
+        room image.
+
+        Parameters:
+        -----------
+        event : int
+            The event that occurred.
+        x : int
+            The x-coordinate of the event.
+        y : int
+            The y-coordinate of the event.
+        flags : int
+            Any flags that were passed to the event.
+        data : dict
+            A dictionary containing the original image, image with
+            the points selected so far drawn as circles, 
+            coordinates of the points and the max points that can
+            be selected.
+
+        Returns:
+        --------
+        None
+        
+        """
         if event == cv2.EVENT_LBUTTONDOWN:
             if len(data['points']) < data['max_points']:
                 cv2.circle(data['img'], (x, y), 2, (0, 255, 255), -1)
@@ -296,7 +449,23 @@ class Calibration:
             cv2.imshow("Select Projection Area", data['img'])
             data['points'] = []
 
+
     def get_projection_corners(self, img):
+        """
+        Retrieve the 4 corners of the projection area that
+        have been selected on the given image of the room. 
+
+        Parameters:
+        -----------
+        img : numpy.ndarray
+            An array containing the image of the room.
+
+        Returns:
+        --------
+        numpy.ndarray or None
+            An array of four points representing the selected corners,
+            or None if the window was closed without selecting four corners.
+        """
         # Set up data to send to mouse handler
         max_points = 4
         data = {}
@@ -308,10 +477,7 @@ class Calibration:
         try:
             cv2.imshow("Select Projection Area", img)
             while ((len(data['points']) != max_points)):
-                # key = cv2.waitKey(1)
                 if cv2.getWindowProperty("Select Projection Area", cv2.WND_PROP_VISIBLE) < 1:
-                    print("WINDOW CLOSED")
-                    # cv2.destroyAllWindows()
                     break
                 else:
                     print("Please select all 4 corners to proceed.")
@@ -321,16 +487,29 @@ class Calibration:
                     cv2.setMouseCallback("Select Projection Area", lambda *args: None)
             cv2.destroyWindow("Select Projection Area")
         except cv2.error as e:
-            # For when the user Xs the window
+            # For when the user presses the X on the window
             if "NULL window: 'Select Projection Area'" in str(e):
                 return None
-
 
         # Convert array to np.array
         points = np.array(data['points'], dtype="float32")
         return points
 
+
     def order_corners(self, crns):
+        """Orders corners of a quadrilateral in the 
+        top-left, top-right, bottom-right, bottom-left order.
+
+        Parameters:
+        -----------
+        crns : numpy.ndarray
+            An array with the corner points of the quadrilateral.
+
+        Returns:
+        --------
+        numpy.ndarray
+            An array with the ordered corner points.
+        """
         # Sort corners by ascending x-value
         x_sorted = crns[np.argsort(crns[:, 0]), :]
         left_most = x_sorted[:2, :]
@@ -347,19 +526,49 @@ class Calibration:
         (br, tr) = right_most[np.argsort(D)[::-1], :]
         return np.array([tl, tr, br, bl], dtype="float32")
 
+
     def perspective_transform(self, img, crns_from):
+        """Performs a perspective transformation on the image of 
+        the room based on the given source and destination corners.
+
+        Parameters:
+        -----------
+        img : numpy.ndarray
+            The image to be transformed.
+        crns_from : numpy.ndarray
+            An array with the initial corner points.
+
+        Returns:
+        --------
+        tuple(numpy.ndarray, numpy.ndarray)
+            A tuple with the transformation matrix and the transformed image.
+        """
         height, width = 1080 // 2, 1920 // 2
         crns_to = np.array([[0, 0], [width, 0], [width, height], [0, height]], np.float32)
 
         matrix = cv2.getPerspectiveTransform(crns_from, crns_to)
         result = cv2.warpPerspective(img, matrix, (width, height))
 
-        # cv2.imshow('View of Projection Area', result)
-        # cv2.waitKey(0)
-        # cv2.destroyWindow("View of Projection Area")
         return matrix, result
 
+
     def update_mode_settings(self, settings, new_data):
+        """Updates mode settings with the new data about the
+        TV coordinates for the Wobble mode (this is the only
+        mode which uses this info right now - should save TV coords
+        to general settings in the future).
+
+        Parameters:
+        -----------
+        settings : list
+            A list with the names of the settings to be updated.
+        new_data : list
+            A list with the new data to update the settings.
+
+        Returns:
+        --------
+        None
+        """
         mode_settings_json = self.settings_access.read_settings("mode_settings.json")
 
         for i in range(len(settings)):
@@ -367,7 +576,20 @@ class Calibration:
 
         self.settings_access.write_settings("mode_settings.json", mode_settings_json)
 
+
     def save_tv_coords(self, tv_area_roi):
+        """Saves the TV coordinates in mode settings.
+
+        Parameters:
+        -----------
+        tv_area_roi : tuple
+            A tuple with the top-left corner, width and 
+            height of the TV area.
+
+        Returns:
+        --------
+        None
+        """
         top_left = [tv_area_roi[0], tv_area_roi[1]]
         bottom_right = [tv_area_roi[0] + tv_area_roi[2], tv_area_roi[1] + tv_area_roi[3]]
 
@@ -399,12 +621,15 @@ class Monitor:
     def display_image(self, img):
         """
         Display given image on the monitor
-        :param img: Image to display
+         Parameters:
+        -----------
+        img : numpy.ndarray
+            Image to display
         """
         cv2.imshow(self.name, img)
 
     def close(self):
         """
-        Destroy the opencv window
+        Destroy the OpenCV window
         """
         cv2.destroyWindow(self.name)
