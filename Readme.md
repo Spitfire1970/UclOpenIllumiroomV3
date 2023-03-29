@@ -134,8 +134,8 @@ Before you launch UCL Open-Illumiroom V2, we would strongly reccomend that you s
 
 To compile the main UCL Open-Illumiroom V2 system, the Nuitka library is used. Nuitka compiles from Python source-code to C source-code, allowing for a distributable build to be generated.
 
-Compiled builds can be found in _/release/UCL_Open-Illumiroom_V2.dist_
-UCL_Open-Illumiroom_V2.exe will be generated and will be included in this folder.
+Compiled builds can be found in _/release/UCL_Open-Illumiroom_V2.dist_ and 
+UCL_Open-Illumiroom_V2.exe will be generated and included in this folder.
 
 All required libraries are statically linked in the distributable.
 
