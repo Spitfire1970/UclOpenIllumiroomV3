@@ -138,7 +138,6 @@ class Calibration:
 
 
     def setup_system(self):
-        def setup_system(self):
         """Sets up the system by instantiating a Monitor object for 
         the TV to display instructions. Checks whether to start the 
         setup procedure from the hardware or software setup based on the 
@@ -324,7 +323,7 @@ class Calibration:
         
         Returns:
         --------
-        tuple(numpy.ndarray, numpy.ndarray)
+        map1, map2 : tuple of numpy.ndarray
             Returns a tuple of two numpy arrays that contain remap maps.
         """
         fs = cv2.FileStorage(os.path.join(self.data_folder, "map.ext"), cv2.FILE_STORAGE_READ)
@@ -540,7 +539,7 @@ class Calibration:
 
         Returns:
         --------
-        tuple(numpy.ndarray, numpy.ndarray)
+        matrix, result : tuple of numpy.ndarray
             A tuple with the transformation matrix and the transformed image.
         """
         height, width = 1080 // 2, 1920 // 2
