@@ -199,7 +199,6 @@ class Calibration:
             self.calibration_state = "software"
         if self.calibration_state == "software":
             self.software_setup(camera, tv_monitor)
-        camera.close()
 
         general_settings_json = self.settings_access.read_settings("general_settings.json")
         general_settings_json["calibration_state"] = self.calibration_state
@@ -257,9 +256,14 @@ class Calibration:
 
         monitor.open_fullscreen()
         self.take_picture_background(monitor)
+        cv2.waitKey(1000)
         projection_area = camera.read()
         cv2.waitKey(1000)
         monitor.close()
+        cv2.waitKey(1000)
+        # release instance of ThreadedVideoCapture
+        # as it is no longer required
+        camera.close()
 
         # Select projection area
         projection_area_roi = self.add_text_to_image(projection_area.copy(),
@@ -275,8 +279,8 @@ class Calibration:
             transformed_proj_roi = self.display_capture.resize_image_fit_projector_each_frame(transformed_proj_roi)
 
             # Select TV area
-            self.select_tv_area(transformed_proj_roi)
-            return True
+            if self.select_tv_area(transformed_proj_roi):
+                return True
         return False
 
     def select_tv_area(self, projector_roi):
@@ -316,6 +320,7 @@ class Calibration:
         cv2.imwrite(self.room_image_path + "room_img_noTV.jpg", tv_area)
 
         self.save_tv_coords(area)
+        return True
 
     def read_maps(self):
         """
