@@ -41,11 +41,16 @@ The system can be run on any computer running Windows, and supports game console
 The system has been released as an open-source project, licensed under LGPL V3.0 so that developers can extend the system and create their own projection modes. Users may also download the system from the Microsoft Store and try it out for themselves! 
 
 
-Our Project websites can be found here:
+Our project websites can be found here:
 
 * [Expanded Experiences - Showcase Site](https://expandedexperiences.com)
 
-* [Full Project Site](https://students.cs.ucl.ac.uk/2022/group33/) 
+* [Full Project Portfolio Site](https://students.cs.ucl.ac.uk/2022/group33/)
+
+
+The GitHub repository for the calibration system can be found here:
+
+* [Space Unfolded Repository](https://spaceunfolded.com)
 
 </br>
 
@@ -129,8 +134,8 @@ Before you launch UCL Open-Illumiroom V2, we would strongly reccomend that you s
 
 To compile the main UCL Open-Illumiroom V2 system, the Nuitka library is used. Nuitka compiles from Python source-code to C source-code, allowing for a distributable build to be generated.
 
-Compiled builds can be found in _/release/UCL_Open-Illumiroom_V2.dist_
-UCL_Open-Illumiroom_V2.exe will be generated and will be included in this folder.
+Compiled builds can be found in _/release/UCL_Open-Illumiroom_V2.dist_ and 
+UCL_Open-Illumiroom_V2.exe will be generated and included in this folder.
 
 All required libraries are statically linked in the distributable.
 
@@ -213,7 +218,7 @@ The wobble mode triggers a sinusoidal distortion centred around the TV screen 
 
 ### Blur
 
-The blur mode simply projects a blurred version of the content shown on the primary display
+The blur mode simply projects a blurred version of the content shown on the primary display.
 
 <div align="center">
   <img src="Documentation/blur.png" alt="Blur mode" width="600">
@@ -246,9 +251,9 @@ The low health mode makes the projection area turn red when the player is on low
 ## Project Roadmap
 
 - [x] Deploy to Microsoft Store
-- [ ] Create More Projection Modes:
+- [ ] Create more projection modes
 - [ ] F1 Data visualisation using MultiViewer for F1 App
-- [ ] Error handling needs to be improved.
+- [ ] Error handling needs to be improved
 
 
 </br>
@@ -280,12 +285,13 @@ Distributed under the LGPL-3.0 License. See `LICENSE.txt` for more information.
 ## Contact
 
 * Fabian Bindley - [LinkedIn](https://www.linkedin.com/in/fabian-bindley-741827221/) - fabian.bindley.21@ucl.ac.uk
-* Aishwarya Bandaru - email@example.com
-* Damian Ziaber - email@example.com
-* Chan Lee -  email@example.com
+* Aishwarya Bandaru - [LinkedIn](https://www.linkedin.com/in/aishwaryab1/) - aishwarya.bandaru.21@ucl.ac.uk
+* Damian Ziaber - [LinkedIn](https://www.linkedin.com/in/damian-ziaber/) - damian.ziaber.21@ucl.ac.uk
+* Chan Lee - [LinkedIn](https://www.linkedin.com/in/chan-hyuk-lee-27b67522b) - chan.lee.21@ucl.ac.uk
 
 
-Repository Link: [https://github.com/FabianBindley/IllumiroomGroup33COMP0016/](https://github.com/FabianBindley/IllumiroomGroup33COMP0016/)
+Main repository link: [https://github.com/FabianBindley/UCL-Open-Illumiroom-V2](https://github.com/FabianBindley/UCL-Open-Illumiroom-V2)
+Calibration repository link: [https://spaceunfolded.com](https://spaceunfolded.com)
 
 </br> 
 

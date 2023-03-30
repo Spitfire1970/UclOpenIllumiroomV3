@@ -10,6 +10,25 @@ from .display_image import DisplayImage
 
 class ModesFactory:
 
+    """
+    Factory class for creating instances of different projectionmode classes.
+
+    This class allows the creation of instances of different mode classes
+    based on a selected projection mode name. The available projection mode classes and their names
+    are specified in the `mode_names` dictionary.
+
+    Attributes:
+        mode_names (dict): A dictionary that maps mode names to mode classes.
+        settings (SettingAccess): An object that provides access to application settings.
+        img (np.ndarray): A background image to use as the base image for the modes.
+        display_capture (DisplayCapture): An object that provides access to display capture functions.
+        audio_capture (AudioCapture): An object that provides access to audio capture functions.
+        selected_mode (str): The name of the currently selected mode.
+
+    Methods:
+        get_mode(): Returns an instance of the currently selected mode, with all required arguments.
+    """
+
     def __init__(
         self, 
         background_image, 
@@ -33,10 +52,7 @@ class ModesFactory:
         self.display_capture = display_capture
         self.audio_capture = audio_capture
         self.selected_mode = setting_access.read_general_settings("selected_mode")
-        #self.background_image = read_background_image()
 
-    def get_available_modes(self):
-        return self.mode_names.keys()
 
     def get_mode(self):
 

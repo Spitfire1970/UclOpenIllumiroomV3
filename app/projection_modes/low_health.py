@@ -203,10 +203,18 @@ class LowHealth(Mode):
         kmeans_colour = self.kmeans_get_colour(data)
 
         low_health_frame_num = self.scale_low_health_to_frames(kmeans_colour)
-        if self.num_low_health_frames-low_health_frame_num > 0.8 * self.num_low_health_frames:
-            frames = [self.low_health_frames[low_health_frame_num]] 
+
+        #First check if low_health_frame_num is within the allowed range, if not, return the background frame
+
+        if not(isinstance(low_health_frame_num, int) and (low_health_frame_num >= 0 and low_health_frame_num < self.num_low_health_frames)):
+            return [self.background_img]
         else:
-            frames = [self.low_health_frames[low_health_frame_num]] * (3)
-        #print("colour: ",kmeans_colour)
-        #print("frame num: ",low_health_frame_num)
+            if self.num_low_health_frames-low_health_frame_num > 0.8 * self.num_low_health_frames:
+                frames = [self.low_health_frames[low_health_frame_num]] 
+            else:
+                frames = [self.low_health_frames[low_health_frame_num]] * (3)
+        print("colour: ",kmeans_colour)
+        print("frame num: ",low_health_frame_num)
         return frames
+
+
