@@ -356,13 +356,13 @@ void CMFCUCLMI3SettingsDlg::ShowAbout()
 void CMFCUCLMI3SettingsDlg::ShowHelp()
 {
 	// OPEN help.txt
-	ShellExecute(NULL, NULL, aboutSite, NULL, NULL, SW_SHOWNORMAL);
-	/*
+	//ShellExecute(NULL, NULL, aboutSite, NULL, NULL, SW_SHOWNORMAL);
+
 	CComHeapPtr<WCHAR> pszPath;
 	if (SHGetKnownFolderPath(FOLDERID_Windows, KF_FLAG_CREATE, nullptr, &pszPath) == S_OK)
 	{
 		// relative path
-		wstring tempStr = L"data\\help\\head\\help.txt";
+		wstring tempStr = L"UCL_Open-Illumiroom_V2.dist\\assets\\help.txt";
 		LPCWSTR finalP = tempStr.c_str();
 
 		// open .txt file
@@ -372,7 +372,7 @@ void CMFCUCLMI3SettingsDlg::ShowHelp()
 		si.lpFile = finalP;
 		si.nShow = SW_SHOW;
 		ShellExecuteEx(&si);
-	}*/
+	}
 }
 
 

@@ -1,8 +1,1 @@
-﻿  pch.cpp
-  CMFCUCLMI3AboutDlg.cpp
-  MFC-UCL-MI3-Settings.cpp
-  MFC-UCL-MI3-SettingsDlg.cpp
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\filesystem(13): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
-  Generating Code...
-  LINK : C:\Users\fabia\Documents\GitHub\UCL-Open-Illumiroom-V2\MFC\data\UCL Open-Illumiroom V2\..\..\MFC-UCL-MI3-Settings.exe not found or not built by the last incremental link; performing full link
-  MFC-UCL-MI3-Settings.vcxproj -> C:\Users\fabia\Documents\GitHub\UCL-Open-Illumiroom-V2\MFC\MFC-UCL-MI3-Settings.exe
+﻿  MFC-UCL-MI3-Settings.vcxproj -> D:\Users\fabia\Documents\GitHub\IllumiroomGroup33COMP0016\MFC\MFC-UCL-MI3-Settings.exe
