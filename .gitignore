@@ -1,6 +1,9 @@
 
 /release/UCL_Open-Illumiroom_V2.dist
+/official_release/UCL_Open-Illumiroom_V2.dist
+offical_release.zip
 
+/release_old_with_cgal/UCL_Open-Illumiroom_V2.dist
 /app/projection_modes/__pycache__/
 /app/utils/__pycache__/
 /MFC_RELEASE
