@@ -48,10 +48,6 @@ Our project websites can be found here:
 * [Full Project Portfolio Site](https://students.cs.ucl.ac.uk/2022/group33/)
 
 
-The GitHub repository for the calibration system can be found here:
-
-* [Space Unfolded Repository](https://spaceunfolded.com)
-
 </br>
 
 ## Built With
