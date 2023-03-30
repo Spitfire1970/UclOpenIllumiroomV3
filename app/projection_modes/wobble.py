@@ -199,8 +199,8 @@ class Wobble(Mode):
         
         The function checks for the presence of a loud sound 
         using an audio capture device. If a loud sound is detected, 
-        the frames with the wobbling effect are returned. Otherwise, 
-        the original image is returned.
+        the pre-generated frames for the wobbling effect are returned. 
+        Otherwise, the original image is of the room is returned.
         
         Returns:
         --------
