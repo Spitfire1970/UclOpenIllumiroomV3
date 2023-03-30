@@ -72,22 +72,23 @@ class Wobble(Mode):
     def create_TV_mask(self):
         """Create a mask to exclude pixels inside the TV 
         rectangle in the animation. Use the TV coordinates
-        saved in the mode settings with a padding.
+        saved in the mode settings with an inward padding
+        to give the appearance that the TV edges are shaking.
 
         Parameters:
         -----------
         None
-        
+
         Returns:
         --------
         mask : numpy.ndarray
             A numpy array representing the mask for the TV.
         """
         mask = np.zeros(self.img.shape[:2], dtype=np.uint8)
-        # Apply padding of 7px
-        padding = 7
-        new_tl_coords = [sum(i) for i in zip(self.tv_tl_coords, [-abs(padding), -abs(padding)])]
-        new_br_coords = [sum(i) for i in zip(self.tv_br_coords, [padding, padding])]
+        # Apply padding (in px)
+        padding = 9
+        new_tl_coords = [sum(i) for i in zip(self.tv_tl_coords, [padding, padding])]
+        new_br_coords = [sum(i) for i in zip(self.tv_br_coords, [-abs(padding), -abs(padding)])]
         # Fill white rectangle for area inside the TV with padding
         cv2.rectangle(mask, new_tl_coords, new_br_coords, (255, 255, 255), -1)
         return mask
