@@ -252,6 +252,7 @@ class Calibration:
         result, projection_area = room_image_camera.read()
         cv2.waitKey(1000)
         result, projection_area = room_image_camera.read()
+        room_image_camera.release()
         cv2.waitKey(1000)
         monitor.close()
 
