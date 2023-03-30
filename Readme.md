@@ -52,6 +52,9 @@ The GitHub repository for the calibration system can be found here:
 
 * [Space Unfolded Repository](https://spaceunfolded.com)
 
+An executable version of UCL Open-Illumiroom V2 can be downloaded here:
+* [Executable Version](https://liveuclac-my.sharepoint.com/:f:/g/personal/zcabfab_ucl_ac_uk/Er_o7EGK4rhPoNyBEPlgWRwBK_TUEDcgWqVzb11vZ-GAdw?e=ZkfGU3)
+
 </br>
 
 ## Built With
