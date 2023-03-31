@@ -1,6 +1,6 @@
 
 /release/UCL_Open-Illumiroom_V2.dist
-/official_release/UCL_Open-Illumiroom_V2.dist
+/official_release
 
 /release_old_with_cgal/UCL_Open-Illumiroom_V2.dist
 /app/projection_modes/__pycache__/
@@ -10,7 +10,7 @@
 MFC_RELEASE.zip
 **/__pycache__
 __pycache__/
-/MFC/UCL_Open-Illumiroom_V2.dist/
+/MFC/UCL_Open-Illumiroom_V2.dist
 /MFC/UCL Open-Illumiroom V2 Launcher.exe
 /app/assets/calibration/grey_code_photos/grey_code/
 
