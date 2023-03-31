@@ -422,6 +422,21 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSelectDisplaysButton()
 
 void CMFCUCLMI3SettingsDlg::OnBnClickedCalibrateSystemButton()
 {
+	//Save the new camera number
+	globalCameraNr = m_camera.GetCurSel();
+
+	LPCWSTR pathConfig = pathConfigSGeneral.c_str();
+	ifstream ifs_config(pathConfig);
+	string content_config((istreambuf_iterator<char>(ifs_config)), (istreambuf_iterator<char>()));
+	json general_settings = json::parse(content_config);
+
+	general_settings["camera_nr"] = globalCameraNr;
+
+	// WRITE INTO CONFIG JSON ALL CHANGES
+	ofstream outputConfigFile(pathConfig);
+	outputConfigFile << setw(4) << general_settings << endl;
+
+
 	// TODO: Add your control notification handler code here
 	// Run Illumiroom, with background_capture argument
 	ShellExecuteA(NULL, "open", runProgramPath, "calibration", NULL, SW_SHOWDEFAULT);
