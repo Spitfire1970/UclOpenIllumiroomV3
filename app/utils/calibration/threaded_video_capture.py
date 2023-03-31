@@ -30,6 +30,9 @@ class ThreadedVideoCapture:
                     pass
             self.queue.put(frame)
 
+    def opened(self):
+        return self.camera is not None and self.camera.isOpened()
+
     def read(self) -> NDArray:
         """
         Read last frame from camera

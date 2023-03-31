@@ -190,7 +190,13 @@ class Calibration:
         tv_monitor.open_fullscreen()
 
         camera = ThreadedVideoCapture(self.cam_port)
-
+        if not camera.opened():
+            camera.close()
+            tv_monitor.display_image(self.instruction_images[1])
+            while cv2.waitKey(1) != 32:
+                pass
+            cv2.destroyAllWindows()
+            exit()
         # Store the state of the calibration so that the
         # user doesn't have to re-do gray code capture etc.
         # when they perform an invalid input for software calibration
