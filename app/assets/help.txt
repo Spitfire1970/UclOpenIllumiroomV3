@@ -1,0 +1,7 @@
+UCL Open-Illumiroom V2 creates real-time, accessible, expanded experiences for TV-based gaming and entertainment by projecting effects with a projector, around a user’s TV. 
+
+To run UCL Open-Illumiroom V2, please click 'Save and Launch'. To stop the projection, click 'Close Projector'.
+
+To change settings, change them either in the Launcher MFC, or in UCL_Open-Illumiroom_V2.dist/settings/ -> general_settings.json or mode_settings.json
+
+For more information and to access our user manual, please visit https://expandedexperiences.com

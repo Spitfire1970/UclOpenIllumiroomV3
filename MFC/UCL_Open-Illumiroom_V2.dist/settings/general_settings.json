@@ -1,0 +1,46 @@
+{
+    "background_image_path": "room_img_noTV.jpg",
+    "calibration_state": "hardware",
+    "camera_nr": 1,
+    "capture_card": {
+        "capture_card_num": 1,
+        "use_capture_card": false
+    },
+    "exit_key_binding": "Key_Escape",
+    "eye": {
+        "Eye_mouse_speed": 14
+    },
+    "full_screen": true,
+    "keep_window_open": true,
+    "modes_available": [
+        "blur",
+        "wobble",
+        "cartoon",
+        "weather",
+        "snow",
+        "rain",
+        "low_health",
+        "speed_blur",
+        "display_image"
+    ],
+    "selected_displays": {
+        "primary_display": {
+            "height": 1440,
+            "left": 0,
+            "top": 0,
+            "width": 2560
+        },
+        "projector_display": {
+            "height": 1080,
+            "left": -1920,
+            "top": 669,
+            "width": 1920
+        }
+    },
+    "selected_mode": "blur",
+    "show_fps": true,
+    "use_calibration": false,
+    "view": {
+        "low_light_indicator_on": false
+    }
+}

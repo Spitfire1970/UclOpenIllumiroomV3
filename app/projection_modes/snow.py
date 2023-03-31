@@ -13,6 +13,15 @@ class Snow(Mode):
         background_img=None, 
         audio_capture=None
     ):
+        """
+        Initializes the Snow mode object.
+
+        Args:
+            settings_access (object): An object that provides access to mode-specific settings.
+            display_capture (object): The object that captures the display.
+            background_img (numpy.ndarray, optional): The background image to add snow to. Defaults to None.
+            audio_capture (object, optional): The object that captures audio. Defaults to None.
+        """
         self.settings = settings_access
         self.img = background_img
         self.height, self.width = self.img.shape[:2]
@@ -32,6 +41,15 @@ class Snow(Mode):
 
 
     def add_settling_snow(self, image):
+        """
+        Adds settling snow to an image.
+
+        Args:
+            image (numpy.ndarray): The image to add settling snow to.
+
+        Returns:
+            numpy.ndarray: The image with settling snow added to it.
+        """
         # Conversion to HLS
         image_HLS = cv2.cvtColor(image,cv2.COLOR_RGB2HLS)
         image_HLS = np.array(image_HLS, dtype = np.float64)
@@ -54,6 +72,12 @@ class Snow(Mode):
 
 
     def add_to_top(self, radius):
+        """
+        Adds new snowflakes to the top of the image.
+
+        Args:
+            radius (int): The maximum radius of the snowflakes.
+        """
         if len(self.snowflakes) == 0:
         # Add new snowflakes to the top of the image
             for i in range(self.num_snowflakes):
@@ -62,8 +86,16 @@ class Snow(Mode):
                 r = random.randint(3, radius)
                 self.snowflakes.append([x, y, r])
 
-
     def create_falling_snow(self, max_radius, radius_factor):
+        """
+        Move snowflakes down by falling speed and wind, and update their properties. 
+        Keep snowflakes within the desired radius and the background image.
+        
+        Args:
+            max_radius (int): The maximum radius of a snowflake.
+            radius_factor (float): How much the radius of a snowflake will change as it falls.
+        
+        """
         # Move snowflakes down by falling speed and wind
         for i in range(len(self.snowflakes)):
             snowflake = self.snowflakes[i]

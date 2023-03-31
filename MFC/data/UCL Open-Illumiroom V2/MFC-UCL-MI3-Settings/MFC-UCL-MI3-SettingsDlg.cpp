@@ -26,17 +26,21 @@ using namespace std;
 int globalCameraNr;
 bool globalShowFPS;
 bool globalSettingsDialogOpen;
+bool globalUseCalibration;
 
 //mode settings
 int globalBlurAmount;
+int globalSoundThreshold;
+float globalSoundThresholdFloat;
+
 string globalSelectedSnowAmount;
 string globalSelectedRainAmount;
 
 string globalSelectedMode;
 int globalSelectedModeNum = 0;
 
-string modesAvailableStr[] = { "blur","wobble","cartoon","weather","snow","rain","low_health","speed_lines"};
-LPCWSTR  modesAvailable[] = { L"blur",L"wobble",L"cartoon",L"weather",L"snow",L"rain",L"low_health",L"speed_lines"};
+string modesAvailableStr[] = { "blur","wobble","cartoon","weather","snow","rain","low_health","speed_blur","display_image"};
+LPCWSTR  modesAvailable[] = { L"blur",L"wobble",L"cartoon",L"weather",L"snow",L"rain",L"low_health",L"speed_blur",L"display_image"};
 
 LPCSTR runProgramPath = "UCL_Open-Illumiroom_V2.dist\\UCL_Open-Illumiroom_V2.exe";
 
@@ -47,7 +51,8 @@ wstring pathConfigSGeneral = L"UCL_Open-Illumiroom_V2.dist\\settings\\general_se
 wstring pathConfigSModes = L"UCL_Open-Illumiroom_V2.dist\\settings\\mode_settings.json";
 
 // parameters
-#define MAX_CAMERA_INDEX 9
+//MFC does not easily support calculating actual number of connected cameras
+#define MAX_CAMERA_INDEX 5
 
 
 
@@ -70,9 +75,14 @@ void CMFCUCLMI3SettingsDlg::DoDataExchange(CDataExchange* pDX){
 
 	DDX_Control(pDX, IDC_BLUR_AMOUNT_SLIDER, m_blurAmount);
 	DDX_Control(pDX, IDC_BLUR_AMOUNT_COUNTER, m_blurAmountValue);
+
+	DDX_Control(pDX, IDC_SOUND_THRESHOLD_SLIDER, m_soundThresholdAmount);
+	DDX_Control(pDX, IDC_SOUND_THRESHOLD_COUNTER, m_soundThresholdAmountValue);
+
 	DDX_Control(pDX, IDC_FPS_BUTTON, m_showFPS);
 	DDX_Control(pDX, IDC_SELECT_MODE_COMBO, m_selectMode);
 	DDX_Control(pDX, IDC_KEEP_SETTINGS_OPEN, m_keepSettingsOpen);
+	DDX_Control(pDX, IDC_USE_CALIBRATION, m_useCalibration);
 
 	DDX_Control(pDX, IDC_SNOW1, m_lightSnow);
 	DDX_Control(pDX, IDC_SNOW2, m_mediumSnow);
@@ -101,8 +111,8 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_INFO_SNOW_MODE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSnowMode)
 	ON_BN_CLICKED(IDC_BUTTON_INFO_BLUR_AMOUNT, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoBlurAmount)
 	ON_BN_CLICKED(IDC_SELECT_DISPLAYS_BUTTON, &CMFCUCLMI3SettingsDlg::OnBnClickedSelectDisplaysButton)
-	ON_BN_CLICKED(IDC_BUTTON_INFO_BACKGROUND_CAPTURE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoBackgroundCapture)
-	ON_BN_CLICKED(IDC_BACKGROUND_CAPTURE_BUTTON, &CMFCUCLMI3SettingsDlg::OnBnClickedBackgroundCaptureButton)
+	ON_BN_CLICKED(IDC_CALIBRATE_SYSTEM_BUTTON, &CMFCUCLMI3SettingsDlg::OnBnClickedCalibrateSystemButton)
+	ON_BN_CLICKED(IDC_BUTTON_INFO_CALIBRATE_SYSTEM, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoCalibrateSystem)
 
 
 	ON_BN_CLICKED(IDCLOSEPROJECTOR, &CMFCUCLMI3SettingsDlg::OnBnClickedCloseprojector)
@@ -118,14 +128,17 @@ BEGIN_MESSAGE_MAP(CMFCUCLMI3SettingsDlg, CDialogEx)
 
 
 
-	ON_BN_CLICKED(IDC_SELECT_TV_EDGES_BUTTON, &CMFCUCLMI3SettingsDlg::OnBnClickedSelectTvEdgesButton)
-	ON_BN_CLICKED(IDC_BUTTON_INFO_SELECT_TV_EDGES, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectTvEdges)
-	ON_BN_CLICKED(IDC_BUTTON_INFO_SELECT_DISPLAYS, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectDisplays)
 
 	ON_BN_CLICKED(IDC_BUTTON_INFO_RAIN_MODE, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoRainMode)
 	ON_BN_CLICKED(IDC_RAIN1, &CMFCUCLMI3SettingsDlg::OnBnClickedRain1)
 	ON_BN_CLICKED(IDC_RAIN2, &CMFCUCLMI3SettingsDlg::OnBnClickedRain2)
 	ON_BN_CLICKED(IDC_RAIN3, &CMFCUCLMI3SettingsDlg::OnBnClickedRain3)
+
+
+
+	ON_BN_CLICKED(IDC_USE_CALIBRATION, &CMFCUCLMI3SettingsDlg::OnBnClickedUseCalibration)
+	ON_BN_CLICKED(IDC_BUTTON_INFO_SOUND_THRESHOLD, &CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSoundThreshold)
+
 END_MESSAGE_MAP()
 
 // drag window cursor
@@ -180,8 +193,9 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 	// Set general settings data
 	//globalSettingsDialogOpen = general_settings["view"]["open"]; //  keep window open
 	globalShowFPS = general_settings["show_fps"]; // FPS
-	globalCameraNr = general_settings["camera"]["camera_nr"]; // CAMERA
+	globalCameraNr = general_settings["camera_nr"]; // CAMERA
 	globalSelectedMode = general_settings["selected_mode"]; // selected mode
+	globalUseCalibration = general_settings["use_calibration"]; // selected mode
 
 
 	// Initializing an object of wstring
@@ -205,14 +219,19 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 
 	// Set mode settings data
 	globalBlurAmount = mode_settings["blur"]["blur_amount"]; // blur amount
+	globalSoundThresholdFloat = mode_settings["wobble"]["sound_threshold"];// sound threshold for wobble
 	globalSelectedSnowAmount = mode_settings["snow"]["snow_amount"]; // snow amount 
 	globalSelectedRainAmount = mode_settings["rain"]["rain_mode"]; // snow amount 
 	globalSettingsDialogOpen = mode_settings["keep_window_open"]; //  keep window open
+
+	globalSoundThreshold = (int)(globalSoundThresholdFloat * 10000);
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	//WINDOW OPEN
 	m_keepSettingsOpen.SetCheck(globalSettingsDialogOpen);
+	//Use calibration
+	m_useCalibration.SetCheck(globalUseCalibration);
 	// FPS
 	m_showFPS.SetWindowTextW(globalShowFPS ? L"ON" : L"OFF");
 	// Camera
@@ -247,6 +266,12 @@ BOOL CMFCUCLMI3SettingsDlg::OnInitDialog(){
 	strSliderValue.Format(_T("%d"), globalBlurAmount);
 	m_blurAmountValue.SetWindowText(strSliderValue);
 
+	//sound threshold
+	m_soundThresholdAmount.SetRange(0, 5000);
+	m_soundThresholdAmount.SetPos(globalSoundThreshold);
+	strSliderValue.Format(_T("%d"), globalSoundThreshold);
+	m_soundThresholdAmountValue.SetWindowText(strSliderValue);
+
 	//Snow mode - sets to the correct radio check based on the snow mode in the settings
 	m_lightSnow.SetCheck(globalSelectedSnowAmount == "light_snow");
 	m_mediumSnow.SetCheck(globalSelectedSnowAmount == "med_snow");
@@ -278,8 +303,9 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	json general_settings = json::parse(content_config_general);
 
 	general_settings["show_fps"] = globalShowFPS;
-	general_settings["camera"]["camera_nr"] = globalCameraNr;
+	general_settings["camera_nr"] = globalCameraNr;
 	general_settings["selected_mode"] = globalSelectedMode;
+	general_settings["use_calibration"] = globalUseCalibration;
 	// WRITE INTO CONFIG JSON ALL CHANGES
 	ofstream outputConfigFileGeneral(pathConfigGeneral);
 	outputConfigFileGeneral << setw(4) << general_settings << endl;
@@ -290,12 +316,17 @@ void CMFCUCLMI3SettingsDlg::Save(){
 	// Update values mode settings
 	globalBlurAmount = m_blurAmount.GetPos();
 
+	// Update values mode settings
+	globalSoundThreshold = m_soundThresholdAmount.GetPos();
+	globalSoundThresholdFloat = (float)(globalSoundThreshold) / 10000;
+
 	LPCWSTR pathConfigMode = pathConfigSModes.c_str();
 	ifstream ifs_config_mode(pathConfigMode);
 	string content_config_mode((istreambuf_iterator<char>(ifs_config_mode)), (istreambuf_iterator<char>()));
 	json mode_settings = json::parse(content_config_mode);
 
 	mode_settings["blur"]["blur_amount"] = globalBlurAmount;
+	mode_settings["wobble"]["sound_threshold"] = globalSoundThresholdFloat;// sound threshold for wobble
 	mode_settings["snow"]["snow_amount"] = globalSelectedSnowAmount;
 	mode_settings["rain"]["rain_mode"] = globalSelectedRainAmount;
 	//for some reason i cannot have this setting in general settings. I do not know why. I fear this may be a problem with later settings. 
@@ -325,13 +356,13 @@ void CMFCUCLMI3SettingsDlg::ShowAbout()
 void CMFCUCLMI3SettingsDlg::ShowHelp()
 {
 	// OPEN help.txt
-	ShellExecute(NULL, NULL, aboutSite, NULL, NULL, SW_SHOWNORMAL);
-	/*
+	//ShellExecute(NULL, NULL, aboutSite, NULL, NULL, SW_SHOWNORMAL);
+
 	CComHeapPtr<WCHAR> pszPath;
 	if (SHGetKnownFolderPath(FOLDERID_Windows, KF_FLAG_CREATE, nullptr, &pszPath) == S_OK)
 	{
 		// relative path
-		wstring tempStr = L"data\\help\\head\\help.txt";
+		wstring tempStr = L"UCL_Open-Illumiroom_V2.dist\\assets\\help.txt";
 		LPCWSTR finalP = tempStr.c_str();
 
 		// open .txt file
@@ -341,7 +372,7 @@ void CMFCUCLMI3SettingsDlg::ShowHelp()
 		si.lpFile = finalP;
 		si.nShow = SW_SHOW;
 		ShellExecuteEx(&si);
-	}*/
+	}
 }
 
 
@@ -355,6 +386,13 @@ void CMFCUCLMI3SettingsDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScro
 		int iValue = m_blurAmount.GetPos(); // Get Slider value
 		strSliderValue.Format(_T("%d"), iValue);
 		m_blurAmountValue.SetWindowText(strSliderValue);
+	}
+
+	else if (pSlider == &m_soundThresholdAmount) {
+		CString strSliderValue;
+		int iValue = m_soundThresholdAmount.GetPos(); // Get Slider value
+		strSliderValue.Format(_T("%d"), iValue);
+		m_soundThresholdAmountValue.SetWindowText(strSliderValue);
 	}
 
 }
@@ -382,18 +420,32 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSelectDisplaysButton()
 	ShellExecuteA(NULL, "open", runProgramPath, "display", NULL, SW_SHOWDEFAULT);
 }
 
-
-void CMFCUCLMI3SettingsDlg::OnBnClickedBackgroundCaptureButton()
+void CMFCUCLMI3SettingsDlg::OnBnClickedCalibrateSystemButton()
 {
+	//Save the new camera number
+	globalCameraNr = m_camera.GetCurSel();
+
+	LPCWSTR pathConfig = pathConfigSGeneral.c_str();
+	ifstream ifs_config(pathConfig);
+	string content_config((istreambuf_iterator<char>(ifs_config)), (istreambuf_iterator<char>()));
+	json general_settings = json::parse(content_config);
+
+	general_settings["camera_nr"] = globalCameraNr;
+
+	// WRITE INTO CONFIG JSON ALL CHANGES
+	ofstream outputConfigFile(pathConfig);
+	outputConfigFile << setw(4) << general_settings << endl;
+
+
+	// TODO: Add your control notification handler code here
 	// Run Illumiroom, with background_capture argument
-	ShellExecuteA(NULL, "open", runProgramPath, "background_capture", NULL, SW_SHOWDEFAULT);
+	ShellExecuteA(NULL, "open", runProgramPath, "calibration", NULL, SW_SHOWDEFAULT);
 }
 
-void CMFCUCLMI3SettingsDlg::OnBnClickedSelectTvEdgesButton()
-{
-	// Run Illumiroom, with select_tv argument
-	ShellExecuteA(NULL, "open", runProgramPath, "select_tv", NULL, SW_SHOWDEFAULT);
-}
+
+
+
+
 
 
 
@@ -409,20 +461,17 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectDisplays()
 	MessageBox(_T("This option allows you to select your two displays. Display windows will be shown for all connected displays, with a number next to them. For the TV and the Projector, please enter the corresponding number for the correct display"), _T("Display Selection Information"));
 }
 
-
-
-
-void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoBackgroundCapture()
+void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoCalibrateSystem()
 {
-	MessageBox(_T("This option allows you to select your to take a picture of your room. Please take a picture of the room using Microsoft Lens, crop the image down, then save it as room_img.jpg in 'UCL_Open-Illumiroom_V2.dist/assets. Press 'Esc' to exit the screen once you have taken your photo'"), _T("Room picture Information"));
+	MessageBox(_T("The calibration system automatically runs a calibration program to ensure that the system is setup for your living room! \n\n For more detailed instructions and a video guide, please visit the software setup section on our website - https://expandedexperiences.com \n\n Place the webcam in the position where you will sit and play games or watch content - most likely on your sofa. The webcam should point towards your TV and the projection area. \n\n Then click the calibrate system button in the launcher; press 'y' if the correct output from the camera is shown.If not, press 'n', and select the next camera in the list, eg: 2 if you are currently on 1. \n\n Finally, allow the calibration system to run, and follow further instructions shown on screen."), _T("Display Selection Information"));
 }
 
 
 
-void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectTvEdges()
-{
-	MessageBox(_T("This option allows you to select the edges of your TV. Please draw a box around your TV by left clicking and holding, then let go. Finally press q to save'"), _T("Select TV Edges Information"));
-}
+
+
+
+
 
 void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectMode()
 {
@@ -431,7 +480,7 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSelectMode()
 
 void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoCamera()
 {
-	MessageBox(_T("Some computer devices may have two or more webcams available for MotionInput to use (such as Microsoft Surface devices which often have a front and a rear camera). Some users might also prefer attaching an additional camera(s) to their computer devices. \n\nThe default camera value is initially set to 0. If you are experiencing difficulties with MotionInput camera detection, set this option to a different number. In most cases, changing 0 to 1 or 2 is likely to be a solution. \nRestart MotionInput to check if the new number selected has resolved the problem. If not adjust the setting again until MotionInput is connected to the desired camera."), _T("Default Camera Information"));
+	MessageBox(_T("Some computer devices may have two or more webcams available for UCL Open-Illumiroom V2 to use.  \n\nThe default webcam value is initially set to 1. If this is the incorrect webcam, chose 2, then 3 and so on. In most cases, changing 1 to 2 or 3 is likely to be a solution. \n If the incorrect camera is shown, simply close the window and try a different camera until the desired one is selected."), _T("Camera Information"));
 }
 
 
@@ -470,9 +519,10 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
 	json general_settings = json::parse(content_config);
 
 	general_settings["show_fps"] = globalShowFPS;
-	general_settings["camera"]["camera_nr"] = globalCameraNr;
+	general_settings["camera_nr"] = globalCameraNr;
 	general_settings["selected_mode"] = globalSelectedMode;
 	general_settings["keep_window_open"] = globalSettingsDialogOpen;
+	general_settings["use_calibration"] = globalUseCalibration;
 
 
 	// WRITE INTO CONFIG JSON ALL CHANGES
@@ -483,6 +533,10 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
 	// Update values mode settings
 	globalBlurAmount = m_blurAmount.GetPos();
 
+	// Update values mode settings
+	globalSoundThreshold = m_soundThresholdAmount.GetPos();
+	globalSoundThresholdFloat = (float)(globalSoundThreshold) / 10000;
+
 
 	LPCWSTR pathConfigMode = pathConfigSModes.c_str();
 	ifstream ifs_config_mode(pathConfigMode);
@@ -490,6 +544,7 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSaveonly()
 	json mode_settings = json::parse(content_config_mode);
 
 	mode_settings["blur"]["blur_amount"] = globalBlurAmount;
+	mode_settings["wobble"]["sound_threshold"] = globalSoundThresholdFloat;// sound threshold for wobble
 	mode_settings["snow"]["snow_amount"] = globalSelectedSnowAmount;
 	mode_settings["keep_window_open"] = globalSettingsDialogOpen;
 	mode_settings["rain"]["rain_mode"] = globalSelectedRainAmount;
@@ -592,9 +647,15 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedSnow3()
 
 void CMFCUCLMI3SettingsDlg::OnBnClickedKeepSettingsOpen()
 {
-	// TODO: Add your control notification handler code here
+	
 	globalSettingsDialogOpen = m_keepSettingsOpen.GetCheck();
 }
+
+void CMFCUCLMI3SettingsDlg::OnBnClickedUseCalibration()
+{
+	globalUseCalibration = m_useCalibration.GetCheck();
+}
+
 
 
 
@@ -604,6 +665,13 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoBlurAmount()
 {
 	MessageBox(_T("This option allows you to chose the amount of blurring in the blur mode."), _T("Blur amount information"));
 }
+
+
+void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSoundThreshold()
+{
+	MessageBox(_T("This option allows you to chose the sound threshold required for the wobble mode to display a wobble effect when it detects a loud sound. \n\n The higher the threshold, the louder the sound needs to be to trigger a wobble."), _T("Sound threshold information"));
+}
+
 
 
 void CMFCUCLMI3SettingsDlg::OnBnClickedButtonInfoSnowMode()
@@ -649,3 +717,6 @@ void CMFCUCLMI3SettingsDlg::OnBnClickedRain3()
 	m_torrentialRain.SetCheck(1);
 	globalSelectedRainAmount = "torrential";
 }
+
+
+

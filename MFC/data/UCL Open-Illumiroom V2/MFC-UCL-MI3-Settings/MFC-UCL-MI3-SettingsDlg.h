@@ -45,6 +45,7 @@ public:
 	CButton m_showFPS;
 	CButton m_lowLightOn;
 	CButton m_keepSettingsOpen;
+	CButton m_useCalibration;
 	afx_msg void UpdateShowFPS();
 	afx_msg void UpdateLowLight();
 
@@ -55,6 +56,9 @@ public:
 
 	CSliderCtrl m_blurAmount;
 	CEdit m_blurAmountValue;
+
+	CSliderCtrl m_soundThresholdAmount;
+	CEdit m_soundThresholdAmountValue;
 
 	CButton m_lightSnow;
 	CButton m_mediumSnow;
@@ -139,5 +143,10 @@ public:
 	afx_msg void OnBnClickedRain1();
 	afx_msg void OnBnClickedRain2();
 	afx_msg void OnBnClickedRain3();
+	afx_msg void OnBnClickedCalibrateSystemButton();
+	afx_msg void OnBnClickedButtonInfoCalibrateSystem();
+	afx_msg void OnStnClickedStaticCalibrateSystem();
+	afx_msg void OnBnClickedUseCalibration();
+	afx_msg void OnBnClickedButtonInfoSoundThreshold();
 };
 

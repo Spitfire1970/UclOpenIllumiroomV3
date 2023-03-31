@@ -5,6 +5,20 @@ from cv2 import blur, rectangle
 
 class Blur(Mode):
 
+    """
+    The Blur mode blurs the content shown on the primary display/TV, and projects the blurred content onto the projector.
+
+    Attributes:
+        blur_amount: Blur amount to be applied to the frame, stored in settings
+        blur_tuple: Blur amount combined twice into a tuple.
+    Methods:
+        apply_mode_to_frame(self, frame):
+            Applies the blur to the frame.
+        trigger(self):
+            Gets a frame from the display capture, applies the blur, and returns the frame.
+
+    """
+
     def __init__(
         self, 
         settings_access, 
@@ -17,38 +31,32 @@ class Blur(Mode):
         self.blur_tuple = (self.blur_amount, self.blur_amount)
 
         self.display_capture = display_capture
-        self.projector_bounding_box = display_capture.get_projector_bounding_box()
-        self.rect_color = self.get_blur_edge_rect_from_settings()
-        height_factor = 128
-        width_factor = 196
-        self.top_rect_coords = [0,0,int(self.projector_bounding_box['width']),int(self.projector_bounding_box['height']/height_factor)]
-        self.bottom_rect_coords = [0,int(self.projector_bounding_box['height']*(height_factor-1)/height_factor),int(self.projector_bounding_box['width']),int(self.projector_bounding_box['height'])]
-        self.left_rect_coords = [0,0,int(self.projector_bounding_box['width']/width_factor),int(self.projector_bounding_box['height'])]
-        self.right_rect_coords = [int(self.projector_bounding_box['width']*(width_factor-1)/width_factor),0,int(self.projector_bounding_box['width']),int(self.projector_bounding_box['height'])]
+        
         
 
-    def add_rectangles_to_frame(self, frame):
-        #Top rectangle
-        rectangle(frame, (self.top_rect_coords[0], self.top_rect_coords[1]), (self.top_rect_coords[2], self.top_rect_coords[3]), self.rect_color, -1)
-        rectangle(frame, (self.bottom_rect_coords[0], self.bottom_rect_coords[1]), (self.bottom_rect_coords[2], self.bottom_rect_coords[3]), self.rect_color, -1)
-        rectangle(frame, (self.left_rect_coords[0], self.left_rect_coords[1]), (self.left_rect_coords[2], self.left_rect_coords[3]), self.rect_color, -1)
-        rectangle(frame, (self.right_rect_coords[0], self.right_rect_coords[1]), (self.right_rect_coords[2], self.right_rect_coords[3]), self.rect_color, -1)
-        #frame = blur(frame, self.blur_tuple ,0)
-        return frame
-
     def apply_mode_to_frame(self,frame):
-        #Add rectangles at edges:
-        frame = self.add_rectangles_to_frame(frame)
+
+        """
+            Applies blurring to the given frame according to the blur tuple stored in the object attribute
+
+            Prameters:
+                frame : The frame to which the blurring is to be applied.
+
+            Returns:
+                 The frame after applying the blurring.
+        """
         return blur(frame, self.blur_tuple ,0)
 
     def trigger(self):
-        #Once triggered, screen record a frame, apply the blurring, then return the frame
-        
-        frames = [None]
-        #frame= self.display_capture.capture_frame_projector_resize()
+        """
+            Triggers the object to capture the current screen display, apply the blurring, and return the resulting frame.
+
+            Returns:
+                A list containing the single blurred frame.
+        """
         frame = self.display_capture.capture_frame()
-        frames[0] = self.apply_mode_to_frame(frame)
-        return frames
+        frame = self.apply_mode_to_frame(frame)
+        return [frame]
 
     def get_blur_amount_from_settings(self):
         mode_settings_json = self.settings_access.read_settings("mode_settings.json")

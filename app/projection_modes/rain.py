@@ -5,6 +5,9 @@ import random
 
 
 class Rain(Mode):
+    """
+    A class that represents the Rain mode, which adds a falling rain effect to a background image.
+    """
 
     def __init__(
         self, 
@@ -13,6 +16,14 @@ class Rain(Mode):
         background_img=None, 
         audio_capture=None
     ):
+        """
+        Initializes a new instance of the Rain class.
+
+        :param settings_access: An object that provides access to the settings for this mode.
+        :param display_capture: A capture object that provides access to the display.
+        :param background_img: The background image to which the rain effect will be added.
+        :param audio_capture: A capture object that provides access to audio.
+        """
         self.settings = settings_access
         self.img = background_img
         self.height, self.width = self.img.shape[:2]
@@ -33,6 +44,12 @@ class Rain(Mode):
         
 
     def add_settling_rain(self, image):
+        """
+        Adds a settling rain effect to the given image.
+
+        :param image: The image to which the settling rain effect will be added.
+        :return: The image with the settling rain effect added.
+        """
         # Conversion to HLS
         image_HLS = cv2.cvtColor(image,cv2.COLOR_RGB2HLS)
         image_HLS = np.array(image_HLS, dtype = np.float64)
@@ -53,7 +70,11 @@ class Rain(Mode):
 
 
     def add_to_top(self, scale):
+        """
+        Adds new raindrops to the top of the image.
 
+        :param scale: The maximum scale for the raindrops.
+        """
         if len(self.raindrops) == 0:
         # Add new raindrops to the top of the image
             for i in range(self.num_raindrops):
@@ -64,6 +85,13 @@ class Rain(Mode):
         
     
     def create_falling_rain(self, max_scale, scale_factor):
+        """
+        Generates falling raindrops in the `rain` image by modifying the positions, sizes and colors of existing raindrops.
+        
+        Args:
+        - max_scale (int): The maximum size that a raindrop can have.
+        - scale_factor (float): How much the size of raindrops can change as they fall.
+        """
         slant_extreme = 1
         slant = np.random.randint(-slant_extreme, slant_extreme)
         #drop_length = 20
