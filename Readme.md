@@ -47,6 +47,8 @@ Our project websites can be found here:
 
 * [Full Project Portfolio Site](https://students.cs.ucl.ac.uk/2022/group33/)
 
+A Compiled build of UCL Open-Illumiroom V2 can be downloaded here:
+
 * [Compiled build of UCL Open-Illumiroom V2](https://liveuclac-my.sharepoint.com/:u:/g/personal/zcabfab_ucl_ac_uk/EdvzbsUXgClAp6Bh4rVZVqEB1gvCvXol217_-jzAm144Sw?e=4b5gig)
 
 
