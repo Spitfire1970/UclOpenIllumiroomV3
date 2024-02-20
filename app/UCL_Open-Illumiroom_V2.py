@@ -25,7 +25,7 @@ import sys
 
 from utils.settings_access import SettingsAccess
 from utils.display_selection import DisplaySelection
-
+from utils.voice_capture import VoiceCapture
 from utils.display_output import DisplayOutput
 from utils.display_capture import DisplayCapture
 from utils.audio_capture import AudioCapture
@@ -52,14 +52,14 @@ def main():
     room_image = room_image_obj.read_room_image(resize=False)
 
     display_capture = DisplayCapture(settings_access)
-    
+    voice_capture = VoiceCapture()
     fps = FPS()
 
     #If no arguments passed, or argument is run, run the main loop
     if len(sys.argv) == 1 or sys.argv[1] == "run":
         print("run main loop")
         audio_capture = AudioCapture(settings_access)
-        mode_factory = ModesFactory(room_image, display_capture, audio_capture, settings_access)
+        mode_factory = ModesFactory(room_image, display_capture, audio_capture, settings_access, voice_capture)
         main_loop(settings_access,  mode_factory, fps)
 
     #Argument is display - run display selection

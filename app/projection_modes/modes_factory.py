@@ -7,6 +7,7 @@ from .rain import Rain
 from .snow import Snow
 from .speed_blur import SpeedBlur
 from .display_image import DisplayImage
+from .voice_to_text import VoiceToText
 
 class ModesFactory:
 
@@ -34,7 +35,8 @@ class ModesFactory:
         background_image, 
         display_capture, 
         audio_capture, 
-        setting_access
+        setting_access,
+        voice_capture
     ):
         self.mode_names = {
             "blur": Blur,
@@ -46,16 +48,24 @@ class ModesFactory:
             "snow": Snow,
             "speed_blur": SpeedBlur,
             "display_image": DisplayImage,
+            "voice_to_text": VoiceToText
         }
         self.settings = setting_access
         self.img = background_image
         self.display_capture = display_capture
         self.audio_capture = audio_capture
+        self.voice_capture = voice_capture
         self.selected_mode = setting_access.read_general_settings("selected_mode")
 
 
     def get_mode(self):
-
+        if self.selected_mode == "voice_to_text":
+            return self.mode_names[self.selected_mode](
+                                                self.settings, 
+                                                self.display_capture, 
+                                                self.img,
+                                                self.voice_capture
+                                            )
         return self.mode_names[self.selected_mode](
                                                 self.settings, 
                                                 self.display_capture, 
